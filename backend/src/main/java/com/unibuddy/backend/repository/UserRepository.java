@@ -11,6 +11,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // Email eken user wa hoyanna (Login weddi ona wenawa)
     Optional<User> findByEmail(String email);
 
+
+
     // University ID eken user wa hoyanna
     Optional<User> findByUniversityId(String universityId);
 }
