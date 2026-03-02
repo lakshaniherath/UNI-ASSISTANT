@@ -20,7 +20,6 @@ public class UserService {
     public User registerUser(User user) {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
-
         return userRepository.save(user);
     }
 
@@ -28,23 +27,26 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    // user Login logic
+    // Login logic with Debugging logs
     public User loginUser(String email, String password) {
-        // 1. Email eken user wa database eken hoyaganna
+        System.out.println("DEBUG: Login attempt for email: [" + email + "]");
+
         return userRepository.findByEmail(email)
-                // 2. User dunnu password ekai, database eke thiyena hashed password ekai match wenawada balanna
-                .filter(user -> passwordEncoder.matches(password, user.getPassword()))
-                // 3. Match wenne nathnam (hari email eka nathnam) null yawanna
-                .orElse(null);
-
+                .map(user -> {
+                    boolean isMatch = passwordEncoder.matches(password, user.getPassword());
+                    System.out.println("DEBUG: User found! Password match result: " + isMatch);
+                    return isMatch ? user : null;
+                })
+                .orElseGet(() -> {
+                    System.out.println("DEBUG: No user found with email: [" + email + "]");
+                    return null;
+                });
     }
-    // 1. University ID eken user wa hoyanna (Admin feature)
+
     public User getUserByUniversityId(String universityId) {
-        return userRepository.findByUniversityId(universityId)
-                .orElse(null); // User nathnam null yawamu
+        return userRepository.findByUniversityId(universityId).orElse(null);
     }
 
-    // 2. User wa DB eken delete karanna (Admin feature)
     public String deleteUser(Long id) {
         if (userRepository.existsById(id)) {
             userRepository.deleteById(id);

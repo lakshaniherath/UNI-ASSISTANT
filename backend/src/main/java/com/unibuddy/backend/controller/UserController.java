@@ -2,6 +2,8 @@ package com.unibuddy.backend.controller;
 
 import com.unibuddy.backend.model.User;
 import com.unibuddy.backend.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -26,16 +28,20 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    // මෙන්න මේ login method එක තමයි අපි වෙනස් කළේ
     @PostMapping("/login")
-    public String login(@RequestBody User loginRequest) {
+    public ResponseEntity<?> login(@RequestBody User loginRequest) {
         User user = userService.loginUser(loginRequest.getEmail(), loginRequest.getPassword());
 
         if (user != null) {
-            return "Login Successful! Welcome " + user.getName() + " (" + user.getRole() + ")";
+            // Login සාර්ථකයි නම් User object එකම (status 200 එක්ක) යවනවා
+            return ResponseEntity.ok(user);
         } else {
-            return "Invalid email or password!";
+            // වැරදි නම් Error message එකක් එක්ක 401 Unauthorized status එකක් යවනවා
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password!");
         }
     }
+
     // GET Request: Admin ta ID eken user wa balanna
     @GetMapping("/student/{universityId}")
     public User getUserByUniId(@PathVariable String universityId) {

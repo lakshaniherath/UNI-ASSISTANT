@@ -2,10 +2,14 @@ package com.unibuddy.backend.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 @Entity
 @Table(name = "users")
-@Data
+@Data                // Getters, Setters, toString, equals, hashCode okkoma generate karanawa
+@NoArgsConstructor   // Default constructor eka (JPA ekata ona)
+@AllArgsConstructor  // All fields constructor eka
 public class User {
 
     @Id
