@@ -23,14 +23,23 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    // 🚀 අලුතින් එකතු කළ Profile Update Method එක
+    public User updateUserProfile(String universityId, String cgpa, List<String> mySkills) {
+        User user = userRepository.findByUniversityId(universityId)
+                .orElseThrow(() -> new RuntimeException("User not found with university ID: " + universityId));
+
+        user.setCgpa(cgpa);
+        user.setMySkills(mySkills);
+
+        return userRepository.save(user);
+    }
+
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    // Login logic with Debugging logs
     public User loginUser(String email, String password) {
         System.out.println("DEBUG: Login attempt for email: [" + email + "]");
-
         return userRepository.findByEmail(email)
                 .map(user -> {
                     boolean isMatch = passwordEncoder.matches(password, user.getPassword());

@@ -38,11 +38,16 @@ api.interceptors.response.use(
 
     // Error එක විස්තරාත්මකව Log කරමු (Option A)
     if (error.code === 'ECONNABORTED') {
-      console.error('❌ Network Timeout: Backend එක ගොඩක් වෙලා ගන්නවා');
+      console.warn('❌ Network Timeout: Backend එක ගොඩක් වෙලා ගන්නවා');
     } else if (!response) {
-      console.error('❌ Network Error: 10.0.2.2 ට කතා කරන්න බැහැ. Firewall එක check කරන්න.');
+      console.warn('❌ Network Error: 10.0.2.2 ට කතා කරන්න බැහැ. Firewall එක check කරන්න.');
     } else {
-      console.error(`❌ Server Error: ${response.status}`);
+      console.warn('❌ Server Error:', {
+        status: response.status,
+        method: config?.method,
+        url: config?.url,
+        responseBody: response?.data,
+      });
     }
 
     return Promise.reject(error);
@@ -57,7 +62,7 @@ export const testBackendConnection = async () => {
     console.log('✅ Backend එක responsive ය!', response.status);
     return { connected: true, status: response.status };
   } catch (error: any) {
-    console.error('❌ Backend έκ unreachable:', {
+    console.warn('❌ Backend έκ unreachable:', {
       code: error?.code,
       message: error?.message,
       status: error?.response?.status,

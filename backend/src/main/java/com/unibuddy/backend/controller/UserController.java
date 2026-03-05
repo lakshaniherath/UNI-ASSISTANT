@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "*") // Mobile app ekata access denna
+@CrossOrigin(origins = "*")
 public class UserController {
 
     private final UserService userService;
@@ -23,32 +23,45 @@ public class UserController {
         return userService.registerUser(user);
     }
 
+    // 🚀 අලුතින් එකතු කළ Profile Update Endpoint එක
+    @PutMapping("/{universityId}/profile")
+    public ResponseEntity<?> updateProfile(
+            @PathVariable String universityId,
+            @RequestBody User profileUpdates) {
+        try {
+            User updatedUser = userService.updateUserProfile(
+                    universityId,
+                    profileUpdates.getCgpa(),
+                    profileUpdates.getMySkills()
+            );
+            return ResponseEntity.ok(updatedUser);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error updating profile: " + e.getMessage());
+        }
+    }
+
     @GetMapping("/all")
     public List<User> getAll() {
         return userService.getAllUsers();
     }
 
-    // මෙන්න මේ login method එක තමයි අපි වෙනස් කළේ
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User loginRequest) {
         User user = userService.loginUser(loginRequest.getEmail(), loginRequest.getPassword());
 
         if (user != null) {
-            // Login සාර්ථකයි නම් User object එකම (status 200 එක්ක) යවනවා
             return ResponseEntity.ok(user);
         } else {
-            // වැරදි නම් Error message එකක් එක්ක 401 Unauthorized status එකක් යවනවා
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password!");
         }
     }
 
-    // GET Request: Admin ta ID eken user wa balanna
     @GetMapping("/student/{universityId}")
     public User getUserByUniId(@PathVariable String universityId) {
         return userService.getUserByUniversityId(universityId);
     }
 
-    // DELETE Request: Admin ta user wa remove karanna
     @DeleteMapping("/delete/{id}")
     public String deleteUser(@PathVariable Long id) {
         return userService.deleteUser(id);

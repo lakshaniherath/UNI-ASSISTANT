@@ -5,10 +5,15 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'react-native';
 
-// Screens tika import karagamu
 import LoginScreen from './src/screens/LoginScreen';
 import HomeScreen from './src/screens/HomeScreen';
-import RegisterScreen from './src/screens/RegisterScreen'; // Aluth register screen eka
+import RegisterScreen from './src/screens/RegisterScreen';
+import StudyGroupScreen from './src/screens/StudyGroupScreen'; 
+import CreateGroupScreen from './src/screens/CreateGroupScreen'; 
+// 🚀 1. Profile Setup Screen එක Import කරන්න
+import ProfileSetupScreen from './src/screens/ProfileSetupScreen'; 
+// 🚀 2. Request Management Screen Import කරන්න
+import RequestManagementScreen from './src/screens/RequestManagementScreen';
 
 const Stack = createStackNavigator();
 
@@ -19,28 +24,51 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Login">
           
-          {/* Login Screen */}
           <Stack.Screen 
             name="Login" 
             component={LoginScreen} 
             options={{ headerShown: false }} 
           />
 
-          {/* Register Screen */}
           <Stack.Screen 
             name="Register" 
             component={RegisterScreen} 
             options={{ title: 'Create Account' }} 
           />
 
-          {/* Home Screen (Dashboard) */}
           <Stack.Screen 
             name="Home" 
             component={HomeScreen} 
             options={{ 
               title: 'Uni-Assistant Dashboard',
-              headerLeft: () => null // Dashboard ekedi aye login ekata back wenna bari wenna
+              headerLeft: () => null 
             }} 
+          />
+
+          <Stack.Screen 
+            name="StudyGroups" 
+            component={StudyGroupScreen} 
+            options={{ title: 'Explore Study Groups' }} 
+          />
+
+          <Stack.Screen 
+            name="CreateGroup" 
+            component={CreateGroupScreen} 
+            options={{ title: 'Start a Project Group' }} 
+          />
+
+          {/* 🚀 2. Profile Setup Screen එක Register කළා */}
+          <Stack.Screen 
+            name="ProfileSetup" 
+            component={ProfileSetupScreen} 
+            options={{ title: 'My Skill Profile' }} 
+          />
+
+          {/* 🚀 3. Request Management Screen - Group Leaders සඳහා */}
+          <Stack.Screen 
+            name="RequestManagement" 
+            component={RequestManagementScreen} 
+            options={{ title: 'Manage Join Requests' }} 
           />
 
         </Stack.Navigator>

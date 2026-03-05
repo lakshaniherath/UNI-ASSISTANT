@@ -4,12 +4,13 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
-@Data                // Getters, Setters, toString, equals, hashCode okkoma generate karanawa
-@NoArgsConstructor   // Default constructor eka (JPA ekata ona)
-@AllArgsConstructor  // All fields constructor eka
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -28,7 +29,17 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private String subgroup;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
+    // The student's actual CGPA range
+    private String cgpa;
+
+    // The student's selected skills
+    @ElementCollection
+    private List<String> mySkills;
 }
