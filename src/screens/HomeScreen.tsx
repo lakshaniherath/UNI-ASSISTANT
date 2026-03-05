@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { subscribeToTokenRefresh } from '../services/notifications';
 
 const HomeScreen = ({ route, navigation }: any) => {
   
   const { userData } = route.params || {};
+
+  useEffect(() => {
+    if (!userData?.universityId) return;
+    // Keep the FCM token fresh as long as the user is logged in
+    const unsubscribe = subscribeToTokenRefresh(userData.universityId);
+    return unsubscribe;
+  }, [userData?.universityId]);
 
   return (
     <ScrollView style={styles.container}>
@@ -32,7 +40,7 @@ const HomeScreen = ({ route, navigation }: any) => {
           <Text style={styles.cardTitle}>Study Groups</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Timetable')}>
+        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Timetable', { userData })}>
           <Text style={styles.cardEmoji}>📅</Text>
           <Text style={styles.cardTitle}>Timetable</Text>
         </TouchableOpacity>

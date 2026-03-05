@@ -1,5 +1,6 @@
 package com.unibuddy.backend.controller;
 
+import com.unibuddy.backend.dto.FcmTokenRequestDTO;
 import com.unibuddy.backend.model.User;
 import com.unibuddy.backend.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -60,6 +61,19 @@ public class UserController {
     @GetMapping("/student/{universityId}")
     public User getUserByUniId(@PathVariable String universityId) {
         return userService.getUserByUniversityId(universityId);
+    }
+
+    @PutMapping("/{universityId}/fcm-token")
+    public ResponseEntity<?> updateFcmToken(
+            @PathVariable String universityId,
+            @RequestBody FcmTokenRequestDTO tokenRequest) {
+        try {
+            User updatedUser = userService.updateFcmToken(universityId, tokenRequest.getFcmToken());
+            return ResponseEntity.ok(updatedUser);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error updating FCM token: " + e.getMessage());
+        }
     }
 
     @DeleteMapping("/delete/{id}")

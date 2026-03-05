@@ -46,6 +46,16 @@ const RequestManagementScreen = ({ route }: any) => {
     }
   };
 
+  const handleReject = async (requestId: number) => {
+    try {
+      await api.post(`/groups/reject-request/${requestId}`);
+      Alert.alert('Rejected', 'The request has been declined.');
+      fetchRequests(); // Refresh the live list
+    } catch (error) {
+      Alert.alert('Error', 'Could not reject the request.');
+    }
+  };
+
   useEffect(() => {
     fetchRequests();
   }, []);
@@ -79,12 +89,21 @@ const RequestManagementScreen = ({ route }: any) => {
                 <Text style={styles.value}>{item.studentSkills || 'No skills listed'}</Text>
               </View>
 
-              <TouchableOpacity
-                style={styles.acceptBtn}
-                onPress={() => handleAccept(item.id)}
-              >
-                <Text style={styles.acceptText}>Accept Member</Text>
-              </TouchableOpacity>
+              <View style={styles.buttonGroup}>
+                <TouchableOpacity
+                  style={[styles.btn, styles.acceptBtn]}
+                  onPress={() => handleAccept(item.id)}
+                >
+                  <Text style={styles.btnText}>Accept</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[styles.btn, styles.rejectBtn]}
+                  onPress={() => handleReject(item.id)}
+                >
+                  <Text style={styles.btnText}>Reject</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           )}
         />
@@ -112,14 +131,11 @@ const styles = StyleSheet.create({
   infoRow: { flexDirection: 'row', marginBottom: 4 },
   label: { fontSize: 14, color: '#475569', fontWeight: '600', marginRight: 6 },
   value: { fontSize: 14, color: '#1E293B', flex: 1 },
-  acceptBtn: {
-    backgroundColor: '#40C057',
-    padding: 10,
-    borderRadius: 8,
-    marginTop: 10,
-    alignItems: 'center',
-  },
-  acceptText: { color: '#fff', fontWeight: 'bold' },
+  buttonGroup: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 },
+  btn: { flex: 1, padding: 12, borderRadius: 8, alignItems: 'center', marginHorizontal: 5 },
+  acceptBtn: { backgroundColor: '#40C057' },
+  rejectBtn: { backgroundColor: '#FA5252' },
+  btnText: { color: '#fff', fontWeight: 'bold' },
   empty: { textAlign: 'center', marginTop: 50, color: '#94A3B8', fontSize: 16 },
 });
 

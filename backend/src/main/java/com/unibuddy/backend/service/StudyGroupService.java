@@ -1,6 +1,7 @@
 package com.unibuddy.backend.service;
 
 import com.unibuddy.backend.dto.JoinRequestResponseDTO;
+import com.unibuddy.backend.dto.MemberDTO;
 import com.unibuddy.backend.dto.StudyGroupResponseDTO;
 import com.unibuddy.backend.model.JoinRequest;
 import com.unibuddy.backend.model.StudyGroup;
@@ -18,14 +19,17 @@ public class StudyGroupService {
 
     private final StudyGroupRepository studyGroupRepository;
     private final UserRepository userRepository;
-    private final JoinRequestRepository joinRequestRepository; // 🚀 අලුතින් එකතු කළා
+    private final JoinRequestRepository joinRequestRepository;
+    private final FcmNotificationService fcmNotificationService;
 
     public StudyGroupService(StudyGroupRepository studyGroupRepository,
                              UserRepository userRepository,
-                             JoinRequestRepository joinRequestRepository) {
+                             JoinRequestRepository joinRequestRepository,
+                             FcmNotificationService fcmNotificationService) {
         this.studyGroupRepository = studyGroupRepository;
         this.userRepository = userRepository;
         this.joinRequestRepository = joinRequestRepository;
+        this.fcmNotificationService = fcmNotificationService;
     }
 
     // 🚀 Match Score Logic
@@ -87,6 +91,21 @@ public class StudyGroupService {
         request.setStatus("PENDING");
 
         joinRequestRepository.save(request);
+
+        // Notify the group leader
+        studyGroupRepository.findById(groupId).ifPresent(grp -> {
+            if (grp.getCreatorId() != null) {
+                userRepository.findByUniversityId(studentId).ifPresent(student -> {
+                    fcmNotificationService.sendToUser(
+                            grp.getCreatorId(),
+                            "New Join Request",
+                            student.getName() + " wants to join \"" + grp.getGroupName() + "\"",
+                            null
+                    );
+                });
+            }
+        });
+
         return "Success: Join request sent to the group leader!";
     }
 
@@ -115,7 +134,36 @@ public class StudyGroupService {
         request.setStatus("ACCEPTED");
         joinRequestRepository.save(request);
 
+        // Notify the student
+        fcmNotificationService.sendToUser(
+                request.getStudentId(),
+                "Request Accepted! 🎉",
+                "You have been added to \"" + group.getGroupName() + "\".",
+                null
+        );
+
         return "Success: Member added to the group!";
+    }
+
+    // 🚀 Group Leader හට Request එක Reject කිරීමට ඇති Method එක
+    public String rejectJoinRequest(Long requestId) {
+        JoinRequest request = joinRequestRepository.findById(requestId)
+                .orElseThrow(() -> new RuntimeException("Request not found"));
+
+        request.setStatus("REJECTED");
+        joinRequestRepository.save(request);
+
+        // Notify the student
+        studyGroupRepository.findById(request.getGroupId()).ifPresent(group -> {
+            fcmNotificationService.sendToUser(
+                    request.getStudentId(),
+                    "Request Declined",
+                    "Your request to join \"" + group.getGroupName() + "\" was not accepted.",
+                    null
+            );
+        });
+
+        return "Success: Request has been rejected.";
     }
 
     // 🚀 Group Leader හට Pending Requests ලබා ගැනීම (Live User Data සමඟ)
@@ -168,5 +216,86 @@ public class StudyGroupService {
     private boolean isStudentInAnyGroup(String studentId) {
         return studyGroupRepository.findAll().stream()
                 .anyMatch(g -> g.getMemberIds() != null && g.getMemberIds().contains(studentId));
+    }
+
+    // 🚀 Group එකේ සාමාජිකයන්ගේ Live Details ලබා ගැනීම
+    public List<MemberDTO> getGroupMembers(Long groupId) {
+        StudyGroup group = studyGroupRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Group not found"));
+
+        if (group.getMemberIds() == null || group.getMemberIds().isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        return group.getMemberIds().stream().map(memberId -> {
+            User user = userRepository.findByUniversityId(memberId)
+                    .orElseThrow(() -> new RuntimeException("User not found: " + memberId));
+            return new MemberDTO(
+                    user.getUniversityId(),
+                    user.getName(),
+                    user.getEmail(),
+                    user.getSubgroup(),
+                    user.getCgpa() != null ? user.getCgpa() : "Not set",
+                    user.getMySkills() != null ? String.join(", ", user.getMySkills()) : "No skills",
+                    memberId.equals(group.getCreatorId())
+            );
+        }).toList();
+    }
+
+    // 🚀 Group Leader හට සාමාජිකයෙක් ඉවත් කිරීම
+    public String removeMember(Long groupId, String memberId) {
+        StudyGroup group = studyGroupRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Group not found"));
+
+        if (memberId.equals(group.getCreatorId())) {
+            return "Error: Cannot remove the group leader.";
+        }
+
+        if (group.getMemberIds() == null || !group.getMemberIds().contains(memberId)) {
+            return "Error: Member not found in this group.";
+        }
+
+        group.getMemberIds().remove(memberId);
+        group.setCurrentMembers(group.getMemberIds().size());
+        studyGroupRepository.save(group);
+
+        return "Success: Member removed from the group.";
+    }
+
+    // 🚀 Group Leader හට Group එක Delete කිරීම
+    public String deleteGroup(Long groupId, String requesterId) {
+        StudyGroup group = studyGroupRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Group not found"));
+
+        if (!group.getCreatorId().equals(requesterId)) {
+            return "Error: Only the group leader can delete this group.";
+        }
+
+        // Delete all join requests associated with this group
+        List<JoinRequest> groupRequests = joinRequestRepository.findByGroupId(groupId);
+        joinRequestRepository.deleteAll(groupRequests);
+
+        studyGroupRepository.delete(group);
+        return "Success: Group has been deleted.";
+    }
+
+    // 🚀 සාමාජිකයෙක් Group එකෙන් ඉවත්වීම
+    public String leaveGroup(Long groupId, String studentId) {
+        StudyGroup group = studyGroupRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Group not found"));
+
+        if (studentId.equals(group.getCreatorId())) {
+            return "Error: The leader cannot leave the group. Delete it instead.";
+        }
+
+        if (group.getMemberIds() == null || !group.getMemberIds().contains(studentId)) {
+            return "Error: You are not a member of this group.";
+        }
+
+        group.getMemberIds().remove(studentId);
+        group.setCurrentMembers(group.getMemberIds().size());
+        studyGroupRepository.save(group);
+
+        return "Success: You have left the group.";
     }
 }

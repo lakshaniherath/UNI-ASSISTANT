@@ -1,6 +1,7 @@
 package com.unibuddy.backend.controller;
 
 import com.unibuddy.backend.dto.JoinRequestResponseDTO;
+import com.unibuddy.backend.dto.MemberDTO;
 import com.unibuddy.backend.dto.StudyGroupResponseDTO;
 import com.unibuddy.backend.model.StudyGroup;
 import com.unibuddy.backend.service.StudyGroupService;
@@ -60,16 +61,66 @@ public class StudyGroupController {
         }
     }
 
-    // 5. 🚀 Pending Join Requests ලබා ගැනීම (Group Leader සඳහා - Live Data)
+    // 5. 🚀 Group Leader හට Request එක Reject කිරීමට ඇති Endpoint එක
+    @PostMapping("/reject-request/{requestId}")
+    public ResponseEntity<String> rejectRequest(@PathVariable Long requestId) {
+        String result = studyGroupService.rejectJoinRequest(requestId);
+        return ResponseEntity.ok(result);
+    }
+
+    // 6. 🚀 Pending Join Requests ලබා ගැනීම (Group Leader සඳහා - Live Data)
     @GetMapping("/{groupId}/requests")
     public ResponseEntity<List<JoinRequestResponseDTO>> getPendingRequests(@PathVariable Long groupId) {
         List<JoinRequestResponseDTO> requests = studyGroupService.getPendingRequestsByGroupId(groupId);
         return ResponseEntity.ok(requests);
     }
 
-    // 6. සියලුම Study Groups ලැයිස්තුව (Optional)
+    // 7. සියලුම Study Groups ලැයිස්තුව (Optional)
     @GetMapping("/all")
     public ResponseEntity<List<StudyGroup>> getAllGroups() {
         return ResponseEntity.ok(studyGroupService.getAllGroups());
+    }
+
+    // 8. 🚀 Group එකේ සාමාජිකයන්ගේ Live Details ලබා ගැනීම
+    @GetMapping("/{groupId}/members")
+    public ResponseEntity<List<MemberDTO>> getGroupMembers(@PathVariable Long groupId) {
+        List<MemberDTO> members = studyGroupService.getGroupMembers(groupId);
+        return ResponseEntity.ok(members);
+    }
+
+    // 9. 🚀 Group Leader හට සාමාජිකයෙක් ඉවත් කිරීම
+    @PostMapping("/{groupId}/remove-member")
+    public ResponseEntity<String> removeMember(
+            @PathVariable Long groupId,
+            @RequestParam String memberId) {
+        String result = studyGroupService.removeMember(groupId, memberId);
+        if (result.startsWith("Success")) {
+            return ResponseEntity.ok(result);
+        }
+        return ResponseEntity.badRequest().body(result);
+    }
+
+    // 10. 🚀 Group Leader හට Group එක Delete කිරීම
+    @DeleteMapping("/{groupId}")
+    public ResponseEntity<String> deleteGroup(
+            @PathVariable Long groupId,
+            @RequestParam String requesterId) {
+        String result = studyGroupService.deleteGroup(groupId, requesterId);
+        if (result.startsWith("Success")) {
+            return ResponseEntity.ok(result);
+        }
+        return ResponseEntity.badRequest().body(result);
+    }
+
+    // 11. 🚀 සාමාජිකයෙක් Group එකෙන් ඉවත්වීම
+    @PostMapping("/{groupId}/leave")
+    public ResponseEntity<String> leaveGroup(
+            @PathVariable Long groupId,
+            @RequestParam String studentId) {
+        String result = studyGroupService.leaveGroup(groupId, studentId);
+        if (result.startsWith("Success")) {
+            return ResponseEntity.ok(result);
+        }
+        return ResponseEntity.badRequest().body(result);
     }
 }

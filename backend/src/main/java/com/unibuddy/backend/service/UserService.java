@@ -56,6 +56,14 @@ public class UserService {
         return userRepository.findByUniversityId(universityId).orElse(null);
     }
 
+    public User updateFcmToken(String universityId, String fcmToken) {
+        User user = userRepository.findByUniversityId(universityId)
+                .orElseThrow(() -> new RuntimeException("User not found with university ID: " + universityId));
+
+        user.setFcmToken(fcmToken);
+        return userRepository.save(user);
+    }
+
     public String deleteUser(Long id) {
         if (userRepository.existsById(id)) {
             userRepository.deleteById(id);

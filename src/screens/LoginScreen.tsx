@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
-import { api, testBackendConnection } from '../services/api'; 
+import { api, testBackendConnection } from '../services/api';
+import { registerFcmTokenForUser } from '../services/notifications';
 
 const LoginScreen = ({ navigation }: any) => {
   const [email, setEmail] = useState('');
@@ -24,12 +25,18 @@ const LoginScreen = ({ navigation }: any) => {
       // Backend එකෙන් සාර්ථකව (Status 200) User object එක ලැබුණා නම්
       if (response.status === 200 && response.data) {
         const loggedInUser = response.data;
-
+        // Register FCM token in the background (don't block navigation)
+        registerFcmTokenForUser(loggedInUser.universityId).catch(err =>
+          console.warn('FCM token registration failed:', err)
+        );
         Alert.alert('Success! 🎉', `Welcome back, ${loggedInUser.name}`, [
           { 
             text: 'OK', 
-            // Home screen එකට යද්දී user ගේ data ටිකත් එක්කම යවනවා
-            onPress: () => navigation.navigate('Home', { userData: loggedInUser }) 
+            // Home screen එකට යද්දී Login එක stack එකෙන් ඉවත් කරනවා (back press කළාම logout නොවන්න)
+            onPress: () => navigation.reset({
+              index: 0,
+              routes: [{ name: 'Home', params: { userData: loggedInUser } }],
+            })
           }
         ]);
       }

@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert, ActivityIndicator, Switch } from 'react-native';
 import { api } from '../services/api';
 
 const StudyGroupScreen = ({ route, navigation }: any) => {
   const { userData } = route.params; 
-  const [filteredGroups, setFilteredGroups] = useState([]);
+  const [allGroups, setAllGroups] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showOnlyMySubgroup, setShowOnlyMySubgroup] = useState(true);
+  const [requestedGroups, setRequestedGroups] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -19,21 +20,14 @@ const StudyGroupScreen = ({ route, navigation }: any) => {
   const fetchGroups = async () => {
     try {
       setLoading(true);
-      // Backend එකේ අපි හදපු අලුත් Endpoint එක (DTO එකක් ලබා දෙයි)
       const response = await api.get(`/groups/recommended/${userData.universityId}`);
       
-      // Response එක DTO එකක් නිසා, එය පාවිච්චි කිරීමට පහසු පරිදි සකසා ගමු
       const groupsWithScores = response.data.map((item: any) => ({
         ...item.group,      
         matchScore: item.matchScore 
       }));
 
-      // Subgroup එක අනුව filter කිරීම
-      if (showOnlyMySubgroup) {
-        setFilteredGroups(groupsWithScores.filter((g: any) => g.subgroup === userData.subgroup));
-      } else {
-        setFilteredGroups(groupsWithScores);
-      }
+      setAllGroups(groupsWithScores);
     } catch (error) {
       console.error(error);
       Alert.alert('Error', 'Groups ලබා ගැනීමට නොහැකි විය.');
@@ -42,10 +36,13 @@ const StudyGroupScreen = ({ route, navigation }: any) => {
     }
   };
 
-  // Switch එක වෙනස් කරන විට නැවත fetch කරමු
-  useEffect(() => {
-    fetchGroups();
-  }, [showOnlyMySubgroup]);
+  // 🔄 Switch එක වෙනස් කරන විට instantly filter වේ (re-fetch අවශ්‍ය නැත)
+  const filteredGroups = useMemo(() => {
+    if (showOnlyMySubgroup) {
+      return allGroups.filter((g: any) => g.subgroup === userData.subgroup);
+    }
+    return allGroups;
+  }, [allGroups, showOnlyMySubgroup]);
 
   const handleRequestToJoin = async (groupId: number) => {
     try {
@@ -55,9 +52,20 @@ const StudyGroupScreen = ({ route, navigation }: any) => {
           studentId: userData.universityId
         }
       });
-      Alert.alert('Success! 🎉', response.data);
+      const message = typeof response.data === 'string' ? response.data : JSON.stringify(response.data);
+      setRequestedGroups(prev => new Set(prev).add(groupId));
+      Alert.alert('Success! 🎉', message);
     } catch (error: any) {
-      Alert.alert('Error', error.response?.data || 'Could not send the request.');
+      console.error('🔴 Request to Join Error:', JSON.stringify(error.response?.data));
+      let errMsg = 'Could not send the request.';
+      if (error.response?.data) {
+        if (typeof error.response.data === 'string') {
+          errMsg = error.response.data;
+        } else if (error.response.data.message) {
+          errMsg = error.response.data.message;
+        }
+      }
+      Alert.alert('Error', errMsg);
     }
   };
 
@@ -92,7 +100,20 @@ const StudyGroupScreen = ({ route, navigation }: any) => {
           ListEmptyComponent={<Text style={styles.empty}>දැනට කිසිදු කණ්ඩායමක් නොමැත.</Text>}
           renderItem={({ item }) => {
             const isLeader = item.creatorId === userData.universityId;
+            const isMember = item.memberIds?.includes(userData.universityId);
             return (
+              <TouchableOpacity
+                activeOpacity={isLeader || isMember ? 0.7 : 1}
+                onPress={() => {
+                  if (isLeader || isMember) {
+                    navigation.navigate('GroupDetails', {
+                      groupId: item.id,
+                      groupData: item,
+                      userData,
+                    });
+                  }
+                }}
+              >
               <View style={styles.groupCard}>
                 <View style={styles.cardHeader}>
                   <Text style={styles.groupName}>{item.groupName}</Text>
@@ -124,8 +145,16 @@ const StudyGroupScreen = ({ route, navigation }: any) => {
                     >
                       <Text style={styles.btnText}>Manage Requests</Text>
                     </TouchableOpacity>
+                  ) : requestedGroups.has(item.id) ? (
+                    // 🚀 2a. Already requested — disabled grey button
+                    <TouchableOpacity
+                      style={[styles.actionButton, styles.requestedBtn]}
+                      disabled={true}
+                    >
+                      <Text style={styles.btnText}>Requested ✓</Text>
+                    </TouchableOpacity>
                   ) : (
-                    // 🚀 2. Button shown to other students
+                    // 🚀 2b. Button shown to other students
                     <TouchableOpacity
                       style={[styles.actionButton, styles.requestBtn]}
                       onPress={() => handleRequestToJoin(item.id)}
@@ -134,7 +163,11 @@ const StudyGroupScreen = ({ route, navigation }: any) => {
                     </TouchableOpacity>
                   )}
                 </View>
+                {(isLeader || isMember) && (
+                  <Text style={styles.tapHint}>Tap to view group details</Text>
+                )}
               </View>
+              </TouchableOpacity>
             );
           }}
         />
@@ -168,7 +201,9 @@ const styles = StyleSheet.create({
   actionButton: { paddingVertical: 10, paddingHorizontal: 15, borderRadius: 8, elevation: 2 },
   manageBtn: { backgroundColor: '#F59E0B' },
   requestBtn: { backgroundColor: '#1864AB' },
+  requestedBtn: { backgroundColor: '#94A3B8' },
   btnText: { color: '#fff', fontWeight: 'bold', fontSize: 13 },
+  tapHint: { textAlign: 'center', color: '#94A3B8', fontSize: 11, marginTop: 8, fontStyle: 'italic' },
   empty: { textAlign: 'center', marginTop: 50, color: '#999' }
 });
 

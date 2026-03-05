@@ -42,4 +42,7 @@ public class User {
     // The student's selected skills
     @ElementCollection
     private List<String> mySkills;
+
+    @Column(length = 1024)
+    private String fcmToken;
 }

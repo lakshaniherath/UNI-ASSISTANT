@@ -37,8 +37,10 @@ const ProfileSetupScreen = ({ route, navigation }: any) => {
         cgpa: selectedCGPA,
         mySkills: selectedSkills
       });
+      // Updated userData එක Home එකට ආපසු යවමු
+      const updatedUserData = { ...userData, cgpa: selectedCGPA, mySkills: selectedSkills };
       Alert.alert("Success! 🎉", "ඔබේ Profile එක යාවත්කාලීන කරන ලදී. දැන් ඔබට ගැලපෙන කණ්ඩායම් පරීක්ෂා කළ හැක.");
-      navigation.goBack();
+      navigation.navigate('Home', { userData: updatedUserData });
     } catch (error) {
       Alert.alert("Error", "Profile එක යාවත්කාලීන කිරීමට නොහැකි විය.");
     }

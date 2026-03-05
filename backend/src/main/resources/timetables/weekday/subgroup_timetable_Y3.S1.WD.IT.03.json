@@ -1,0 +1,828 @@
+{
+  "group": "Y3.S1.WD.IT.03",
+  "subgroups": [
+    "Y3.S1.WD.IT.0301",
+    "Y3.S1.WD.IT.0302",
+    "Y3.S1.WD.IT.0303"
+  ],
+  "events": [
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0301",
+      "day": "Wednesday",
+      "start": "08:30",
+      "end": "",
+      "title": "IT3040 - ITPM Lecture",
+      "module_code": "IT3040",
+      "location": "G601",
+      "instructors": "Prof. Dilshan de Silva, Ms. Mathishi Adya Dissanayake",
+      "raw": [
+        "IT3040 - ITPM Lecture",
+        "Prof. Dilshan de Silva, Ms. Mathishi Adya Dissanayake",
+        "G601"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0301",
+      "day": "Thursday",
+      "start": "08:30",
+      "end": "",
+      "title": "IT3020 - DS Lecture, Tutorial",
+      "module_code": "IT3020",
+      "location": "G1101",
+      "instructors": "Dr. Prasanna Sumathipala, Ms. Malithi Nawarathne",
+      "raw": [
+        "IT3020 - DS Lecture, Tutorial",
+        "Dr. Prasanna Sumathipala, Ms. Malithi Nawarathne",
+        "G1101"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0301",
+      "day": "Wednesday",
+      "start": "09:30",
+      "end": "",
+      "title": "IT3010 - NDM Lecture",
+      "module_code": "IT3010",
+      "location": "F1308",
+      "instructors": "Mr. Ashvinda Iddamalgoda",
+      "raw": [
+        "Y3.S1.WD.IT.03, Y3.S2.WD.IT.01",
+        "IT3010 - NDM Lecture",
+        "Mr. Ashvinda Iddamalgoda",
+        "F1308"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0301",
+      "day": "Monday",
+      "start": "10:30",
+      "end": "",
+      "title": "Y3.S1.WD.IT.0302, Y3.S1.WD.IT.0303",
+      "module_code": "",
+      "location": "IT3030 - PAF Practical BYOD",
+      "instructors": "IT3010 - NDM Practical BYOD",
+      "raw": [
+        "Y3.S1.WD.IT.0301",
+        "Y3.S1.WD.IT.0302, Y3.S1.WD.IT.0303",
+        "IT3010 - NDM Practical BYOD",
+        "IT3030 - PAF Practical BYOD",
+        "Mr. Sahan Dhananjaya, Ms. Jasmi Gunasekara",
+        "Ms. Nadeema Hansani, Mr. Malshan Gunasekara",
+        "G1101",
+        "G1106"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0301",
+      "day": "Wednesday",
+      "start": "10:30",
+      "end": "",
+      "title": "IT3040 - ITPM Tutorial",
+      "module_code": "IT3040",
+      "location": "G601",
+      "instructors": "Ms. Minuli Samaraweera, Ms. Mathishi Adya Dissanayake",
+      "raw": [
+        "IT3040 - ITPM Tutorial",
+        "Ms. Minuli Samaraweera, Ms. Mathishi Adya Dissanayake",
+        "G601"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0301",
+      "day": "Monday",
+      "start": "11:30",
+      "end": "",
+      "title": "Y3.S1.WD.IT.0302, Y3.S1.WD.IT.0303",
+      "module_code": "",
+      "location": "IT3030 - PAF Practical BYOD",
+      "instructors": "IT3010 - NDM Practical BYOD",
+      "raw": [
+        "Y3.S1.WD.IT.0301",
+        "Y3.S1.WD.IT.0302, Y3.S1.WD.IT.0303",
+        "IT3010 - NDM Practical BYOD",
+        "IT3030 - PAF Practical BYOD",
+        "Mr. Sahan Dhananjaya, Ms. Jasmi Gunasekara",
+        "Ms. Nadeema Hansani, Mr. Malshan Gunasekara",
+        "G1101",
+        "G1106"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0301",
+      "day": "Friday",
+      "start": "11:30",
+      "end": "",
+      "title": "IT3010 - NDM Tutorial",
+      "module_code": "IT3010",
+      "location": "F1308",
+      "instructors": "Mr. Ashvinda Iddamalgoda, Ms. Shashika Lokuliyana",
+      "raw": [
+        "Y3.S1.WD.IT.03, Y3.S2.WD.IT.01",
+        "IT3010 - NDM Tutorial",
+        "Mr. Ashvinda Iddamalgoda, Ms. Shashika Lokuliyana",
+        "F1308"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0301",
+      "day": "Wednesday",
+      "start": "12:30",
+      "end": "",
+      "title": "IT3040 - ITPM Practical",
+      "module_code": "IT3040",
+      "location": "F1301+F1302",
+      "instructors": "Ms. Subodha Subasingha, Mr. Vishwa Gurusinghe",
+      "raw": [
+        "Y3.S1.WD.IT.0301",
+        "IT3040 - ITPM Practical",
+        "Ms. Subodha Subasingha, Mr. Vishwa Gurusinghe",
+        "F1301+F1302"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0301",
+      "day": "Wednesday",
+      "start": "13:30",
+      "end": "",
+      "title": "IT3040 - ITPM Practical",
+      "module_code": "IT3040",
+      "location": "F1301+F1302",
+      "instructors": "Ms. Subodha Subasingha, Mr. Vishwa Gurusinghe",
+      "raw": [
+        "Y3.S1.WD.IT.0301",
+        "IT3040 - ITPM Practical",
+        "Ms. Subodha Subasingha, Mr. Vishwa Gurusinghe",
+        "F1301+F1302"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0301",
+      "day": "Friday",
+      "start": "14:30",
+      "end": "",
+      "title": "IT3030 - PAF Lecture, Tutorial",
+      "module_code": "IT3030",
+      "location": "A304",
+      "instructors": "Ms. Sasini Hathurusinghe",
+      "raw": [
+        "Y3.S1.WD.IT.03, Y3.S1.WD.DS.01",
+        "IT3030 - PAF Lecture, Tutorial",
+        "Ms. Sasini Hathurusinghe",
+        "A304"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0301",
+      "day": "Monday",
+      "start": "15:30",
+      "end": "",
+      "title": "IT3030 - PAF Practical BYOD",
+      "module_code": "IT3030",
+      "location": "G1106",
+      "instructors": "Ms. Prashanthi Dissanayake, Mr. Malshan Gunasekara",
+      "raw": [
+        "Y3.S1.WD.IT.0301",
+        "IT3030 - PAF Practical BYOD",
+        "Ms. Prashanthi Dissanayake, Mr. Malshan Gunasekara",
+        "G1106"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0301",
+      "day": "Wednesday",
+      "start": "15:30",
+      "end": "",
+      "title": "IT3020 - DS Practical BYOD",
+      "module_code": "IT3020",
+      "location": "G1101",
+      "instructors": "Ms. Minuli Samaraweera, Mr. Bhanuka Edirisinghe",
+      "raw": [
+        "Y3.S1.WD.IT.0301",
+        "IT3020 - DS Practical BYOD",
+        "Ms. Minuli Samaraweera, Mr. Bhanuka Edirisinghe",
+        "G1101"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0301",
+      "day": "Monday",
+      "start": "16:30",
+      "end": "",
+      "title": "IT3030 - PAF Practical BYOD",
+      "module_code": "IT3030",
+      "location": "G1106",
+      "instructors": "Ms. Prashanthi Dissanayake, Mr. Malshan Gunasekara",
+      "raw": [
+        "Y3.S1.WD.IT.0301",
+        "IT3030 - PAF Practical BYOD",
+        "Ms. Prashanthi Dissanayake, Mr. Malshan Gunasekara",
+        "G1106"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0301",
+      "day": "Wednesday",
+      "start": "16:30",
+      "end": "",
+      "title": "IT3020 - DS Practical BYOD",
+      "module_code": "IT3020",
+      "location": "G1101",
+      "instructors": "Ms. Minuli Samaraweera, Mr. Bhanuka Edirisinghe",
+      "raw": [
+        "Y3.S1.WD.IT.0301",
+        "IT3020 - DS Practical BYOD",
+        "Ms. Minuli Samaraweera, Mr. Bhanuka Edirisinghe",
+        "G1101"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0301",
+      "day": "Thursday",
+      "start": "19:00",
+      "end": "",
+      "title": "IT3050 - ESDSeminar Lecture Online",
+      "module_code": "IT3050",
+      "location": "",
+      "instructors": "Mr. Bimal Gunapala, Mr. Bhanuka Edirisinghe",
+      "raw": [
+        "Y3.S1.WD.ISE.01, Y3.S2.WD.ISE.01, Y3.S1.WD.IT.01, Y3.S1.WD.IT.02, Y3.S1.WD.IT.03, Y3.S1.WD.CSNE.01, Y3.S1.WD.CS.01, Y3.S1.WD.SE.01, Y3.S1.WD.IM.01, Y3.S1.WD.DS.01, Y3.S2.WD.IT.01, Y3.S2.WD.SE.01, Y3.S2.WD.DS.01, Y3.S2.WD.IM.01, Y3.S2.WD.CS.01, Y3.S2.WD.CSNE.01",
+        "IT3050 - ESDSeminar Lecture Online",
+        "Mr. Bimal Gunapala, Mr. Bhanuka Edirisinghe"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0302",
+      "day": "Monday",
+      "start": "08:30",
+      "end": "",
+      "title": "IT3020 - DS Practical BYOD",
+      "module_code": "IT3020",
+      "location": "G1103",
+      "instructors": "Ms. Minuli Samaraweera, Ms. Prashanthi Dissanayake",
+      "raw": [
+        "Y3.S1.WD.IT.0302",
+        "IT3020 - DS Practical BYOD",
+        "Ms. Minuli Samaraweera, Ms. Prashanthi Dissanayake",
+        "G1103"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0302",
+      "day": "Wednesday",
+      "start": "08:30",
+      "end": "",
+      "title": "IT3040 - ITPM Lecture",
+      "module_code": "IT3040",
+      "location": "G601",
+      "instructors": "Prof. Dilshan de Silva, Ms. Mathishi Adya Dissanayake",
+      "raw": [
+        "IT3040 - ITPM Lecture",
+        "Prof. Dilshan de Silva, Ms. Mathishi Adya Dissanayake",
+        "G601"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0302",
+      "day": "Thursday",
+      "start": "08:30",
+      "end": "",
+      "title": "IT3020 - DS Lecture, Tutorial",
+      "module_code": "IT3020",
+      "location": "G1101",
+      "instructors": "Dr. Prasanna Sumathipala, Ms. Malithi Nawarathne",
+      "raw": [
+        "IT3020 - DS Lecture, Tutorial",
+        "Dr. Prasanna Sumathipala, Ms. Malithi Nawarathne",
+        "G1101"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0302",
+      "day": "Monday",
+      "start": "09:30",
+      "end": "",
+      "title": "IT3020 - DS Practical BYOD",
+      "module_code": "IT3020",
+      "location": "G1103",
+      "instructors": "Ms. Minuli Samaraweera, Ms. Prashanthi Dissanayake",
+      "raw": [
+        "Y3.S1.WD.IT.0302",
+        "IT3020 - DS Practical BYOD",
+        "Ms. Minuli Samaraweera, Ms. Prashanthi Dissanayake",
+        "G1103"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0302",
+      "day": "Wednesday",
+      "start": "09:30",
+      "end": "",
+      "title": "IT3010 - NDM Lecture",
+      "module_code": "IT3010",
+      "location": "F1308",
+      "instructors": "Mr. Ashvinda Iddamalgoda",
+      "raw": [
+        "Y3.S1.WD.IT.03, Y3.S2.WD.IT.01",
+        "IT3010 - NDM Lecture",
+        "Mr. Ashvinda Iddamalgoda",
+        "F1308"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0302",
+      "day": "Monday",
+      "start": "10:30",
+      "end": "",
+      "title": "Y3.S1.WD.IT.0302, Y3.S1.WD.IT.0303",
+      "module_code": "",
+      "location": "IT3030 - PAF Practical BYOD",
+      "instructors": "IT3010 - NDM Practical BYOD",
+      "raw": [
+        "Y3.S1.WD.IT.0301",
+        "Y3.S1.WD.IT.0302, Y3.S1.WD.IT.0303",
+        "IT3010 - NDM Practical BYOD",
+        "IT3030 - PAF Practical BYOD",
+        "Mr. Sahan Dhananjaya, Ms. Jasmi Gunasekara",
+        "Ms. Nadeema Hansani, Mr. Malshan Gunasekara",
+        "G1101",
+        "G1106"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0302",
+      "day": "Wednesday",
+      "start": "10:30",
+      "end": "",
+      "title": "IT3040 - ITPM Tutorial",
+      "module_code": "IT3040",
+      "location": "G601",
+      "instructors": "Ms. Minuli Samaraweera, Ms. Mathishi Adya Dissanayake",
+      "raw": [
+        "IT3040 - ITPM Tutorial",
+        "Ms. Minuli Samaraweera, Ms. Mathishi Adya Dissanayake",
+        "G601"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0302",
+      "day": "Monday",
+      "start": "11:30",
+      "end": "",
+      "title": "Y3.S1.WD.IT.0302, Y3.S1.WD.IT.0303",
+      "module_code": "",
+      "location": "IT3030 - PAF Practical BYOD",
+      "instructors": "IT3010 - NDM Practical BYOD",
+      "raw": [
+        "Y3.S1.WD.IT.0301",
+        "Y3.S1.WD.IT.0302, Y3.S1.WD.IT.0303",
+        "IT3010 - NDM Practical BYOD",
+        "IT3030 - PAF Practical BYOD",
+        "Mr. Sahan Dhananjaya, Ms. Jasmi Gunasekara",
+        "Ms. Nadeema Hansani, Mr. Malshan Gunasekara",
+        "G1101",
+        "G1106"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0302",
+      "day": "Friday",
+      "start": "11:30",
+      "end": "",
+      "title": "IT3010 - NDM Tutorial",
+      "module_code": "IT3010",
+      "location": "F1308",
+      "instructors": "Mr. Ashvinda Iddamalgoda, Ms. Shashika Lokuliyana",
+      "raw": [
+        "Y3.S1.WD.IT.03, Y3.S2.WD.IT.01",
+        "IT3010 - NDM Tutorial",
+        "Mr. Ashvinda Iddamalgoda, Ms. Shashika Lokuliyana",
+        "F1308"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0302",
+      "day": "Friday",
+      "start": "12:30",
+      "end": "",
+      "title": "IT3010 - NDM Practical BYOD",
+      "module_code": "IT3010",
+      "location": "",
+      "instructors": "G1102",
+      "raw": [
+        "Y3.S1.WD.IT.0302, Y3.S1.WD.IT.0303",
+        "IT3010 - NDM Practical BYOD",
+        "G1102"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0302",
+      "day": "Thursday",
+      "start": "13:30",
+      "end": "",
+      "title": "IT3040 - ITPM Practical",
+      "module_code": "IT3040",
+      "location": "F1303+F1304",
+      "instructors": "Ms. Minuli Samaraweera, Ms. Tasikala Rathnayake",
+      "raw": [
+        "Y3.S1.WD.IT.0302",
+        "IT3040 - ITPM Practical",
+        "Ms. Minuli Samaraweera, Ms. Tasikala Rathnayake",
+        "F1303+F1304"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0302",
+      "day": "Friday",
+      "start": "13:30",
+      "end": "",
+      "title": "IT3010 - NDM Practical BYOD",
+      "module_code": "IT3010",
+      "location": "",
+      "instructors": "G1102",
+      "raw": [
+        "Y3.S1.WD.IT.0302, Y3.S1.WD.IT.0303",
+        "IT3010 - NDM Practical BYOD",
+        "G1102"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0302",
+      "day": "Thursday",
+      "start": "14:30",
+      "end": "",
+      "title": "IT3040 - ITPM Practical",
+      "module_code": "IT3040",
+      "location": "F1303+F1304",
+      "instructors": "Ms. Minuli Samaraweera, Ms. Tasikala Rathnayake",
+      "raw": [
+        "Y3.S1.WD.IT.0302",
+        "IT3040 - ITPM Practical",
+        "Ms. Minuli Samaraweera, Ms. Tasikala Rathnayake",
+        "F1303+F1304"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0302",
+      "day": "Friday",
+      "start": "14:30",
+      "end": "",
+      "title": "IT3030 - PAF Lecture, Tutorial",
+      "module_code": "IT3030",
+      "location": "A304",
+      "instructors": "Ms. Sasini Hathurusinghe",
+      "raw": [
+        "Y3.S1.WD.IT.03, Y3.S1.WD.DS.01",
+        "IT3030 - PAF Lecture, Tutorial",
+        "Ms. Sasini Hathurusinghe",
+        "A304"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0302",
+      "day": "Thursday",
+      "start": "19:00",
+      "end": "",
+      "title": "IT3050 - ESDSeminar Lecture Online",
+      "module_code": "IT3050",
+      "location": "",
+      "instructors": "Mr. Bimal Gunapala, Mr. Bhanuka Edirisinghe",
+      "raw": [
+        "Y3.S1.WD.ISE.01, Y3.S2.WD.ISE.01, Y3.S1.WD.IT.01, Y3.S1.WD.IT.02, Y3.S1.WD.IT.03, Y3.S1.WD.CSNE.01, Y3.S1.WD.CS.01, Y3.S1.WD.SE.01, Y3.S1.WD.IM.01, Y3.S1.WD.DS.01, Y3.S2.WD.IT.01, Y3.S2.WD.SE.01, Y3.S2.WD.DS.01, Y3.S2.WD.IM.01, Y3.S2.WD.CS.01, Y3.S2.WD.CSNE.01",
+        "IT3050 - ESDSeminar Lecture Online",
+        "Mr. Bimal Gunapala, Mr. Bhanuka Edirisinghe"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0303",
+      "day": "Wednesday",
+      "start": "08:30",
+      "end": "",
+      "title": "IT3040 - ITPM Lecture",
+      "module_code": "IT3040",
+      "location": "G601",
+      "instructors": "Prof. Dilshan de Silva, Ms. Mathishi Adya Dissanayake",
+      "raw": [
+        "IT3040 - ITPM Lecture",
+        "Prof. Dilshan de Silva, Ms. Mathishi Adya Dissanayake",
+        "G601"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0303",
+      "day": "Thursday",
+      "start": "08:30",
+      "end": "",
+      "title": "IT3020 - DS Lecture, Tutorial",
+      "module_code": "IT3020",
+      "location": "G1101",
+      "instructors": "Dr. Prasanna Sumathipala, Ms. Malithi Nawarathne",
+      "raw": [
+        "IT3020 - DS Lecture, Tutorial",
+        "Dr. Prasanna Sumathipala, Ms. Malithi Nawarathne",
+        "G1101"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0303",
+      "day": "Wednesday",
+      "start": "09:30",
+      "end": "",
+      "title": "IT3010 - NDM Lecture",
+      "module_code": "IT3010",
+      "location": "F1308",
+      "instructors": "Mr. Ashvinda Iddamalgoda",
+      "raw": [
+        "Y3.S1.WD.IT.03, Y3.S2.WD.IT.01",
+        "IT3010 - NDM Lecture",
+        "Mr. Ashvinda Iddamalgoda",
+        "F1308"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0303",
+      "day": "Monday",
+      "start": "10:30",
+      "end": "",
+      "title": "Y3.S1.WD.IT.0302, Y3.S1.WD.IT.0303",
+      "module_code": "",
+      "location": "IT3030 - PAF Practical BYOD",
+      "instructors": "IT3010 - NDM Practical BYOD",
+      "raw": [
+        "Y3.S1.WD.IT.0301",
+        "Y3.S1.WD.IT.0302, Y3.S1.WD.IT.0303",
+        "IT3010 - NDM Practical BYOD",
+        "IT3030 - PAF Practical BYOD",
+        "Mr. Sahan Dhananjaya, Ms. Jasmi Gunasekara",
+        "Ms. Nadeema Hansani, Mr. Malshan Gunasekara",
+        "G1101",
+        "G1106"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0303",
+      "day": "Wednesday",
+      "start": "10:30",
+      "end": "",
+      "title": "IT3040 - ITPM Tutorial",
+      "module_code": "IT3040",
+      "location": "G601",
+      "instructors": "Ms. Minuli Samaraweera, Ms. Mathishi Adya Dissanayake",
+      "raw": [
+        "IT3040 - ITPM Tutorial",
+        "Ms. Minuli Samaraweera, Ms. Mathishi Adya Dissanayake",
+        "G601"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0303",
+      "day": "Monday",
+      "start": "11:30",
+      "end": "",
+      "title": "Y3.S1.WD.IT.0302, Y3.S1.WD.IT.0303",
+      "module_code": "",
+      "location": "IT3030 - PAF Practical BYOD",
+      "instructors": "IT3010 - NDM Practical BYOD",
+      "raw": [
+        "Y3.S1.WD.IT.0301",
+        "Y3.S1.WD.IT.0302, Y3.S1.WD.IT.0303",
+        "IT3010 - NDM Practical BYOD",
+        "IT3030 - PAF Practical BYOD",
+        "Mr. Sahan Dhananjaya, Ms. Jasmi Gunasekara",
+        "Ms. Nadeema Hansani, Mr. Malshan Gunasekara",
+        "G1101",
+        "G1106"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0303",
+      "day": "Thursday",
+      "start": "11:30",
+      "end": "",
+      "title": "IT3020 - DS Practical BYOD",
+      "module_code": "IT3020",
+      "location": "G1106",
+      "instructors": "Ms. Prabhashini Jayasinghe",
+      "raw": [
+        "Y3.S1.WD.IT.0303",
+        "IT3020 - DS Practical BYOD",
+        "Ms. Prabhashini Jayasinghe",
+        "G1106"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0303",
+      "day": "Friday",
+      "start": "11:30",
+      "end": "",
+      "title": "IT3010 - NDM Tutorial",
+      "module_code": "IT3010",
+      "location": "F1308",
+      "instructors": "Mr. Ashvinda Iddamalgoda, Ms. Shashika Lokuliyana",
+      "raw": [
+        "Y3.S1.WD.IT.03, Y3.S2.WD.IT.01",
+        "IT3010 - NDM Tutorial",
+        "Mr. Ashvinda Iddamalgoda, Ms. Shashika Lokuliyana",
+        "F1308"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0303",
+      "day": "Thursday",
+      "start": "12:30",
+      "end": "",
+      "title": "IT3020 - DS Practical BYOD",
+      "module_code": "IT3020",
+      "location": "G1106",
+      "instructors": "Ms. Prabhashini Jayasinghe",
+      "raw": [
+        "Y3.S1.WD.IT.0303",
+        "IT3020 - DS Practical BYOD",
+        "Ms. Prabhashini Jayasinghe",
+        "G1106"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0303",
+      "day": "Friday",
+      "start": "12:30",
+      "end": "",
+      "title": "IT3010 - NDM Practical BYOD",
+      "module_code": "IT3010",
+      "location": "",
+      "instructors": "G1102",
+      "raw": [
+        "Y3.S1.WD.IT.0302, Y3.S1.WD.IT.0303",
+        "IT3010 - NDM Practical BYOD",
+        "G1102"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0303",
+      "day": "Monday",
+      "start": "13:30",
+      "end": "",
+      "title": "IT3040 - ITPM Practical",
+      "module_code": "IT3040",
+      "location": "A410",
+      "instructors": "Ms. Subodha Subasingha, Ms. Poorna Gayathri Panduwawala",
+      "raw": [
+        "Y3.S1.WD.IT.0303",
+        "IT3040 - ITPM Practical",
+        "Ms. Subodha Subasingha, Ms. Poorna Gayathri Panduwawala",
+        "A410"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0303",
+      "day": "Friday",
+      "start": "13:30",
+      "end": "",
+      "title": "IT3010 - NDM Practical BYOD",
+      "module_code": "IT3010",
+      "location": "",
+      "instructors": "G1102",
+      "raw": [
+        "Y3.S1.WD.IT.0302, Y3.S1.WD.IT.0303",
+        "IT3010 - NDM Practical BYOD",
+        "G1102"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0303",
+      "day": "Monday",
+      "start": "14:30",
+      "end": "",
+      "title": "IT3040 - ITPM Practical",
+      "module_code": "IT3040",
+      "location": "A410",
+      "instructors": "Ms. Subodha Subasingha, Ms. Poorna Gayathri Panduwawala",
+      "raw": [
+        "Y3.S1.WD.IT.0303",
+        "IT3040 - ITPM Practical",
+        "Ms. Subodha Subasingha, Ms. Poorna Gayathri Panduwawala",
+        "A410"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0303",
+      "day": "Friday",
+      "start": "14:30",
+      "end": "",
+      "title": "IT3030 - PAF Lecture, Tutorial",
+      "module_code": "IT3030",
+      "location": "A304",
+      "instructors": "Ms. Sasini Hathurusinghe",
+      "raw": [
+        "Y3.S1.WD.IT.03, Y3.S1.WD.DS.01",
+        "IT3030 - PAF Lecture, Tutorial",
+        "Ms. Sasini Hathurusinghe",
+        "A304"
+      ]
+    },
+    {
+      "batch": "WD",
+      "main_group": "Y3.S1.WD.IT.03",
+      "subgroup": "Y3.S1.WD.IT.0303",
+      "day": "Thursday",
+      "start": "19:00",
+      "end": "",
+      "title": "IT3050 - ESDSeminar Lecture Online",
+      "module_code": "IT3050",
+      "location": "",
+      "instructors": "Mr. Bimal Gunapala, Mr. Bhanuka Edirisinghe",
+      "raw": [
+        "Y3.S1.WD.ISE.01, Y3.S2.WD.ISE.01, Y3.S1.WD.IT.01, Y3.S1.WD.IT.02, Y3.S1.WD.IT.03, Y3.S1.WD.CSNE.01, Y3.S1.WD.CS.01, Y3.S1.WD.SE.01, Y3.S1.WD.IM.01, Y3.S1.WD.DS.01, Y3.S2.WD.IT.01, Y3.S2.WD.SE.01, Y3.S2.WD.DS.01, Y3.S2.WD.IM.01, Y3.S2.WD.CS.01, Y3.S2.WD.CSNE.01",
+        "IT3050 - ESDSeminar Lecture Online",
+        "Mr. Bimal Gunapala, Mr. Bhanuka Edirisinghe"
+      ]
+    }
+  ]
+}
