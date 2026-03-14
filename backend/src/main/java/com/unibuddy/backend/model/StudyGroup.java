@@ -3,6 +3,7 @@ package com.unibuddy.backend.model;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 @Table(name = "study_groups")
@@ -20,12 +21,12 @@ public class StudyGroup {
     private String description;
     private String subgroup;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> requiredSkills;
 
     private String targetCGPA;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> memberIds;
 
     private Integer maxMembers;

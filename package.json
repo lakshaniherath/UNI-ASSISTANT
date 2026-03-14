@@ -7,7 +7,8 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "postinstall": "node -e \"const fs=require('fs'),p='node_modules/@react-navigation/elements/lib/module/assets/'; ['1x','2x','3x','4x'].forEach(d=>{const src=p+'back-icon@'+d+'x.ios.png',dst=p+'back-icon@'+d+'x.png';if(fs.existsSync(src)&&!fs.existsSync(dst))fs.copyFileSync(src,dst);})\""
   },
   "dependencies": {
     "@notifee/react-native": "^9.1.8",

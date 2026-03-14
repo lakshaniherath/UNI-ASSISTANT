@@ -10,6 +10,7 @@ import com.unibuddy.backend.repository.JoinRequestRepository;
 import com.unibuddy.backend.repository.StudyGroupRepository;
 import com.unibuddy.backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ public class StudyGroupService {
     }
 
     // 🚀 Match Score Logic
+    @Transactional(readOnly = true)
     public List<StudyGroupResponseDTO> getGroupsWithMatchScore(String universityId) {
         User user = userRepository.findByUniversityId(universityId)
                 .orElseThrow(() -> new RuntimeException("User not found: " + universityId));
@@ -66,6 +68,7 @@ public class StudyGroupService {
     }
 
     // 🚀 Join Request එකක් යැවීමේ නව පහසුකම
+    @Transactional
     public String sendJoinRequest(Long groupId, String studentId) {
         studyGroupRepository.findById(groupId)
                 .orElseThrow(() -> new RuntimeException("Group not found"));
@@ -110,6 +113,7 @@ public class StudyGroupService {
     }
 
     // 🚀 Group Leader හට Request එක Accept කිරීමට ඇති Method එක
+    @Transactional
     public String acceptJoinRequest(Long requestId) {
         JoinRequest request = joinRequestRepository.findById(requestId)
                 .orElseThrow(() -> new RuntimeException("Request not found"));
@@ -146,6 +150,7 @@ public class StudyGroupService {
     }
 
     // 🚀 Group Leader හට Request එක Reject කිරීමට ඇති Method එක
+    @Transactional
     public String rejectJoinRequest(Long requestId) {
         JoinRequest request = joinRequestRepository.findById(requestId)
                 .orElseThrow(() -> new RuntimeException("Request not found"));
@@ -167,6 +172,7 @@ public class StudyGroupService {
     }
 
     // 🚀 Group Leader හට Pending Requests ලබා ගැනීම (Live User Data සමඟ)
+    @Transactional(readOnly = true)
     public List<JoinRequestResponseDTO> getPendingRequestsByGroupId(Long groupId) {
         // 1. Fetch all PENDING requests for this group
         List<JoinRequest> requests = joinRequestRepository.findByGroupId(groupId).stream()
@@ -188,6 +194,7 @@ public class StudyGroupService {
         }).toList();
     }
 
+    @Transactional
     public StudyGroup createGroup(StudyGroup group, String creatorId) {
         try {
             validateGroupData(group);
@@ -202,6 +209,7 @@ public class StudyGroupService {
         }
     }
 
+    @Transactional(readOnly = true)
     public List<StudyGroup> getAllGroups() {
         return studyGroupRepository.findAll();
     }
@@ -219,6 +227,7 @@ public class StudyGroupService {
     }
 
     // 🚀 Group එකේ සාමාජිකයන්ගේ Live Details ලබා ගැනීම
+    @Transactional(readOnly = true)
     public List<MemberDTO> getGroupMembers(Long groupId) {
         StudyGroup group = studyGroupRepository.findById(groupId)
                 .orElseThrow(() -> new RuntimeException("Group not found"));
@@ -243,6 +252,7 @@ public class StudyGroupService {
     }
 
     // 🚀 Group Leader හට සාමාජිකයෙක් ඉවත් කිරීම
+    @Transactional
     public String removeMember(Long groupId, String memberId) {
         StudyGroup group = studyGroupRepository.findById(groupId)
                 .orElseThrow(() -> new RuntimeException("Group not found"));
@@ -263,6 +273,7 @@ public class StudyGroupService {
     }
 
     // 🚀 Group Leader හට Group එක Delete කිරීම
+    @Transactional
     public String deleteGroup(Long groupId, String requesterId) {
         StudyGroup group = studyGroupRepository.findById(groupId)
                 .orElseThrow(() -> new RuntimeException("Group not found"));
@@ -280,6 +291,7 @@ public class StudyGroupService {
     }
 
     // 🚀 සාමාජිකයෙක් Group එකෙන් ඉවත්වීම
+    @Transactional
     public String leaveGroup(Long groupId, String studentId) {
         StudyGroup group = studyGroupRepository.findById(groupId)
                 .orElseThrow(() -> new RuntimeException("Group not found"));

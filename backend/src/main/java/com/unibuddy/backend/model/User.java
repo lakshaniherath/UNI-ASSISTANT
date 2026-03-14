@@ -40,7 +40,7 @@ public class User {
     private String cgpa;
 
     // The student's selected skills
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> mySkills;
 
     @Column(length = 1024)
