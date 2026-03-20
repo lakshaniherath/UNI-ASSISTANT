@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -17,6 +17,7 @@ import {
   TimetableEvent,
 } from '../../services/timetableService';
 import { clearScheduledReminders, scheduleClassRemindersForNextWeek } from '../../services/reminderScheduler';
+import { appTheme } from '../../theme/appTheme';
 
 const DAY_TABS = ['ALL', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
 const TYPE_TABS = ['ALL', 'LECTURE', 'TUTORIAL', 'PRACTICAL'];
@@ -33,7 +34,7 @@ const TimetableScreen = ({ route, navigation }: any) => {
 
   const subgroup = userData?.subgroup;
 
-  const load = async () => {
+  const load = useCallback(async () => {
     if (!subgroup) {
       Alert.alert('Profile Required', 'Please set your subgroup first.');
       return;
@@ -48,17 +49,17 @@ const TimetableScreen = ({ route, navigation }: any) => {
       setEvents(table);
       await clearScheduledReminders();
       await scheduleClassRemindersForNextWeek(table, prefs as ReminderPreference);
-    } catch (e) {
+    } catch {
       Alert.alert('Error', 'Could not load timetable.');
     } finally {
       setLoading(false);
     }
-  };
+  }, [subgroup, userData.universityId]);
 
   useEffect(() => {
     const unsub = navigation.addListener('focus', load);
     return unsub;
-  }, [navigation, subgroup]);
+  }, [load, navigation]);
 
   const filtered = useMemo(() => {
     const seen = new Set<string>();
@@ -80,6 +81,7 @@ const TimetableScreen = ({ route, navigation }: any) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.glowTop} />
       <Text style={styles.title}>Smart Timetable</Text>
       <Text style={styles.subtitle}>Subgroup: {subgroup}</Text>
 
@@ -140,11 +142,16 @@ const TimetableScreen = ({ route, navigation }: any) => {
 
       <View style={styles.switchRow}>
         <Text style={styles.switchText}>Show hall classes only</Text>
-        <Switch value={showOnlyHall} onValueChange={setShowOnlyHall} />
+        <Switch
+          value={showOnlyHall}
+          onValueChange={setShowOnlyHall}
+          trackColor={{ false: '#3D536B', true: '#295A89' }}
+          thumbColor={showOnlyHall ? appTheme.colors.accent : '#f4f3f4'}
+        />
       </View>
 
       {loading ? (
-        <ActivityIndicator size="large" color="#1864AB" />
+        <ActivityIndicator size="large" color={appTheme.colors.accent} />
       ) : (
         <FlatList
           data={filtered}
@@ -207,36 +214,55 @@ const TimetableScreen = ({ route, navigation }: any) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F5F7FA', padding: 16 },
-  title: { fontSize: 25, fontWeight: '700', color: '#102A43' },
-  subtitle: { color: '#486581', marginTop: 4, marginBottom: 10 },
+  container: { flex: 1, backgroundColor: appTheme.colors.bg, padding: 16 },
+  glowTop: {
+    position: 'absolute',
+    top: -90,
+    right: -70,
+    width: 230,
+    height: 230,
+    borderRadius: 115,
+    backgroundColor: appTheme.colors.overlayBlue,
+  },
+  title: { fontSize: 25, fontWeight: '700', color: appTheme.colors.textPrimary },
+  subtitle: { color: appTheme.colors.textSecondary, marginTop: 4, marginBottom: 10 },
   quickRow: { flexDirection: 'row', gap: 10, marginBottom: 8 },
-  quickBtn: { flex: 1, backgroundColor: '#1864AB', padding: 10, borderRadius: 10 },
+  quickBtn: { flex: 1, backgroundColor: appTheme.colors.primary, padding: 12, borderRadius: 14 },
   quickText: { color: '#fff', textAlign: 'center', fontWeight: '700', fontSize: 12 },
-  personalBtn: { backgroundColor: '#2F855A', borderRadius: 10, padding: 10, marginBottom: 8 },
+  personalBtn: { backgroundColor: appTheme.colors.success, borderRadius: 14, padding: 12, marginBottom: 8 },
   personalBtnText: { color: '#fff', textAlign: 'center', fontWeight: '700' },
   tabList: { marginVertical: 6, maxHeight: 45 },
-  tab: { paddingHorizontal: 10, paddingVertical: 7, borderRadius: 16, backgroundColor: '#E4ECF2', marginRight: 8 },
-  tabActive: { backgroundColor: '#1864AB' },
-  tabText: { color: '#334E68', fontWeight: '700' },
+  tab: { paddingHorizontal: 10, paddingVertical: 7, borderRadius: 16, backgroundColor: appTheme.colors.chipBg, borderWidth: 1, borderColor: appTheme.colors.chipBorder, marginRight: 8 },
+  tabActive: { backgroundColor: appTheme.colors.primary, borderColor: appTheme.colors.primary },
+  tabText: { color: appTheme.colors.textSecondary, fontWeight: '700' },
   tabTextActive: { color: '#fff' },
   switchRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginVertical: 10,
-    backgroundColor: '#fff',
-    borderRadius: 10,
+    backgroundColor: appTheme.colors.surface,
+    borderRadius: 14,
     paddingHorizontal: 12,
+    borderWidth: 1,
+    borderColor: appTheme.colors.chipBorder,
   },
-  switchText: { color: '#334E68', fontWeight: '600' },
-  card: { backgroundColor: '#fff', borderRadius: 12, padding: 12, marginBottom: 10, elevation: 2 },
+  switchText: { color: appTheme.colors.textPrimary, fontWeight: '600' },
+  card: {
+    backgroundColor: appTheme.colors.card,
+    borderRadius: 18,
+    padding: 14,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: appTheme.colors.cardBorder,
+    ...appTheme.shadow.card,
+  },
   rowBetween: { flexDirection: 'row', justifyContent: 'space-between' },
-  code: { fontWeight: '800', color: '#1864AB' },
-  type: { color: '#627D98', fontWeight: '700' },
-  name: { color: '#102A43', fontWeight: '600', marginTop: 4 },
-  meta: { color: '#486581', marginTop: 2 },
-  empty: { textAlign: 'center', color: '#829AB1', marginTop: 40 },
+  code: { fontWeight: '800', color: appTheme.colors.primary },
+  type: { color: appTheme.colors.textDarkSoft, fontWeight: '700' },
+  name: { color: appTheme.colors.textDark, fontWeight: '600', marginTop: 4 },
+  meta: { color: appTheme.colors.textDarkSoft, marginTop: 2 },
+  empty: { textAlign: 'center', color: appTheme.colors.textSecondary, marginTop: 40 },
 });
 
 export default TimetableScreen;

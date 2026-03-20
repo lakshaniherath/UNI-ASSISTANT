@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Alert,
   FlatList,
@@ -18,6 +18,7 @@ import {
   updateTask,
 } from '../../services/timetableService';
 import { clearScheduledReminders, scheduleTaskReminders } from '../../services/reminderScheduler';
+import { appTheme } from '../../theme/appTheme';
 
 const TaskTrackerScreen = ({ route }: any) => {
   const { userData } = route.params;
@@ -29,7 +30,7 @@ const TaskTrackerScreen = ({ route }: any) => {
   const [dueDateTime, setDueDateTime] = useState('');
   const [notes, setNotes] = useState('');
 
-  const load = async () => {
+  const load = useCallback(async () => {
     try {
       const list = await getTasks(userId);
       setTasks(list);
@@ -39,11 +40,11 @@ const TaskTrackerScreen = ({ route }: any) => {
     } catch {
       Alert.alert('Error', 'Could not load tasks.');
     }
-  };
+  }, [userId]);
 
   useEffect(() => {
     load();
-  }, []);
+  }, [load]);
 
   const filtered = useMemo(() => tasks.filter(t => t.status === tab), [tasks, tab]);
 
@@ -89,19 +90,23 @@ const TaskTrackerScreen = ({ route }: any) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.glowTop} />
       <Text style={styles.title}>Task Tracker</Text>
-      <TextInput style={styles.input} placeholder="Task title" value={title} onChangeText={setTitle} />
-      <TextInput style={styles.input} placeholder="Module code (optional)" value={moduleCode} onChangeText={setModuleCode} />
+      <View style={styles.formPanel}>
+      <TextInput style={styles.input} placeholder="Task title" placeholderTextColor={appTheme.colors.textMuted} value={title} onChangeText={setTitle} />
+      <TextInput style={styles.input} placeholder="Module code (optional)" placeholderTextColor={appTheme.colors.textMuted} value={moduleCode} onChangeText={setModuleCode} />
       <TextInput
         style={styles.input}
         placeholder="Due datetime (yyyy-MM-ddTHH:mm)"
+        placeholderTextColor={appTheme.colors.textMuted}
         value={dueDateTime}
         onChangeText={setDueDateTime}
       />
-      <TextInput style={[styles.input, styles.notes]} placeholder="Notes" value={notes} onChangeText={setNotes} multiline />
+      <TextInput style={[styles.input, styles.notes]} placeholder="Notes" placeholderTextColor={appTheme.colors.textMuted} value={notes} onChangeText={setNotes} multiline />
       <TouchableOpacity style={styles.addBtn} onPress={addTask}>
         <Text style={styles.addBtnText}>Add Task</Text>
       </TouchableOpacity>
+      </View>
 
       <View style={styles.tabs}>
         <TouchableOpacity style={[styles.tab, tab === 'PENDING' && styles.tabActive]} onPress={() => setTab('PENDING')}>
@@ -137,31 +142,66 @@ const TaskTrackerScreen = ({ route }: any) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F5F7FA', padding: 16 },
-  title: { fontSize: 24, fontWeight: '700', color: '#102A43', marginBottom: 10 },
+  container: { flex: 1, backgroundColor: appTheme.colors.bg, padding: 16 },
+  glowTop: {
+    position: 'absolute',
+    top: -90,
+    right: -70,
+    width: 220,
+    height: 220,
+    borderRadius: 110,
+    backgroundColor: appTheme.colors.overlayBlue,
+  },
+  title: { fontSize: 24, fontWeight: '700', color: appTheme.colors.textPrimary, marginBottom: 10 },
+  formPanel: {
+    backgroundColor: appTheme.colors.surface,
+    borderRadius: 22,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: appTheme.colors.chipBorder,
+    marginBottom: 12,
+  },
   input: {
     backgroundColor: '#fff',
-    borderColor: '#D9E2EC',
+    borderColor: appTheme.colors.inputBorder,
     borderWidth: 1,
-    borderRadius: 10,
+    borderRadius: 14,
     paddingHorizontal: 12,
     paddingVertical: 10,
     marginBottom: 8,
+    color: appTheme.colors.textDark,
   },
   notes: { height: 70, textAlignVertical: 'top' },
-  addBtn: { backgroundColor: '#1864AB', borderRadius: 10, padding: 11, alignItems: 'center', marginBottom: 10 },
+  addBtn: { backgroundColor: appTheme.colors.primary, borderRadius: 14, padding: 13, alignItems: 'center', marginTop: 4 },
   addBtnText: { color: '#fff', fontWeight: '700' },
   tabs: { flexDirection: 'row', marginBottom: 10 },
-  tab: { flex: 1, padding: 10, borderRadius: 8, backgroundColor: '#E4ECF2', marginRight: 8, alignItems: 'center' },
-  tabActive: { backgroundColor: '#1864AB' },
-  tabText: { color: '#334E68', fontWeight: '700' },
+  tab: {
+    flex: 1,
+    padding: 12,
+    borderRadius: 14,
+    backgroundColor: appTheme.colors.chipBg,
+    borderWidth: 1,
+    borderColor: appTheme.colors.chipBorder,
+    marginRight: 8,
+    alignItems: 'center',
+  },
+  tabActive: { backgroundColor: appTheme.colors.primary, borderColor: appTheme.colors.primary },
+  tabText: { color: appTheme.colors.textSecondary, fontWeight: '700' },
   tabTextActive: { color: '#fff' },
-  card: { backgroundColor: '#fff', borderRadius: 12, padding: 12, marginBottom: 10 },
-  cardTitle: { color: '#102A43', fontWeight: '700' },
-  cardMeta: { color: '#486581', marginTop: 3 },
+  card: {
+    backgroundColor: appTheme.colors.card,
+    borderRadius: 18,
+    padding: 14,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: appTheme.colors.cardBorder,
+    ...appTheme.shadow.card,
+  },
+  cardTitle: { color: appTheme.colors.textDark, fontWeight: '700' },
+  cardMeta: { color: appTheme.colors.textDarkSoft, marginTop: 3 },
   row: { flexDirection: 'row', marginTop: 10 },
-  smallBtn: { flex: 1, backgroundColor: '#1864AB', borderRadius: 8, padding: 8, alignItems: 'center', marginRight: 8 },
-  deleteBtn: { backgroundColor: '#E53E3E', marginRight: 0 },
+  smallBtn: { flex: 1, backgroundColor: appTheme.colors.primary, borderRadius: 10, padding: 10, alignItems: 'center', marginRight: 8 },
+  deleteBtn: { backgroundColor: appTheme.colors.danger, marginRight: 0 },
   smallBtnText: { color: '#fff', fontWeight: '700', fontSize: 12 },
 });
 

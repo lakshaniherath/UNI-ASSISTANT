@@ -1,12 +1,14 @@
 import 'react-native-gesture-handler'; 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { StatusBar } from 'react-native';
+import { ActivityIndicator, StatusBar, View } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setupForegroundMessageListener } from './src/services/notifications';
 
 import LoginScreen from './src/screens/LoginScreen';
+import OnboardingScreen, { ONBOARDING_KEY } from './src/screens/OnboardingScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
 import StudyGroupScreen from './src/screens/StudyGroupScreen'; 
@@ -22,21 +24,71 @@ import RecoveryResultsScreen from './src/screens/timetable/RecoveryResultsScreen
 import ReminderSettingsScreen from './src/screens/timetable/ReminderSettingsScreen';
 import TaskTrackerScreen from './src/screens/timetable/TaskTrackerScreen';
 import AddPersonalEventScreen from './src/screens/timetable/AddPersonalEventScreen';
+import { appTheme } from './src/theme/appTheme';
 
 const Stack = createStackNavigator();
 
+const loadingContainerStyle = {
+  flex: 1,
+  justifyContent: 'center' as const,
+  alignItems: 'center' as const,
+};
+
 const App = () => {
+  const [initialRouteName, setInitialRouteName] = useState<string | null>(null);
+
   useEffect(() => {
     // Listen for FCM messages while the app is in the foreground
     const unsubscribe = setupForegroundMessageListener();
     return unsubscribe;
   }, []);
 
+  useEffect(() => {
+    const resolveInitialRoute = async () => {
+      const seen = await AsyncStorage.getItem(ONBOARDING_KEY);
+      setInitialRouteName(seen === 'true' ? 'Login' : 'Onboarding');
+    };
+
+    resolveInitialRoute();
+  }, []);
+
+  if (!initialRouteName) {
+    return (
+      <SafeAreaProvider>
+        <StatusBar barStyle="light-content" backgroundColor={appTheme.colors.bg} />
+        <View style={[loadingContainerStyle, { backgroundColor: appTheme.colors.bg }]}>
+          <ActivityIndicator size="large" color={appTheme.colors.accent} />
+        </View>
+      </SafeAreaProvider>
+    );
+  }
+
   return (
     <SafeAreaProvider>
-      <StatusBar barStyle="dark-content" backgroundColor="#F5F7FA" />
+      <StatusBar barStyle="light-content" backgroundColor={appTheme.colors.bg} />
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Login">
+        <Stack.Navigator
+          initialRouteName={initialRouteName}
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: appTheme.colors.bg,
+            },
+            headerTintColor: appTheme.colors.textPrimary,
+            headerTitleStyle: {
+              fontWeight: '700',
+            },
+            headerShadowVisible: false,
+            cardStyle: {
+              backgroundColor: appTheme.colors.bg,
+            },
+          }}
+        >
+
+          <Stack.Screen
+            name="Onboarding"
+            component={OnboardingScreen}
+            options={{ headerShown: false }}
+          />
           
           <Stack.Screen 
             name="Login" 

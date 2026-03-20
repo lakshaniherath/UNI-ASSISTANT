@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -7,9 +7,9 @@ import {
   StyleSheet,
   Alert,
   ActivityIndicator,
-  ScrollView,
 } from 'react-native';
 import { api } from '../services/api';
+import { appTheme } from '../theme/appTheme';
 
 interface MemberDTO {
   universityId: string;
@@ -29,21 +29,21 @@ const GroupDetailsScreen = ({ route, navigation }: any) => {
   const isLeader = userData.universityId === groupData.creatorId;
   const isMember = groupData.memberIds?.includes(userData.universityId);
 
-  const fetchMembers = async () => {
+  const fetchMembers = useCallback(async () => {
     try {
       setLoading(true);
       const response = await api.get(`/groups/${groupId}/members`);
       setMembers(response.data);
-    } catch (error) {
+    } catch {
       Alert.alert('Error', 'Could not load members.');
     } finally {
       setLoading(false);
     }
-  };
+  }, [groupId]);
 
   useEffect(() => {
     fetchMembers();
-  }, []);
+  }, [fetchMembers]);
 
   const handleRemoveMember = async (memberId: string, memberName: string) => {
     Alert.alert(
@@ -127,6 +127,7 @@ const GroupDetailsScreen = ({ route, navigation }: any) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.glowTop} />
       {/* Group Info Header */}
       <View style={styles.groupHeader}>
         <Text style={styles.groupName}>{groupData.groupName}</Text>
@@ -143,7 +144,7 @@ const GroupDetailsScreen = ({ route, navigation }: any) => {
       <Text style={styles.sectionTitle}>Group Members</Text>
 
       {loading ? (
-        <ActivityIndicator size="large" color="#1864AB" />
+        <ActivityIndicator size="large" color={appTheme.colors.accent} />
       ) : (
         <FlatList
           data={members}
@@ -195,40 +196,45 @@ const GroupDetailsScreen = ({ route, navigation }: any) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: '#F5F7FA' },
-  groupHeader: {
-    backgroundColor: '#fff',
-    padding: 18,
-    borderRadius: 15,
-    marginBottom: 20,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
+  container: { flex: 1, padding: 20, backgroundColor: appTheme.colors.bg },
+  glowTop: {
+    position: 'absolute',
+    top: -90,
+    right: -60,
+    width: 220,
+    height: 220,
+    borderRadius: 110,
+    backgroundColor: appTheme.colors.overlayBlue,
   },
-  groupName: { fontSize: 22, fontWeight: 'bold', color: '#1864AB' },
-  groupSub: { fontSize: 12, color: '#40C057', fontWeight: 'bold', marginTop: 2 },
-  groupDesc: { fontSize: 14, color: '#334E68', marginTop: 8 },
+  groupHeader: {
+    backgroundColor: appTheme.colors.card,
+    padding: 18,
+    borderRadius: 18,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: appTheme.colors.cardBorder,
+    ...appTheme.shadow.card,
+  },
+  groupName: { fontSize: 22, fontWeight: 'bold', color: appTheme.colors.primary },
+  groupSub: { fontSize: 12, color: appTheme.colors.success, fontWeight: 'bold', marginTop: 2 },
+  groupDesc: { fontSize: 14, color: appTheme.colors.textDark, marginTop: 8 },
   statsRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 },
-  stat: { fontSize: 13, color: '#627D98', fontWeight: '600' },
-  skillsText: { fontSize: 12, color: '#627D98', fontStyle: 'italic', marginTop: 6 },
-  sectionTitle: { fontSize: 18, fontWeight: 'bold', color: '#102A43', marginBottom: 12 },
+  stat: { fontSize: 13, color: appTheme.colors.textDarkSoft, fontWeight: '600' },
+  skillsText: { fontSize: 12, color: appTheme.colors.textDarkSoft, fontStyle: 'italic', marginTop: 6 },
+  sectionTitle: { fontSize: 18, fontWeight: 'bold', color: appTheme.colors.textPrimary, marginBottom: 12 },
   memberCard: {
-    backgroundColor: '#fff',
+    backgroundColor: appTheme.colors.card,
     padding: 15,
-    borderRadius: 12,
+    borderRadius: 18,
     marginBottom: 12,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.08,
-    shadowRadius: 2,
+    borderWidth: 1,
+    borderColor: appTheme.colors.cardBorder,
+    ...appTheme.shadow.card,
   },
   memberHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  memberName: { fontSize: 16, fontWeight: 'bold', color: '#1864AB' },
+  memberName: { fontSize: 16, fontWeight: 'bold', color: appTheme.colors.primary },
   leaderTag: {
-    backgroundColor: '#F59E0B',
+    backgroundColor: appTheme.colors.accent,
     color: '#fff',
     fontSize: 10,
     fontWeight: 'bold',
@@ -236,10 +242,10 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     borderRadius: 6,
   },
-  memberId: { fontSize: 12, color: '#627D98', marginTop: 4 },
-  memberDetail: { fontSize: 13, color: '#475569', marginTop: 3 },
+  memberId: { fontSize: 12, color: appTheme.colors.textDarkSoft, marginTop: 4 },
+  memberDetail: { fontSize: 13, color: appTheme.colors.textDarkSoft, marginTop: 3 },
   removeBtn: {
-    backgroundColor: '#FA5252',
+    backgroundColor: appTheme.colors.danger,
     padding: 8,
     borderRadius: 6,
     marginTop: 10,
@@ -248,21 +254,21 @@ const styles = StyleSheet.create({
   removeBtnText: { color: '#fff', fontWeight: 'bold', fontSize: 12 },
   actionArea: { paddingVertical: 15 },
   deleteBtn: {
-    backgroundColor: '#FA5252',
+    backgroundColor: appTheme.colors.danger,
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
     elevation: 2,
   },
   leaveBtn: {
-    backgroundColor: '#F59E0B',
+    backgroundColor: appTheme.colors.accent,
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
     elevation: 2,
   },
   actionBtnText: { color: '#fff', fontWeight: 'bold', fontSize: 15 },
-  empty: { textAlign: 'center', marginTop: 30, color: '#94A3B8', fontSize: 16 },
+  empty: { textAlign: 'center', marginTop: 30, color: appTheme.colors.textSecondary, fontSize: 16 },
 });
 
 export default GroupDetailsScreen;

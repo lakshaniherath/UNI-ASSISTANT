@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { subscribeToTokenRefresh } from '../services/notifications';
+import { appTheme } from '../theme/appTheme';
 
 const HomeScreen = ({ route, navigation }: any) => {
   
@@ -15,6 +16,7 @@ const HomeScreen = ({ route, navigation }: any) => {
 
   return (
     <ScrollView style={styles.container}>
+      <View style={styles.glowTop} />
       <View style={styles.header}>
         <Text style={styles.welcomeText}>
           Hello, {userData ? userData.name.split(' ')[0] : 'Student'}! 👋
@@ -45,19 +47,19 @@ const HomeScreen = ({ route, navigation }: any) => {
           <Text style={styles.cardTitle}>Timetable</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('GPATracker')}>
+        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('TaskTracker', { userData })}>
           <Text style={styles.cardEmoji}>📊</Text>
-          <Text style={styles.cardTitle}>GPA Tracker</Text>
+          <Text style={styles.cardTitle}>Task Tracker</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('CampusEvents')}>
+        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('ReminderSettings', { userData })}>
           <Text style={styles.cardEmoji}>🏛️</Text>
-          <Text style={styles.cardTitle}>Events Hub</Text>
+          <Text style={styles.cardTitle}>Reminders</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Assignments')}>
+        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('AddPersonalEvent', { userData })}>
           <Text style={styles.cardEmoji}>📝</Text>
-          <Text style={styles.cardTitle}>Assignments</Text>
+          <Text style={styles.cardTitle}>Personal Events</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Login')}>
@@ -70,30 +72,45 @@ const HomeScreen = ({ route, navigation }: any) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F5F7FA' },
-  header: { padding: 30, backgroundColor: '#1864AB', borderBottomLeftRadius: 30, borderBottomRightRadius: 30 },
-  welcomeText: { fontSize: 24, fontWeight: 'bold', color: '#fff' },
-  subtitle: { fontSize: 14, color: '#D0EBFF', marginTop: 5 },
-  menuGrid: { flexDirection: 'row', flexWrap: 'wrap', padding: 15, justifyContent: 'space-between' },
+  container: { flex: 1, backgroundColor: appTheme.colors.bg },
+  glowTop: {
+    position: 'absolute',
+    top: -90,
+    right: -70,
+    width: 240,
+    height: 240,
+    borderRadius: 120,
+    backgroundColor: appTheme.colors.overlayBlue,
+  },
+  header: {
+    margin: 16,
+    padding: 24,
+    backgroundColor: appTheme.colors.primaryStrong,
+    borderRadius: 28,
+    borderWidth: 1,
+    borderColor: '#2A5A8D',
+  },
+  welcomeText: { fontSize: 24, fontWeight: 'bold', color: appTheme.colors.textPrimary },
+  subtitle: { fontSize: 14, color: appTheme.colors.textSecondary, marginTop: 5 },
+  menuGrid: { flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: 16, paddingBottom: 20, justifyContent: 'space-between' },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: appTheme.colors.card,
     width: '47%',
     padding: 20,
-    borderRadius: 15,
+    borderRadius: 18,
     marginBottom: 15,
     alignItems: 'center',
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    borderWidth: 1,
+    borderColor: appTheme.colors.cardBorder,
+    ...appTheme.shadow.card,
   },
   // 🎨 Profile Card එක කැපී පෙනෙන්න අලුත් styles
-  profileCard: { borderColor: '#1864AB', borderWidth: 1 },
-  profileTitle: { color: '#1864AB' },
-  profileSub: { fontSize: 10, color: '#627D98', marginTop: 4 },
+  profileCard: { borderColor: appTheme.colors.accent, borderWidth: 1.5 },
+  profileTitle: { color: appTheme.colors.primary },
+  profileSub: { fontSize: 10, color: appTheme.colors.textDarkSoft, marginTop: 4 },
   
   cardEmoji: { fontSize: 30, marginBottom: 10 },
-  cardTitle: { fontSize: 16, fontWeight: '600', color: '#334E68' },
+  cardTitle: { fontSize: 16, fontWeight: '600', color: appTheme.colors.textDark },
 });
 
 export default HomeScreen;
