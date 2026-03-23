@@ -55,7 +55,7 @@ const StudyGroupScreen = ({ route, navigation }: any) => {
       });
       const message = typeof response.data === 'string' ? response.data : JSON.stringify(response.data);
       setRequestedGroups(prev => new Set(prev).add(groupId));
-      Alert.alert('Success! 🎉', message);
+      Alert.alert('Success!', message);
     } catch (error: any) {
       console.error('🔴 Request to Join Error:', JSON.stringify(error.response?.data));
       let errMsg = 'Could not send the request.';
@@ -129,14 +129,14 @@ const StudyGroupScreen = ({ route, navigation }: any) => {
 
                 {/* 🎯 Displaying Target CGPA */}
                 <View style={styles.targetRow}>
-                  <Text style={styles.targetLabel}>🎯 Target CGPA: </Text>
+                  <Text style={styles.targetLabel}>Target CGPA: </Text>
                   <Text style={styles.targetValue}>{item.targetCGPA}</Text>
                 </View>
 
                 <Text style={styles.skills}>Target Skills: {item.requiredSkills?.join(', ')}</Text>
 
                 <View style={styles.footer}>
-                  <Text style={styles.members}>👥 {item.currentMembers}/{item.maxMembers}</Text>
+                  <Text style={styles.members}>{item.currentMembers}/{item.maxMembers}</Text>
 
                   {isLeader ? (
                     // 🚀 1. Button shown only to the Leader

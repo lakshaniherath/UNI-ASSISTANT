@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://10.0.2.2:8080/api';
+const BASE_URL = 'http://192.168.1.4:8080/api';
 
 export const api = axios.create({
   baseURL: BASE_URL,
-  timeout: 10000, // Request එකක් වෙනුවෙන් තත්පර 10ක් බලන් ඉන්නවා
+  timeout: 30000, // Request එකක් වෙනුවෙන් තත්පර 30ක් බලන් ඉන්නවා (විශේෂයෙන් Wi-Fi සඳහා)
   headers: {
     'Content-Type': 'application/json',
   },
@@ -22,10 +22,10 @@ api.interceptors.response.use(
   async error => {
     const { config, response } = error;
 
-    // Network error එකක් නම් හෝ Timeout වුණොත් 3 වතාවක් Retry කරනවා
-    if (!response && config && !config._retry && config.retryCount < 3) {
+    const retryCount = config.retryCount || 0;
+    if (!response && config && !config._retry && retryCount < 3) {
       config._retry = true;
-      config.retryCount = (config.retryCount || 0) + 1;
+      config.retryCount = retryCount + 1;
       
       console.log(`🔄 Retrying... Attempt ${config.retryCount}`);
       
@@ -40,7 +40,7 @@ api.interceptors.response.use(
     if (error.code === 'ECONNABORTED') {
       console.warn('❌ Network Timeout: Backend එක ගොඩක් වෙලා ගන්නවා');
     } else if (!response) {
-      console.warn('❌ Network Error: 10.0.2.2 ට කතා කරන්න බැහැ. Firewall එක check කරන්න.');
+      console.warn('❌ Network Error: 192.168.1.4:8080 ට කතා කරන්න බැහැ. Firewall එක check කරන්න.');
     } else {
       console.warn('❌ Server Error:', {
         status: response.status,
@@ -70,7 +70,7 @@ export const testBackendConnection = async () => {
     return { 
       connected: false, 
       error: error?.message || 'Connection failed',
-      hint: `Frontend: http://10.0.2.2:8080/api ට යන්න බැරි. Firewall එක check කරන්න හෝ backend restart කරන්න.`
+      hint: `Frontend: http://192.168.1.4:8080/api ට යන්න බැරි. Firewall එක check කරන්න හෝ devices දෙකම එකම Wi-Fi එකට connect කරන්න.`
     };
   }
 };

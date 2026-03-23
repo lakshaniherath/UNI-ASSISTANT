@@ -3,7 +3,7 @@
  */
 
 import { AppRegistry, Platform } from 'react-native';
-import messaging from '@react-native-firebase/messaging';
+import { getMessaging, setBackgroundMessageHandler } from '@react-native-firebase/messaging';
 import notifee, { AndroidImportance } from '@notifee/react-native';
 import App from './App';
 import { name as appName } from './app.json';
@@ -11,7 +11,7 @@ import { displayNotificationFromRemoteMessage } from './src/services/notificatio
 
 // 🚀 1. Background Message Handler
 // ඇප් එක සම්පූර්ණයෙන්ම වසා තිබියදී පණිවිඩ ලැබීමට මෙය අත්‍යවශ්‍ය වේ.
-messaging().setBackgroundMessageHandler(async remoteMessage => {
+setBackgroundMessageHandler(getMessaging(), async remoteMessage => {
   console.log('Message handled in the background!', remoteMessage);
   await displayNotificationFromRemoteMessage(remoteMessage);
 });

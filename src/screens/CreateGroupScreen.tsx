@@ -72,7 +72,7 @@ const CreateGroupScreen = ({ route, navigation }: any) => {
         params: { creatorId: userData.universityId }
       });
 
-      Alert.alert('Success! 🎉', 'Your study group has been created successfully.', [
+      Alert.alert('Success!', 'Your study group has been created successfully.', [
         { text: 'OK', onPress: () => navigation.goBack() }
       ]);
     } catch (error: any) {

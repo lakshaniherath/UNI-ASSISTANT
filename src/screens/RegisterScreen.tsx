@@ -39,13 +39,13 @@ const RegisterScreen = ({ navigation }: any) => {
       const response = await api.post('/users/register', formData);
       
       if (response.data) {
-        Alert.alert('Success! 🎉', 'ගිණුම සාර්ථකව සැකසූවා. දැන් ඔබට ලොග් විය හැක.', [
+        Alert.alert('Success!', 'ගිණුම සාර්ථකව සැකසූවා. දැන් ඔබට ලොග් විය හැක.', [
           { text: 'Login Now', onPress: () => navigation.navigate('Login') }
         ]);
       }
     } catch (error) {
       console.error(error);
-      Alert.alert('Registration Failed ❌', 'University ID එක හෝ Email එක දැනටමත් භාවිතයේ පවතී.');
+      Alert.alert('Registration Failed', 'University ID එක හෝ Email එක දැනටමත් භාවිතයේ පවතී.');
     } finally {
       setLoading(false);
     }

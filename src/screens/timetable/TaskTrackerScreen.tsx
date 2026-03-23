@@ -7,7 +7,9 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Platform,
 } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import {
   createTask,
   deleteTask,
@@ -30,6 +32,41 @@ const TaskTrackerScreen = ({ route }: any) => {
   const [dueDateTime, setDueDateTime] = useState('');
   const [notes, setNotes] = useState('');
 
+  const [date, setDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
+
+  const onChangeDate = (event: any, selectedDate?: Date) => {
+    setShowDatePicker(Platform.OS === 'ios');
+    if (selectedDate) {
+      setDate(selectedDate);
+      if (Platform.OS === 'android') {
+        setShowTimePicker(true);
+      } else {
+        updateDateString(selectedDate);
+      }
+    }
+  };
+
+  const onChangeTime = (event: any, selectedTime?: Date) => {
+    setShowTimePicker(Platform.OS === 'ios');
+    if (selectedTime) {
+      const finalDate = new Date(date);
+      finalDate.setHours(selectedTime.getHours(), selectedTime.getMinutes());
+      setDate(finalDate);
+      updateDateString(finalDate);
+    }
+  };
+
+  const updateDateString = (d: Date) => {
+    const yyyy = d.getFullYear();
+    const MM = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    const HH = String(d.getHours()).padStart(2, '0');
+    const mm = String(d.getMinutes()).padStart(2, '0');
+    setDueDateTime(`${yyyy}-${MM}-${dd}T${HH}:${mm}`);
+  };
+
   const load = useCallback(async () => {
     try {
       const list = await getTasks(userId);
@@ -46,7 +83,15 @@ const TaskTrackerScreen = ({ route }: any) => {
     load();
   }, [load]);
 
-  const filtered = useMemo(() => tasks.filter(t => t.status === tab), [tasks, tab]);
+  const filtered = useMemo(() => {
+    return tasks
+      .filter(t => t.status === tab)
+      .sort((a, b) => {
+        const dateA = new Date(a.dueDateTime).getTime();
+        const dateB = new Date(b.dueDateTime).getTime();
+        return dateA - dateB; // Closest due date first
+      });
+  }, [tasks, tab]);
 
   const addTask = async () => {
     if (!title || !dueDateTime) {
@@ -95,13 +140,40 @@ const TaskTrackerScreen = ({ route }: any) => {
       <View style={styles.formPanel}>
       <TextInput style={styles.input} placeholder="Task title" placeholderTextColor={appTheme.colors.textMuted} value={title} onChangeText={setTitle} />
       <TextInput style={styles.input} placeholder="Module code (optional)" placeholderTextColor={appTheme.colors.textMuted} value={moduleCode} onChangeText={setModuleCode} />
-      <TextInput
-        style={styles.input}
-        placeholder="Due datetime (yyyy-MM-ddTHH:mm)"
-        placeholderTextColor={appTheme.colors.textMuted}
-        value={dueDateTime}
-        onChangeText={setDueDateTime}
-      />
+      <View style={styles.datePickerRow}>
+        <TextInput
+          style={[styles.input, styles.dateInput]}
+          placeholder="Due datetime (yyyy-MM-ddTHH:mm)"
+          placeholderTextColor={appTheme.colors.textMuted}
+          value={dueDateTime}
+          onChangeText={setDueDateTime}
+        />
+        <TouchableOpacity style={styles.calendarBtn} onPress={() => { setShowDatePicker(true); if (Platform.OS === 'ios') setShowTimePicker(true); }}>
+          <View style={styles.calendarIconContainer}>
+            <View style={styles.calendarIconHeader} />
+            <View style={styles.calendarIconBody}>
+              {[...Array(6)].map((_, i) => <View key={i} style={styles.calendarIconDot} />)}
+            </View>
+          </View>
+        </TouchableOpacity>
+      </View>
+
+      {showDatePicker && (
+        <DateTimePicker
+          value={date}
+          mode={Platform.OS === 'ios' ? 'datetime' : 'date'}
+          display="default"
+          onChange={onChangeDate}
+        />
+      )}
+      {showTimePicker && Platform.OS === 'android' && (
+        <DateTimePicker
+          value={date}
+          mode="time"
+          display="default"
+          onChange={onChangeTime}
+        />
+      )}
       <TextInput style={[styles.input, styles.notes]} placeholder="Notes" placeholderTextColor={appTheme.colors.textMuted} value={notes} onChangeText={setNotes} multiline />
       <TouchableOpacity style={styles.addBtn} onPress={addTask}>
         <Text style={styles.addBtnText}>Add Task</Text>
@@ -128,7 +200,7 @@ const TaskTrackerScreen = ({ route }: any) => {
             <Text style={styles.cardMeta}>Status: {item.status}</Text>
             <View style={styles.row}>
               <TouchableOpacity style={styles.smallBtn} onPress={() => toggleStatus(item)}>
-                <Text style={styles.smallBtnText}>Toggle Status</Text>
+                <Text style={styles.smallBtnText}>{item.status === 'PENDING' ? 'Submit' : 'Mark Pending'}</Text>
               </TouchableOpacity>
               <TouchableOpacity style={[styles.smallBtn, styles.deleteBtn]} onPress={() => removeTask(item)}>
                 <Text style={styles.smallBtnText}>Delete</Text>
@@ -203,6 +275,13 @@ const styles = StyleSheet.create({
   smallBtn: { flex: 1, backgroundColor: appTheme.colors.primary, borderRadius: 10, padding: 10, alignItems: 'center', marginRight: 8 },
   deleteBtn: { backgroundColor: appTheme.colors.danger, marginRight: 0 },
   smallBtnText: { color: '#fff', fontWeight: '700', fontSize: 12 },
+  datePickerRow: { flexDirection: 'row', alignItems: 'center' },
+  dateInput: { flex: 1, marginBottom: 0 },
+  calendarBtn: { marginLeft: 10, padding: 10, backgroundColor: appTheme.colors.chipBg, borderRadius: 12, borderWidth: 1, borderColor: appTheme.colors.chipBorder },
+  calendarIconContainer: { width: 22, height: 22, borderWidth: 2, borderColor: appTheme.colors.primary, borderRadius: 4, overflow: 'hidden' },
+  calendarIconHeader: { backgroundColor: appTheme.colors.primary, height: 5, width: '100%' },
+  calendarIconBody: { flex: 1, backgroundColor: '#fff', flexDirection: 'row', flexWrap: 'wrap', padding: 2, gap: 2, justifyContent: 'center' },
+  calendarIconDot: { width: 3, height: 3, backgroundColor: appTheme.colors.primary, borderRadius: 1.5 },
 });
 
 export default TaskTrackerScreen;

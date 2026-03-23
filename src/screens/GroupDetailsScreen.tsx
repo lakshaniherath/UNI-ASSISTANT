@@ -134,8 +134,8 @@ const GroupDetailsScreen = ({ route, navigation }: any) => {
         <Text style={styles.groupSub}>{groupData.subgroup}</Text>
         <Text style={styles.groupDesc}>{groupData.description}</Text>
         <View style={styles.statsRow}>
-          <Text style={styles.stat}>👥 {members.length}/{groupData.maxMembers} Members</Text>
-          <Text style={styles.stat}>🎯 CGPA: {groupData.targetCGPA}</Text>
+          <Text style={styles.stat}>{members.length}/{groupData.maxMembers} Members</Text>
+          <Text style={styles.stat}>CGPA: {groupData.targetCGPA}</Text>
         </View>
         <Text style={styles.skillsText}>Skills: {groupData.requiredSkills?.join(', ')}</Text>
       </View>
@@ -161,8 +161,8 @@ const GroupDetailsScreen = ({ route, navigation }: any) => {
 
               <Text style={styles.memberId}>🆔 {item.universityId}</Text>
               <Text style={styles.memberDetail}>📧 {item.email}</Text>
-              <Text style={styles.memberDetail}>📊 CGPA: {item.cgpa}</Text>
-              <Text style={styles.memberDetail}>🛠 Skills: {item.skills}</Text>
+              <Text style={styles.memberDetail}>CGPA: {item.cgpa}</Text>
+              <Text style={styles.memberDetail}>Skills: {item.skills}</Text>
               <Text style={styles.memberDetail}>📋 Subgroup: {item.subgroup}</Text>
 
               {/* Leader can remove non-leader members */}
@@ -187,7 +187,7 @@ const GroupDetailsScreen = ({ route, navigation }: any) => {
           </TouchableOpacity>
         ) : isMember ? (
           <TouchableOpacity style={styles.leaveBtn} onPress={handleLeaveGroup}>
-            <Text style={styles.actionBtnText}>🚪 Leave Group</Text>
+            <Text style={styles.actionBtnText}>Leave Group</Text>
           </TouchableOpacity>
         ) : null}
       </View>

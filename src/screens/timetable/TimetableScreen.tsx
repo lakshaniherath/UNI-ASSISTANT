@@ -106,14 +106,10 @@ const TimetableScreen = ({ route, navigation }: any) => {
         <Text style={styles.personalBtnText}>Personal Events</Text>
       </TouchableOpacity>
 
-      <FlatList
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        data={DAY_TABS}
-        keyExtractor={d => d}
-        style={styles.tabList}
-        renderItem={({ item }) => (
+      <View style={styles.chipContainer}>
+        {DAY_TABS.map(item => (
           <TouchableOpacity
+            key={item}
             style={[styles.tab, selectedDay === item && styles.tabActive]}
             onPress={() => setSelectedDay(item)}
           >
@@ -121,24 +117,20 @@ const TimetableScreen = ({ route, navigation }: any) => {
               {item.slice(0, 3)}
             </Text>
           </TouchableOpacity>
-        )}
-      />
+        ))}
+      </View>
 
-      <FlatList
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        data={TYPE_TABS}
-        keyExtractor={d => d}
-        style={styles.tabList}
-        renderItem={({ item }) => (
+      <View style={styles.chipContainer}>
+        {TYPE_TABS.map(item => (
           <TouchableOpacity
+            key={item}
             style={[styles.tab, selectedType === item && styles.tabActive]}
             onPress={() => setSelectedType(item)}
           >
             <Text style={[styles.tabText, selectedType === item && styles.tabTextActive]}>{item}</Text>
           </TouchableOpacity>
-        )}
-      />
+        ))}
+      </View>
 
       <View style={styles.switchRow}>
         <Text style={styles.switchText}>Show hall classes only</Text>
@@ -231,8 +223,8 @@ const styles = StyleSheet.create({
   quickText: { color: '#fff', textAlign: 'center', fontWeight: '700', fontSize: 12 },
   personalBtn: { backgroundColor: appTheme.colors.success, borderRadius: 14, padding: 12, marginBottom: 8 },
   personalBtnText: { color: '#fff', textAlign: 'center', fontWeight: '700' },
-  tabList: { marginVertical: 6, maxHeight: 45 },
-  tab: { paddingHorizontal: 10, paddingVertical: 7, borderRadius: 16, backgroundColor: appTheme.colors.chipBg, borderWidth: 1, borderColor: appTheme.colors.chipBorder, marginRight: 8 },
+  chipContainer: { flexDirection: 'row', flexWrap: 'wrap', marginVertical: 6, gap: 8 },
+  tab: { paddingHorizontal: 10, paddingVertical: 7, borderRadius: 16, backgroundColor: appTheme.colors.chipBg, borderWidth: 1, borderColor: appTheme.colors.chipBorder },
   tabActive: { backgroundColor: appTheme.colors.primary, borderColor: appTheme.colors.primary },
   tabText: { color: appTheme.colors.textSecondary, fontWeight: '700' },
   tabTextActive: { color: '#fff' },

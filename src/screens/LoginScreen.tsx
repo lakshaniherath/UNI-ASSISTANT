@@ -32,7 +32,7 @@ const LoginScreen = ({ navigation }: any) => {
         registerFcmTokenForUser(loggedInUser.universityId).catch(err =>
           console.warn('FCM token registration failed:', err)
         );
-        Alert.alert('Success! 🎉', `Welcome back, ${loggedInUser.name}`, [
+        Alert.alert('Success!', `Welcome back, ${loggedInUser.name}`, [
           { 
             text: 'OK', 
             // Home screen එකට යද්දී Login එක stack එකෙන් ඉවත් කරනවා (back press කළාම logout නොවන්න)
@@ -44,11 +44,11 @@ const LoginScreen = ({ navigation }: any) => {
         ]);
       }
     } catch (error: any) {
-      console.error('Login Error:', error?.message || error);
+      console.warn('Login failure (Likely invalid credentials)');
       
       // 401 Error එකක් ආවොත් ඒ කියන්නේ email/password වැරදියි
       if (error?.response?.status === 401) {
-        Alert.alert('Login Failed ❌', 'Invalid email or password.');
+        Alert.alert('Login Failed', 'Invalid email or password.');
       } else if (error?.code === 'ECONNABORTED' || error?.message === 'Network Error') {
         // Network Timeout
         Alert.alert('Connection Timeout', 'Backend එක ඈතිගිය. නැවතත් උත්සාහ කරන්න.');
@@ -108,9 +108,9 @@ const LoginScreen = ({ navigation }: any) => {
           onPress={async () => {
             const result = await testBackendConnection();
             if (result.connected) {
-              Alert.alert('✅ Success', 'Backend එක reachable ය!');
+              Alert.alert('Success', 'Backend එක reachable ය!');
             } else {
-              Alert.alert('❌ Connection Failed', result.hint);
+              Alert.alert('Connection Failed', result.hint);
             }
           }}
         >

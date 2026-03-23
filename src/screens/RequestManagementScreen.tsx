@@ -39,7 +39,7 @@ const RequestManagementScreen = ({ route }: any) => {
   const handleAccept = async (requestId: number) => {
     try {
       await api.post(`/groups/accept-request/${requestId}`);
-      Alert.alert('Success! 🎉', 'New member added.');
+      Alert.alert('Success!', 'New member added.');
       fetchRequests(); // Refresh list
     } catch (error) {
       Alert.alert('Error', 'Failed to add member.');
@@ -80,12 +80,12 @@ const RequestManagementScreen = ({ route }: any) => {
               <View style={styles.divider} />
 
               <View style={styles.infoRow}>
-                <Text style={styles.label}>📊 CGPA:</Text>
+                <Text style={styles.label}>CGPA:</Text>
                 <Text style={styles.value}>{item.studentCgpa || 'Not Set'}</Text>
               </View>
 
               <View style={styles.infoRow}>
-                <Text style={styles.label}>🛠 Skills:</Text>
+                <Text style={styles.label}>Skills:</Text>
                 <Text style={styles.value}>{item.studentSkills || 'No skills listed'}</Text>
               </View>
 

@@ -19,7 +19,7 @@ const HomeScreen = ({ route, navigation }: any) => {
       <View style={styles.glowTop} />
       <View style={styles.header}>
         <Text style={styles.welcomeText}>
-          Hello, {userData ? userData.name.split(' ')[0] : 'Student'}! 👋
+          Hello, {userData ? userData.name.split(' ')[0] : 'Student'}!
         </Text>
         <Text style={styles.subtitle}>
           {userData?.subgroup || 'Subgroup not set'} | Uni-Assistant
@@ -32,38 +32,31 @@ const HomeScreen = ({ route, navigation }: any) => {
           style={[styles.card, styles.profileCard]} 
           onPress={() => navigation.navigate('ProfileSetup', { userData })}
         >
-          <Text style={styles.cardEmoji}>👤</Text>
           <Text style={[styles.cardTitle, styles.profileTitle]}>Update Profile</Text>
           <Text style={styles.profileSub}>Set Skills & CGPA</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('StudyGroups', { userData })}>
-          <Text style={styles.cardEmoji}>🤝</Text>
           <Text style={styles.cardTitle}>Study Groups</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Timetable', { userData })}>
-          <Text style={styles.cardEmoji}>📅</Text>
           <Text style={styles.cardTitle}>Timetable</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('TaskTracker', { userData })}>
-          <Text style={styles.cardEmoji}>📊</Text>
           <Text style={styles.cardTitle}>Task Tracker</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('ReminderSettings', { userData })}>
-          <Text style={styles.cardEmoji}>🏛️</Text>
           <Text style={styles.cardTitle}>Reminders</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('AddPersonalEvent', { userData })}>
-          <Text style={styles.cardEmoji}>📝</Text>
           <Text style={styles.cardTitle}>Personal Events</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Login')}>
-          <Text style={styles.cardEmoji}>🚪</Text>
           <Text style={styles.cardTitle}>Logout</Text>
         </TouchableOpacity>
       </View>
@@ -109,7 +102,6 @@ const styles = StyleSheet.create({
   profileTitle: { color: appTheme.colors.primary },
   profileSub: { fontSize: 10, color: appTheme.colors.textDarkSoft, marginTop: 4 },
   
-  cardEmoji: { fontSize: 30, marginBottom: 10 },
   cardTitle: { fontSize: 16, fontWeight: '600', color: appTheme.colors.textDark },
 });
 

@@ -1,5 +1,14 @@
 import notifee, { AndroidImportance } from '@notifee/react-native';
-import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
+import { 
+  getMessaging, 
+  onMessage, 
+  getToken, 
+  onTokenRefresh, 
+  requestPermission, 
+  registerDeviceForRemoteMessages, 
+  AuthorizationStatus,
+  FirebaseMessagingTypes 
+} from '@react-native-firebase/messaging';
 import { api } from './api';
 
 let channelReady = false;
@@ -20,7 +29,7 @@ const ensureAndroidChannel = async () => {
 export const displayDeviceNotification = async (
   title: string,
   body: string,
-  data?: Record<string, string>
+  data?: Record<string, any>
 ) => {
   await ensureAndroidChannel();
   await notifee.displayNotification({
@@ -43,7 +52,7 @@ export const displayNotificationFromRemoteMessage = async (
 };
 
 export const setupForegroundMessageListener = () => {
-  return messaging().onMessage(async remoteMessage => {
+  return onMessage(getMessaging(), async remoteMessage => {
     await displayNotificationFromRemoteMessage(remoteMessage);
   });
 };
@@ -53,17 +62,18 @@ export const registerFcmTokenForUser = async (universityId: string) => {
     return;
   }
 
-  await messaging().registerDeviceForRemoteMessages();
-  const authStatus = await messaging().requestPermission();
+  const messaging = getMessaging();
+  await registerDeviceForRemoteMessages(messaging);
+  const authStatus = await requestPermission(messaging);
   const isAuthorized =
-    authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-    authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+    authStatus === AuthorizationStatus.AUTHORIZED ||
+    authStatus === AuthorizationStatus.PROVISIONAL;
 
   if (!isAuthorized) {
     return;
   }
 
-  const token = await messaging().getToken();
+  const token = await getToken(messaging);
   if (!token) {
     return;
   }
@@ -72,7 +82,7 @@ export const registerFcmTokenForUser = async (universityId: string) => {
 };
 
 export const subscribeToTokenRefresh = (universityId: string) => {
-  return messaging().onTokenRefresh(async token => {
+  return onTokenRefresh(getMessaging(), async token => {
     if (!universityId || !token) {
       return;
     }
