@@ -24,6 +24,7 @@ import RecoveryResultsScreen from './src/screens/timetable/RecoveryResultsScreen
 import ReminderSettingsScreen from './src/screens/timetable/ReminderSettingsScreen';
 import TaskTrackerScreen from './src/screens/timetable/TaskTrackerScreen';
 import AddPersonalEventScreen from './src/screens/timetable/AddPersonalEventScreen';
+import RecoveryPlansScreen from './src/screens/timetable/RecoveryPlansScreen';
 import { appTheme } from './src/theme/appTheme';
 
 const Stack = createStackNavigator();
@@ -168,6 +169,11 @@ const App = () => {
             name="AddPersonalEvent"
             component={AddPersonalEventScreen}
             options={{ title: 'Personal Events' }}
+          />
+          <Stack.Screen
+            name="RecoveryPlans"
+            component={RecoveryPlansScreen}
+            options={{ title: 'Recovery Plans' }}
           />
 
         </Stack.Navigator>

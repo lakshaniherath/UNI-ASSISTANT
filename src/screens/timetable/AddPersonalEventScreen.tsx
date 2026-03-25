@@ -4,9 +4,12 @@ import {
   createPersonalEvent,
   deletePersonalEvent,
   getPersonalEvents,
+  getReminderPreferences,
   PersonalCalendarEvent,
+  ReminderPreference,
   updatePersonalEvent,
 } from '../../services/timetableService';
+import { clearScheduledReminders, schedulePersonalEventReminders } from '../../services/reminderScheduler';
 
 const emptyForm: PersonalCalendarEvent = {
   title: '',
@@ -26,8 +29,13 @@ const AddPersonalEventScreen = ({ route }: any) => {
 
   const load = async () => {
     try {
-      const list = await getPersonalEvents(userId);
+      const [list, prefs] = await Promise.all([
+        getPersonalEvents(userId),
+        getReminderPreferences(userId),
+      ]);
       setEvents(list);
+      await clearScheduledReminders();
+      await schedulePersonalEventReminders(list, prefs as ReminderPreference);
     } catch {
       Alert.alert('Error', 'Could not load personal events.');
     }

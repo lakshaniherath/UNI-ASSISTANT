@@ -8,7 +8,6 @@ interface Props {
   onClose: () => void;
   onFindAlternative: () => void;
   onAddPersonal: () => void;
-  onMarkMissed: () => void;
 }
 
 const EventDetailModal = ({
@@ -17,7 +16,6 @@ const EventDetailModal = ({
   onClose,
   onFindAlternative,
   onAddPersonal,
-  onMarkMissed,
 }: Props) => {
   if (!event) return null;
 
@@ -39,9 +37,7 @@ const EventDetailModal = ({
           <TouchableOpacity style={styles.actionBtn} onPress={onFindAlternative}>
             <Text style={styles.actionText}>Find Alternative Slot</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.actionBtn, styles.secondary]} onPress={onMarkMissed}>
-            <Text style={styles.actionText}>Mark as Missed</Text>
-          </TouchableOpacity>
+
           <TouchableOpacity style={[styles.actionBtn, styles.secondary]} onPress={onAddPersonal}>
             <Text style={styles.actionText}>Add to Personal Calendar</Text>
           </TouchableOpacity>

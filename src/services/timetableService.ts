@@ -50,6 +50,21 @@ export interface TaskAssignment {
   notes?: string;
 }
 
+export interface RecoveryPlan {
+  id?: number;
+  universityId: string;
+  originalModuleCode: string;
+  originalActivityType: string;
+  originalTime: string;
+  recoveryModuleCode: string;
+  recoveryActivityType: string;
+  recoveryDay: string;
+  recoveryStartTime: string;
+  recoveryEndTime: string;
+  recoveryLocation: string;
+  recoverySubgroup: string;
+}
+
 export const fetchTimetable = async (subgroup: string): Promise<TimetableEvent[]> => {
   const res = await api.get(`/timetable/${encodeURIComponent(subgroup)}`);
   return res.data || [];
@@ -124,6 +139,20 @@ export const updateTask = async (
   const res = await api.put(`/tasks/${id}`, payload, { params: { universityId } });
   return res.data;
 };
+
+export async function saveRecoveryPlan(plan: RecoveryPlan): Promise<RecoveryPlan> {
+  const res = await api.post('/recovery', plan);
+  return res.data;
+}
+
+export async function getRecoveryPlans(universityId: string): Promise<RecoveryPlan[]> {
+  const res = await api.get('/recovery', { params: { universityId } });
+  return res.data || [];
+}
+
+export async function deleteRecoveryPlan(id: number): Promise<void> {
+  await api.delete(`/recovery/${id}`);
+}
 
 export const deleteTask = async (universityId: string, id: number): Promise<void> => {
   await api.delete(`/tasks/${id}`, { params: { universityId } });

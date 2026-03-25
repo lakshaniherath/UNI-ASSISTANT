@@ -98,6 +98,12 @@ const TimetableScreen = ({ route, navigation }: any) => {
         >
           <Text style={styles.quickText}>Task Tracker</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.quickBtn, { backgroundColor: '#4C6F8C' }]}
+          onPress={() => navigation.navigate('RecoveryPlans', { userData })}
+        >
+          <Text style={styles.quickText}>Recovery Plans</Text>
+        </TouchableOpacity>
       </View>
       <TouchableOpacity
         style={styles.personalBtn}
@@ -178,18 +184,30 @@ const TimetableScreen = ({ route, navigation }: any) => {
             missedEventId: selectedEvent.id,
           });
         }}
-        onMarkMissed={() => {
-          if (!selectedEvent) return;
-          setShowModal(false);
-          navigation.navigate('RecoveryResults', {
-            userData,
-            studentSubgroup: subgroup,
-            missedEventId: selectedEvent.id,
-          });
-        }}
+
         onAddPersonal={() => {
           if (!selectedEvent) return;
           setShowModal(false);
+
+          // Get the date for the current week's corresponding day
+          const getThisWeekDate = (dayName: string) => {
+            const days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+            const targetIndex = days.indexOf(dayName.toUpperCase());
+            if (targetIndex === -1) return '';
+
+            const now = new Date();
+            const currentDayIndex = now.getDay(); // 0 is Sunday
+            const diff = targetIndex - currentDayIndex;
+            
+            const targetDate = new Date(now);
+            targetDate.setDate(now.getDate() + diff);
+            
+            const yyyy = targetDate.getFullYear();
+            const MM = String(targetDate.getMonth() + 1).padStart(2, '0');
+            const dd = String(targetDate.getDate()).padStart(2, '0');
+            return `${yyyy}-${MM}-${dd}`;
+          };
+
           navigation.navigate('AddPersonalEvent', {
             userData,
             prefill: {
@@ -197,6 +215,7 @@ const TimetableScreen = ({ route, navigation }: any) => {
               notes: selectedEvent.moduleName,
               startTime: selectedEvent.startTime,
               endTime: selectedEvent.endTime,
+              date: getThisWeekDate(selectedEvent.dayOfWeek),
             },
           });
         }}

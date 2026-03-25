@@ -1,5 +1,5 @@
 import notifee, { AndroidImportance, TriggerType, TimestampTrigger } from '@notifee/react-native';
-import { ReminderPreference, TaskAssignment, TimetableEvent } from './timetableService';
+import { PersonalCalendarEvent, ReminderPreference, TaskAssignment, TimetableEvent } from './timetableService';
 
 const CHANNEL_ID = 'unibuddy-reminders';
 const DAY_INDEX: Record<string, number> = {
@@ -42,7 +42,11 @@ const nextOccurrence = (event: TimetableEvent): Date | null => {
 export const clearScheduledReminders = async () => {
   const triggers = await notifee.getTriggerNotifications();
   for (const t of triggers) {
-    if (t.notification?.id?.startsWith('class-') || t.notification?.id?.startsWith('task-')) {
+    if (
+      t.notification?.id?.startsWith('class-') ||
+      t.notification?.id?.startsWith('task-') ||
+      t.notification?.id?.startsWith('personal-')
+    ) {
       await notifee.cancelNotification(t.notification.id);
     }
   }
@@ -123,5 +127,37 @@ export const scheduleTaskReminders = async (
         at
       );
     }
+  }
+};
+
+export const schedulePersonalEventReminders = async (
+  events: PersonalCalendarEvent[],
+  prefs: ReminderPreference
+) => {
+  await ensureChannel();
+  if (!prefs.classRemindersEnabled) return;
+
+  for (const event of events) {
+    if (!event.date || !event.startTime) continue;
+    const eventTime = new Date(`${event.date}T${event.startTime}`);
+    
+    if (Number.isNaN(eventTime.getTime())) continue;
+    if (eventTime.getTime() <= Date.now()) continue;
+
+    const p1 = new Date(eventTime.getTime() - prefs.beforeMinutesPrimary * 60 * 1000);
+    const p2 = new Date(eventTime.getTime() - prefs.beforeMinutesSecondary * 60 * 1000);
+
+    await scheduleAt(
+      `personal-${event.id}-p1`,
+      `Upcoming: ${event.title}`,
+      `${event.notes || 'Personal Event'} in ${prefs.beforeMinutesPrimary} min`,
+      p1
+    );
+    await scheduleAt(
+      `personal-${event.id}-p2`,
+      `Reminder: ${event.title}`,
+      `${event.notes || 'Personal Event'} in ${prefs.beforeMinutesSecondary} min`,
+      p2
+    );
   }
 };
