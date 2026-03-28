@@ -24,7 +24,7 @@ const ReminderSettingsScreen = ({ route }: any) => {
         const data = await getReminderPreferences(userId);
         setPrefs(data);
       } catch {
-        Alert.alert('Error', 'Could not load reminder settings.');
+        Alert.alert('Error', 'Unable to fetch reminder settings.');
       }
     };
     load();
@@ -41,7 +41,7 @@ const ReminderSettingsScreen = ({ route }: any) => {
       setPrefs(updated);
       Alert.alert('Saved', 'Reminder settings updated.');
     } catch {
-      Alert.alert('Error', 'Could not save reminder settings.');
+      Alert.alert('Error', 'Unable to save your reminder settings.');
     }
   };
 

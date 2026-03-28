@@ -62,6 +62,11 @@ public class UserService {
         return userRepository.findByUniversityId(universityId).orElse(null);
     }
 
+    @Transactional(readOnly = true)
+    public List<User> searchUsersByUniversityId(String keyword) {
+        return userRepository.findByUniversityIdContainingIgnoreCase(keyword);
+    }
+
     @Transactional
     public User updateFcmToken(String universityId, String fcmToken) {
         User user = userRepository.findByUniversityId(universityId)

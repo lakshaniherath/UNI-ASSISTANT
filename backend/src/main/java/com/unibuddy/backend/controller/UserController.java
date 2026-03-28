@@ -63,6 +63,11 @@ public class UserController {
         return userService.getUserByUniversityId(universityId);
     }
 
+    @GetMapping("/search")
+    public List<User> searchUsers(@RequestParam String query) {
+        return userService.searchUsersByUniversityId(query);
+    }
+
     @PutMapping("/{universityId}/fcm-token")
     public ResponseEntity<?> updateFcmToken(
             @PathVariable String universityId,

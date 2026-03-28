@@ -37,7 +37,7 @@ const AddPersonalEventScreen = ({ route }: any) => {
       await clearScheduledReminders();
       await schedulePersonalEventReminders(list, prefs as ReminderPreference);
     } catch {
-      Alert.alert('Error', 'Could not load personal events.');
+      Alert.alert('Error', 'Unable to retrieve personal events.');
     }
   };
 
@@ -47,7 +47,7 @@ const AddPersonalEventScreen = ({ route }: any) => {
 
   const submit = async () => {
     if (!form.title || !form.date || !form.startTime || !form.endTime) {
-      Alert.alert('Validation', 'title/date/start/end are required.');
+      Alert.alert('Validation Required', 'Title, date, start time, and end time are required.');
       return;
     }
     try {
@@ -60,7 +60,7 @@ const AddPersonalEventScreen = ({ route }: any) => {
       setForm(emptyForm);
       await load();
     } catch {
-      Alert.alert('Error', 'Could not save event.');
+      Alert.alert('Error', 'Unable to save the event.');
     }
   };
 
@@ -82,7 +82,7 @@ const AddPersonalEventScreen = ({ route }: any) => {
       await deletePersonalEvent(userId, e.id);
       await load();
     } catch {
-      Alert.alert('Error', 'Could not delete event.');
+      Alert.alert('Error', 'Unable to delete the event.');
     }
   };
 

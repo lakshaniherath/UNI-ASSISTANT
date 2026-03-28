@@ -24,7 +24,7 @@ const StudyGroupScreen = ({ route, navigation }: any) => {
       setAllGroups(groupsWithScores);
     } catch (error) {
       console.error(error);
-      Alert.alert('Error', 'Groups ලබා ගැනීමට නොහැකි විය.');
+      Alert.alert('Error', 'Unable to retrieve study groups.');
     } finally {
       setLoading(false);
     }

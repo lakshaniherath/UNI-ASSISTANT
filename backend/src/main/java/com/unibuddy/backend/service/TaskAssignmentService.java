@@ -29,7 +29,7 @@ public class TaskAssignmentService {
         TaskAssignment existing = taskAssignmentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found: " + id));
         if (!existing.getUniversityId().equals(universityId)) {
-            throw new RuntimeException("Cannot update another user's task.");
+            throw new RuntimeException("Unauthorized Access: You are only permitted to update your own tasks.");
         }
 
         existing.setTitle(incoming.getTitle());
@@ -44,7 +44,7 @@ public class TaskAssignmentService {
         TaskAssignment existing = taskAssignmentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found: " + id));
         if (!existing.getUniversityId().equals(universityId)) {
-            throw new RuntimeException("Cannot delete another user's task.");
+            throw new RuntimeException("Unauthorized Access: You are only permitted to delete your own tasks.");
         }
         taskAssignmentRepository.deleteById(id);
     }

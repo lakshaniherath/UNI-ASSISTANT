@@ -30,7 +30,7 @@ const RequestManagementScreen = ({ route }: any) => {
       const response = await api.get(`/groups/${groupId}/requests`);
       setRequests(response.data);
     } catch (error) {
-      Alert.alert('Error', 'Could not load requests.');
+      Alert.alert('Error', 'Unable to load requests.');
     } finally {
       setLoading(false);
     }
@@ -39,20 +39,20 @@ const RequestManagementScreen = ({ route }: any) => {
   const handleAccept = async (requestId: number) => {
     try {
       await api.post(`/groups/accept-request/${requestId}`);
-      Alert.alert('Success!', 'New member added.');
+      Alert.alert('Success', 'The member has been added successfully.');
       fetchRequests(); // Refresh list
     } catch (error) {
-      Alert.alert('Error', 'Failed to add member.');
+      Alert.alert('Error', 'Unable to add the member.');
     }
   };
 
   const handleReject = async (requestId: number) => {
     try {
       await api.post(`/groups/reject-request/${requestId}`);
-      Alert.alert('Rejected', 'The request has been declined.');
+      Alert.alert('Declined', 'The request has been successfully declined.');
       fetchRequests(); // Refresh the live list
     } catch (error) {
-      Alert.alert('Error', 'Could not reject the request.');
+      Alert.alert('Error', 'Unable to decline the request.');
     }
   };
 

@@ -3,7 +3,7 @@ package com.unibuddy.backend.model;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.List;
-import java.util.ArrayList;
+
 
 @Entity
 @Table(name = "study_groups")

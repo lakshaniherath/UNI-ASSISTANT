@@ -30,7 +30,7 @@ const RegisterScreen = ({ navigation }: any) => {
 
   const handleRegister = async () => {
     if (!formData.universityId || !formData.name || !formData.email || !formData.password || !formData.subgroup) {
-      Alert.alert('Error', 'සියලුම තොරතුරු සහ Subgroup එක ඇතුළත් කිරීම අනිවාර්යයි.');
+      Alert.alert('Validation Required', 'All required information and the subgroup must be provided.');
       return;
     }
 
@@ -39,13 +39,13 @@ const RegisterScreen = ({ navigation }: any) => {
       const response = await api.post('/users/register', formData);
       
       if (response.data) {
-        Alert.alert('Success!', 'ගිණුම සාර්ථකව සැකසූවා. දැන් ඔබට ලොග් විය හැක.', [
+        Alert.alert('Registration Successful', 'Your account has been created. You can now log in.', [
           { text: 'Login Now', onPress: () => navigation.navigate('Login') }
         ]);
       }
     } catch (error) {
       console.error(error);
-      Alert.alert('Registration Failed', 'University ID එක හෝ Email එක දැනටමත් භාවිතයේ පවතී.');
+      Alert.alert('Registration Failed', 'The provided University ID or Email is already registered.');
     } finally {
       setLoading(false);
     }

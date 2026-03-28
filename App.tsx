@@ -25,6 +25,23 @@ import ReminderSettingsScreen from './src/screens/timetable/ReminderSettingsScre
 import TaskTrackerScreen from './src/screens/timetable/TaskTrackerScreen';
 import AddPersonalEventScreen from './src/screens/timetable/AddPersonalEventScreen';
 import RecoveryPlansScreen from './src/screens/timetable/RecoveryPlansScreen';
+
+import AcademicForumScreen from './src/screens/AcademicForumScreen';
+import ForumModuleSelectionScreen from './src/screens/ForumModuleSelectionScreen';
+import CreateQuestionScreen from './src/screens/CreateQuestionScreen';
+import QuestionDetailScreen from './src/screens/QuestionDetailScreen';
+
+import ResourceModuleSelectionScreen from './src/screens/ResourceModuleSelectionScreen';
+import ResourceHubScreen from './src/screens/ResourceHubScreen';
+import UploadResourceScreen from './src/screens/UploadResourceScreen';
+import AcademicDashboardScreen from './src/screens/AcademicDashboardScreen';
+import PeerSupportScreen from './src/screens/PeerSupportScreen';
+
+// 🚀 Campus Event Hub Screens
+import CampusEventHubScreen from './src/screens/events/CampusEventHubScreen';
+import CreateEventScreen from './src/screens/events/CreateEventScreen';
+import EventDetailScreen from './src/screens/events/EventDetailScreen';
+
 import { appTheme } from './src/theme/appTheme';
 
 const Stack = createStackNavigator();
@@ -174,6 +191,74 @@ const App = () => {
             name="RecoveryPlans"
             component={RecoveryPlansScreen}
             options={{ title: 'Recovery Plans' }}
+          />
+
+          {/* 🚀 Academic Forum Screens */}
+          <Stack.Screen 
+            name="ForumModuleSelection" 
+            component={ForumModuleSelectionScreen} 
+            options={{ title: 'Select Module' }} 
+          />
+          <Stack.Screen 
+            name="AcademicForum" 
+            component={AcademicForumScreen} 
+            options={{ title: 'Academic Forum (Q&A)' }} 
+          />
+          <Stack.Screen 
+            name="CreateQuestion" 
+            component={CreateQuestionScreen} 
+            options={{ title: 'Ask a Question' }} 
+          />
+          <Stack.Screen 
+            name="QuestionDetail" 
+            component={QuestionDetailScreen} 
+            options={{ title: 'Question Details' }} 
+          />
+
+          {/* 🚀 Resource Hub Screens */}
+          <Stack.Screen 
+            name="ResourceModuleSelection" 
+            component={ResourceModuleSelectionScreen} 
+            options={{ title: 'Select Resource Module' }} 
+          />
+          <Stack.Screen 
+            name="ResourceHub" 
+            component={ResourceHubScreen} 
+            options={{ title: 'Resource Hub' }} 
+          />
+          <Stack.Screen 
+            name="UploadResource" 
+            component={UploadResourceScreen} 
+            options={{ title: 'Upload File' }} 
+          />
+
+          <Stack.Screen 
+            name="AcademicAnalytics" 
+            component={AcademicDashboardScreen} 
+            options={{ title: 'Academic Analytics' }} 
+          />
+
+          <Stack.Screen
+            name="PeerSupport"
+            component={PeerSupportScreen}
+            options={{ title: 'Peer Support Hub' }}
+          />
+
+          {/* 🚀 Campus Event Hub Screens */}
+          <Stack.Screen 
+            name="CampusEventHub" 
+            component={CampusEventHubScreen} 
+            options={{ title: 'Campus Events' }} 
+          />
+          <Stack.Screen 
+            name="CreateEventScreen" 
+            component={CreateEventScreen} 
+            options={{ title: 'Create Event' }} 
+          />
+          <Stack.Screen 
+            name="EventDetailScreen" 
+            component={EventDetailScreen} 
+            options={{ title: 'Event Details' }} 
           />
 
         </Stack.Navigator>

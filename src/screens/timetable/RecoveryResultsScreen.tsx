@@ -15,7 +15,7 @@ const RecoveryResultsScreen = ({ route, navigation }: any) => {
         const data = await fetchRecoverySuggestions(studentSubgroup, missedEventId);
         setResult(data);
       } catch (e) {
-        Alert.alert('Error', 'Could not find recovery options.');
+        Alert.alert('Error', 'Unable to locate recovery options.');
       } finally {
         setLoading(false);
       }
@@ -47,7 +47,7 @@ const RecoveryResultsScreen = ({ route, navigation }: any) => {
         { text: 'OK', onPress: () => navigation.navigate('Timetable', { userData }) },
       ]);
     } catch (e) {
-      Alert.alert('Error', 'Failed to save recovery plan.');
+      Alert.alert('Error', 'Unable to save the recovery plan.');
     }
   };
 

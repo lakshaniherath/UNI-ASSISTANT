@@ -75,7 +75,7 @@ const TaskTrackerScreen = ({ route }: any) => {
       await clearScheduledReminders();
       await scheduleTaskReminders(list, prefs);
     } catch {
-      Alert.alert('Error', 'Could not load tasks.');
+      Alert.alert('Error', 'Unable to load your tasks.');
     }
   }, [userId]);
 
@@ -95,7 +95,7 @@ const TaskTrackerScreen = ({ route }: any) => {
 
   const addTask = async () => {
     if (!title || !dueDateTime) {
-      Alert.alert('Validation', 'Title and dueDateTime are required.');
+      Alert.alert('Validation Required', 'Both the title and due date/time must be provided.');
       return;
     }
     try {
@@ -106,7 +106,7 @@ const TaskTrackerScreen = ({ route }: any) => {
       setNotes('');
       await load();
     } catch {
-      Alert.alert('Error', 'Could not create task.');
+      Alert.alert('Error', 'Unable to create the task.');
     }
   };
 
@@ -119,7 +119,7 @@ const TaskTrackerScreen = ({ route }: any) => {
       });
       await load();
     } catch {
-      Alert.alert('Error', 'Could not update task.');
+      Alert.alert('Error', 'Unable to update the task.');
     }
   };
 
@@ -129,7 +129,7 @@ const TaskTrackerScreen = ({ route }: any) => {
       await deleteTask(userId, task.id);
       await load();
     } catch {
-      Alert.alert('Error', 'Could not delete task.');
+      Alert.alert('Error', 'Unable to delete the task.');
     }
   };
 

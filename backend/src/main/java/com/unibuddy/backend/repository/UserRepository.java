@@ -10,6 +10,7 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
     Optional<User> findByUniversityId(String universityId);
+    List<User> findByUniversityIdContainingIgnoreCase(String keyword);
 
     // එකම subgroup එකේ සිටින සිසුන් ලැයිස්තුවක් ලබා ගැනීමට (අවශ්‍ය නම්)
     List<User> findBySubgroup(String subgroup);

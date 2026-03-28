@@ -13,7 +13,7 @@ const LoginScreen = ({ navigation }: any) => {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert('Error', 'Please enter both email and password.');
+      Alert.alert('Validation Required', 'Please provide both your email and password.');
       return;
     }
 
@@ -32,7 +32,7 @@ const LoginScreen = ({ navigation }: any) => {
         registerFcmTokenForUser(loggedInUser.universityId).catch(err =>
           console.warn('FCM token registration failed:', err)
         );
-        Alert.alert('Success!', `Welcome back, ${loggedInUser.name}`, [
+        Alert.alert('Success', `Welcome back, ${loggedInUser.name}.`, [
           { 
             text: 'OK', 
             // Home screen එකට යද්දී Login එක stack එකෙන් ඉවත් කරනවා (back press කළාම logout නොවන්න)
@@ -48,13 +48,13 @@ const LoginScreen = ({ navigation }: any) => {
       
       // 401 Error එකක් ආවොත් ඒ කියන්නේ email/password වැරදියි
       if (error?.response?.status === 401) {
-        Alert.alert('Login Failed', 'Invalid email or password.');
+        Alert.alert('Authentication Failed', 'The email or password you entered is incorrect.');
       } else if (error?.code === 'ECONNABORTED' || error?.message === 'Network Error') {
         // Network Timeout
-        Alert.alert('Connection Timeout', 'Backend එක ඈතිගිය. නැවතත් උත්සාහ කරන්න.');
+        Alert.alert('Connection Timeout', 'The server is taking too long to respond. Please try again.');
       } else if (!error?.response) {
         // Network error - Backend එක ගිහින් නැත
-        Alert.alert('Connection Error', 'Backend එක ගිහින් නැත. Firewall එක check කරන්න. localhost:8080 ය running?');
+        Alert.alert('Connection Error', 'Unable to reach the server. Please check your network connection.');
       } else {
         // වෙනත් Server error එකක් ආවොත්
         Alert.alert('Server Error', `Error: ${error?.response?.status || 'Unknown error'}`);
@@ -108,7 +108,7 @@ const LoginScreen = ({ navigation }: any) => {
           onPress={async () => {
             const result = await testBackendConnection();
             if (result.connected) {
-              Alert.alert('Success', 'Backend එක reachable ය!');
+              Alert.alert('Connection Successful', 'The backend server is reachable.');
             } else {
               Alert.alert('Connection Failed', result.hint);
             }

@@ -56,6 +56,27 @@ const HomeScreen = ({ route, navigation }: any) => {
           <Text style={styles.cardTitle}>Personal Events</Text>
         </TouchableOpacity>
 
+        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('ForumModuleSelection', { userData, currentUserId: userData?.universityId })}>
+          <Text style={styles.cardTitle}>Academic Forum</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('ResourceModuleSelection', { userData, currentUserId: userData?.universityId })}>
+          <Text style={styles.cardTitle}>Resource Hub</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('AcademicAnalytics', { userData, currentUserId: userData?.universityId })}>
+          <Text style={styles.cardTitle}>Academic Analytics</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('PeerSupport', { userData, currentUserId: userData?.universityId })}>
+          <Text style={styles.cardTitle}>Peer Support</Text>
+        </TouchableOpacity>
+
+        {/* 🚀 Campus Event Hub */}
+        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('CampusEventHub', { userData, currentUserId: userData?.universityId, role: userData?.role })}>
+          <Text style={styles.cardTitle}>Campus Events</Text>
+        </TouchableOpacity>
+
         <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Login')}>
           <Text style={styles.cardTitle}>Logout</Text>
         </TouchableOpacity>

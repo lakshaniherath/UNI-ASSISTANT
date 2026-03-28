@@ -22,7 +22,7 @@ const RecoveryPlansScreen = ({ route }: any) => {
       const data = await getRecoveryPlans(userData.universityId);
       setPlans(data);
     } catch {
-      Alert.alert('Error', 'Could not load recovery plans.');
+      Alert.alert('Error', 'Unable to load recovery plans.');
     } finally {
       setLoading(false);
     }
@@ -37,7 +37,7 @@ const RecoveryPlansScreen = ({ route }: any) => {
       await deleteRecoveryPlan(id);
       load();
     } catch {
-      Alert.alert('Error', 'Could not delete plan.');
+      Alert.alert('Error', 'Unable to delete the plan.');
     }
   };
 

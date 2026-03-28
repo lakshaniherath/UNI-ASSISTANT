@@ -36,7 +36,7 @@ const TimetableScreen = ({ route, navigation }: any) => {
 
   const load = useCallback(async () => {
     if (!subgroup) {
-      Alert.alert('Profile Required', 'Please set your subgroup first.');
+      Alert.alert('Action Required', 'Please select your subgroup in your profile first.');
       return;
     }
 
@@ -50,7 +50,7 @@ const TimetableScreen = ({ route, navigation }: any) => {
       await clearScheduledReminders();
       await scheduleClassRemindersForNextWeek(table, prefs as ReminderPreference);
     } catch {
-      Alert.alert('Error', 'Could not load timetable.');
+      Alert.alert('Error', 'Unable to load the timetable.');
     } finally {
       setLoading(false);
     }

@@ -3,7 +3,7 @@ package com.unibuddy.backend.service;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
-import com.unibuddy.backend.model.User;
+
 import com.unibuddy.backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 

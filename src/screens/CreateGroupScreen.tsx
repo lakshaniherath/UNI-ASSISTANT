@@ -53,7 +53,7 @@ const CreateGroupScreen = ({ route, navigation }: any) => {
     }
 
     if (!selectedCGPA) {
-      Alert.alert('Validation Error', 'Please select a target CGPA range.');
+      Alert.alert('Validation Required', 'Please select a target CGPA range.');
       return;
     }
 
@@ -72,7 +72,7 @@ const CreateGroupScreen = ({ route, navigation }: any) => {
         params: { creatorId: userData.universityId }
       });
 
-      Alert.alert('Success!', 'Your study group has been created successfully.', [
+      Alert.alert('Success', 'Your study group has been created successfully.', [
         { text: 'OK', onPress: () => navigation.goBack() }
       ]);
     } catch (error: any) {
