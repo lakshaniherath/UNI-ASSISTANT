@@ -24,7 +24,7 @@ const StudyGroupScreen = ({ route, navigation }: any) => {
       setAllGroups(groupsWithScores);
     } catch (error) {
       console.error(error);
-      Alert.alert('Error', 'Unable to retrieve study groups.');
+      Alert.alert('Error', 'Groups ලබා ගැනීමට නොහැකි විය.');
     } finally {
       setLoading(false);
     }
@@ -55,7 +55,7 @@ const StudyGroupScreen = ({ route, navigation }: any) => {
       });
       const message = typeof response.data === 'string' ? response.data : JSON.stringify(response.data);
       setRequestedGroups(prev => new Set(prev).add(groupId));
-      Alert.alert('Success!', message);
+      Alert.alert('Success', message);
     } catch (error: any) {
       console.error('🔴 Request to Join Error:', JSON.stringify(error.response?.data));
       let errMsg = 'Could not send the request.';
@@ -127,7 +127,7 @@ const StudyGroupScreen = ({ route, navigation }: any) => {
                 <Text style={styles.subgroupTag}>{item.subgroup}</Text>
                 <Text style={styles.desc}>{item.description}</Text>
 
-                {/* 🎯 Displaying Target CGPA */}
+                {/* Displaying target CGPA */}
                 <View style={styles.targetRow}>
                   <Text style={styles.targetLabel}>Target CGPA: </Text>
                   <Text style={styles.targetValue}>{item.targetCGPA}</Text>
@@ -136,7 +136,7 @@ const StudyGroupScreen = ({ route, navigation }: any) => {
                 <Text style={styles.skills}>Target Skills: {item.requiredSkills?.join(', ')}</Text>
 
                 <View style={styles.footer}>
-                  <Text style={styles.members}>{item.currentMembers}/{item.maxMembers}</Text>
+                  <Text style={styles.members}>{item.currentMembers}/{item.maxMembers} Members</Text>
 
                   {isLeader ? (
                     // 🚀 1. Button shown only to the Leader

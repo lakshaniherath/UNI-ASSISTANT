@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import * as Animatable from 'react-native-animatable';
 import { useFocusEffect } from '@react-navigation/native';
 import { campusEventApi } from '../../services/api';
 import { appTheme } from '../../theme/appTheme';
@@ -61,32 +62,32 @@ const EventDetailScreen = ({ route, navigation }: any) => {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>{event.title}</Text>
+      <Animatable.Text animation="fadeInDown" duration={500} style={styles.title}>{event.title}</Animatable.Text>
       
-      <View style={styles.badgeRow}>
+      <Animatable.View animation="fadeInRight" delay={100} duration={500} style={styles.badgeRow}>
         <View style={[styles.badge, { backgroundColor: event.type === 'CAREER_FAIR' ? appTheme.colors.accent : appTheme.colors.primary }]}>
             <Text style={styles.badgeText}>{event.type === 'CAREER_FAIR' ? 'Career Fair' : 'University Event'}</Text>
         </View>
-      </View>
+      </Animatable.View>
 
-      <View style={styles.card}>
-        <Text style={styles.detailText}>📅 Date: {event.eventDate}</Text>
-        <Text style={styles.detailText}>🕒 Time: {event.startTime} - {event.endTime}</Text>
-        <Text style={styles.detailText}>📍 Location: {event.location}</Text>
-        <Text style={styles.detailText}>👩‍💼 Organizer: {event.organizerName}</Text>
-        <Text style={styles.detailText}>👥 Going: {event.attendeesCount} people</Text>
-      </View>
+      <Animatable.View animation="zoomIn" delay={200} duration={600} style={styles.card}>
+        <Text style={styles.detailText}>Date: {event.eventDate}</Text>
+        <Text style={styles.detailText}>Time: {event.startTime} - {event.endTime}</Text>
+        <Text style={styles.detailText}>Location: {event.location}</Text>
+        <Text style={styles.detailText}>Organizer: {event.organizerName}</Text>
+        <Text style={styles.detailText}>Going: {event.attendeesCount} people</Text>
+      </Animatable.View>
 
-      <Text style={styles.sectionTitle}>About</Text>
-      <Text style={styles.description}>{event.description}</Text>
+      <Animatable.Text animation="fadeInUp" delay={300} style={styles.sectionTitle}>About</Animatable.Text>
+      <Animatable.Text animation="fadeInUp" delay={350} style={styles.description}>{event.description}</Animatable.Text>
 
-      <View style={styles.actions}>
+      <Animatable.View animation="fadeInUp" delay={400} style={styles.actions}>
         <TouchableOpacity 
           style={[styles.goingBtn, isGoing ? styles.goingBtnActive : styles.goingBtnInactive]} 
           onPress={toggleGoing}
         >
           <Text style={[isGoing ? styles.goingTextActive : styles.goingTextInactive]}>
-            {isGoing ? '✅ Going' : 'Mark as Going'}
+            {isGoing ? 'Going' : 'Mark as Going'}
           </Text>
         </TouchableOpacity>
         
@@ -96,14 +97,14 @@ const EventDetailScreen = ({ route, navigation }: any) => {
               style={styles.editBtn} 
               onPress={() => navigation.navigate('CreateEventScreen', { event, currentUserId })}
             >
-              <Text style={styles.editBtnText}>✏️ Edit</Text>
+              <Text style={styles.editBtnText}>Edit</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.deleteBtn} onPress={handleDelete}>
-              <Text style={styles.deleteBtnText}>🗑️ Delete</Text>
+              <Text style={styles.deleteBtnText}>Delete</Text>
             </TouchableOpacity>
           </View>
         )}
-      </View>
+      </Animatable.View>
     </ScrollView>
   );
 };
@@ -114,13 +115,13 @@ const styles = StyleSheet.create({
   badgeRow: { flexDirection: 'row', marginBottom: 20 },
   badge: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20 },
   badgeText: { color: '#fff', fontWeight: 'bold' },
-  card: { backgroundColor: '#fff', padding: 20, borderRadius: 12, elevation: 3, marginBottom: 25 },
+  card: { backgroundColor: appTheme.colors.glassStrong, padding: 20, borderRadius: 12, elevation: 3, marginBottom: 25 },
   detailText: { fontSize: 16, color: '#333', marginBottom: 8 },
   sectionTitle: { fontSize: 20, fontWeight: 'bold', color: appTheme.colors.textDark, marginBottom: 10 },
   description: { fontSize: 16, color: '#555', lineHeight: 24, marginBottom: 30 },
   actions: { flex: 1, marginTop: 10, marginBottom: 40 },
   goingBtn: { padding: 15, borderRadius: 8, alignItems: 'center', marginBottom: 20, borderWidth: 2, borderColor: appTheme.colors.primary },
-  goingBtnInactive: { backgroundColor: '#fff' },
+  goingBtnInactive: { backgroundColor: appTheme.colors.glassStrong },
   goingBtnActive: { backgroundColor: appTheme.colors.primary },
   goingTextInactive: { color: appTheme.colors.primary, fontSize: 18, fontWeight: 'bold' },
   goingTextActive: { color: '#fff', fontSize: 18, fontWeight: 'bold' },

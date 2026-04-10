@@ -163,7 +163,7 @@ const QuestionDetailScreen = ({ route, navigation }: any) => {
             />
             
             <TouchableOpacity style={styles.pdfBtn} onPress={handleDownloadReport} disabled={downloading}>
-              {downloading ? <ActivityIndicator color="#fff" /> : <Text style={styles.pdfBtnText}>📄 Download QA Report</Text>}
+              {downloading ? <ActivityIndicator color="#fff" /> : <Text style={styles.pdfBtnText}>Download QA Report</Text>}
             </TouchableOpacity>
 
             <Text style={styles.sectionTitle}>Answers ({answers.length})</Text>

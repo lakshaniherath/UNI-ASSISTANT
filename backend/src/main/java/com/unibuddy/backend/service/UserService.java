@@ -63,7 +63,11 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public List<User> searchUsersByUniversityId(String keyword) {
+    public List<User> searchUsersByUniversityId(String query) {
+        String keyword = query == null ? "" : query.trim();
+        if (keyword.isEmpty()) {
+            return userRepository.findAll();
+        }
         return userRepository.findByUniversityIdContainingIgnoreCase(keyword);
     }
 

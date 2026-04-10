@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   input: {
-    backgroundColor: '#fff',
+    backgroundColor: appTheme.colors.glassStrong,
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 8,
@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: 'center',
     marginVertical: 10,
-    backgroundColor: '#fff',
+    backgroundColor: appTheme.colors.glassStrong,
   },
   filePickerText: {
     fontSize: 16,

@@ -10,6 +10,7 @@ import {
   updatePersonalEvent,
 } from '../../services/timetableService';
 import { clearScheduledReminders, schedulePersonalEventReminders } from '../../services/reminderScheduler';
+import { appTheme } from '../../theme/appTheme';
 
 const emptyForm: PersonalCalendarEvent = {
   title: '',
@@ -89,12 +90,12 @@ const AddPersonalEventScreen = ({ route }: any) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Personal Events</Text>
-      <TextInput style={styles.input} placeholder="Title" value={form.title} onChangeText={v => setForm(prev => ({ ...prev, title: v }))} />
-      <TextInput style={styles.input} placeholder="Date (yyyy-MM-dd)" value={form.date} onChangeText={v => setForm(prev => ({ ...prev, date: v }))} />
-      <TextInput style={styles.input} placeholder="Start time (HH:mm)" value={form.startTime} onChangeText={v => setForm(prev => ({ ...prev, startTime: v }))} />
-      <TextInput style={styles.input} placeholder="End time (HH:mm)" value={form.endTime} onChangeText={v => setForm(prev => ({ ...prev, endTime: v }))} />
-      <TextInput style={[styles.input, styles.notes]} placeholder="Notes" value={form.notes} onChangeText={v => setForm(prev => ({ ...prev, notes: v }))} multiline />
-      <TextInput style={styles.input} placeholder="Color tag (hex)" value={form.colorTag} onChangeText={v => setForm(prev => ({ ...prev, colorTag: v }))} />
+      <TextInput style={styles.input} placeholder="Title" placeholderTextColor={appTheme.colors.textDarkSoft} value={form.title} onChangeText={v => setForm(prev => ({ ...prev, title: v }))} />
+      <TextInput style={styles.input} placeholder="Date (yyyy-MM-dd)" placeholderTextColor={appTheme.colors.textDarkSoft} value={form.date} onChangeText={v => setForm(prev => ({ ...prev, date: v }))} />
+      <TextInput style={styles.input} placeholder="Start time (HH:mm)" placeholderTextColor={appTheme.colors.textDarkSoft} value={form.startTime} onChangeText={v => setForm(prev => ({ ...prev, startTime: v }))} />
+      <TextInput style={styles.input} placeholder="End time (HH:mm)" placeholderTextColor={appTheme.colors.textDarkSoft} value={form.endTime} onChangeText={v => setForm(prev => ({ ...prev, endTime: v }))} />
+      <TextInput style={[styles.input, styles.notes]} placeholder="Notes" placeholderTextColor={appTheme.colors.textDarkSoft} value={form.notes} onChangeText={v => setForm(prev => ({ ...prev, notes: v }))} multiline />
+      <TextInput style={styles.input} placeholder="Color tag (hex)" placeholderTextColor={appTheme.colors.textDarkSoft} value={form.colorTag} onChangeText={v => setForm(prev => ({ ...prev, colorTag: v }))} />
 
       <TouchableOpacity style={styles.submitBtn} onPress={submit}>
         <Text style={styles.submitText}>{editingId ? 'Update Event' : 'Add Event'}</Text>
@@ -136,6 +137,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 10,
     marginBottom: 8,
+    color: appTheme.colors.textDark,
   },
   notes: { height: 60, textAlignVertical: 'top' },
   submitBtn: { backgroundColor: '#2F855A', borderRadius: 10, padding: 11, alignItems: 'center', marginBottom: 10 },

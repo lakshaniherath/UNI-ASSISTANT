@@ -136,18 +136,6 @@ public class TimetableService {
             String end = normalizeTime(getText(event, "end"), addOneHour(start));
             String title = getText(event, "title");
             String moduleCode = firstNonBlank(getText(event, "module_code"), extractModuleCode(title));
-
-            if (moduleCode.isBlank() && event.path("raw").isArray()) {
-                for (JsonNode n : event.path("raw")) {
-                    String mc = extractModuleCode(n.asText(""));
-                    if (!mc.isBlank()) {
-                        moduleCode = mc;
-                        title = n.asText("");
-                        break;
-                    }
-                }
-            }
-
             String activityType = inferActivityType(title);
             String moduleName = extractModuleName(title, moduleCode);
             String location = getText(event, "location");
@@ -183,14 +171,12 @@ public class TimetableService {
     private List<String> resolveTargetSubgroups(JsonNode event, String mainGroup, List<String> fileSubgroups, String fallbackSubgroup) {
         List<String> rawLabels = new ArrayList<>();
         JsonNode raw = event.path("raw");
-        if (raw.isArray()) {
-            for (JsonNode node : raw) {
-                String text = node.asText("");
-                Arrays.stream(text.split(","))
-                        .map(String::trim)
-                        .filter(s -> !s.isBlank())
-                        .forEach(rawLabels::add);
-            }
+        if (raw.isArray() && !raw.isEmpty()) {
+            String rawFirst = raw.get(0).asText("");
+            rawLabels = Arrays.stream(rawFirst.split(","))
+                    .map(String::trim)
+                    .filter(s -> !s.isBlank())
+                    .collect(Collectors.toList());
         }
 
         boolean mentionsMainGroup = rawLabels.stream().anyMatch(label -> label.equalsIgnoreCase(mainGroup));

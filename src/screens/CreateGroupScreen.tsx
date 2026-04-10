@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
   },
   title: { fontSize: 24, fontWeight: 'bold', color: appTheme.colors.textPrimary, marginBottom: 5 },
   subText: { fontSize: 14, color: appTheme.colors.accent, marginBottom: 20, fontWeight: '600' },
-  input: { backgroundColor: '#fff', padding: 15, borderRadius: 14, marginBottom: 15, borderWidth: 1, borderColor: appTheme.colors.inputBorder, color: appTheme.colors.textDark },
+  input: { backgroundColor: appTheme.colors.glassStrong, padding: 15, borderRadius: 14, marginBottom: 15, borderWidth: 1, borderColor: appTheme.colors.inputBorder, color: appTheme.colors.textDark },
   textArea: { height: 90, textAlignVertical: 'top' },
   label: { fontSize: 16, fontWeight: 'bold', color: appTheme.colors.textSecondary, marginBottom: 10, marginTop: 5 },
   

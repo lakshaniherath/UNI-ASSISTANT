@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Alert, ActivityIndicator, Modal } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import * as Animatable from 'react-native-animatable';
 import { tutoringApi, userSearchApi } from '../services/api';
 import { appTheme } from '../theme/appTheme';
 import { useFocusEffect } from '@react-navigation/native';
@@ -190,34 +191,34 @@ const PeerSupportScreen = ({ route, navigation }: any) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      <Animatable.View animation="fadeInDown" style={styles.header}>
         <Text style={styles.title}>Peer Tutoring</Text>
-      </View>
+      </Animatable.View>
 
-      <View style={styles.actionRow}>
+      <Animatable.View animation="zoomIn" delay={100} style={styles.actionRow}>
         <TouchableOpacity style={styles.actionBtn} onPress={() => setBookModalVisible(true)}>
           <Text style={styles.btnText}>+ Book Session</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.actionBtnOutline} onPress={handleDownloadPDF}>
-          <Text style={styles.btnTextPrimary}>📄 Summary PDF</Text>
+          <Text style={styles.btnTextPrimary}>Summary PDF</Text>
         </TouchableOpacity>
-      </View>
+      </Animatable.View>
 
-      <View style={styles.tabContainer}>
+      <Animatable.View animation="fadeIn" delay={200} style={styles.tabContainer}>
         <TouchableOpacity style={[styles.tab, activeTab === 'myBookings' && styles.activeTab]} onPress={() => setActiveTab('myBookings')}>
           <Text style={[styles.tabText, activeTab === 'myBookings' && styles.activeTabText]}>My Bookings</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.tab, activeTab === 'tutorRequests' && styles.activeTab]} onPress={() => setActiveTab('tutorRequests')}>
           <Text style={[styles.tabText, activeTab === 'tutorRequests' && styles.activeTabText]}>Requests For Me</Text>
         </TouchableOpacity>
-      </View>
+      </Animatable.View>
 
       <ScrollView>
         {activeTab === 'myBookings' ? (
           <>
             {history.length === 0 ? <Text style={styles.empty}>No bookings found.</Text> : null}
             {history.map((item, idx) => (
-              <View key={idx} style={styles.historyCard}>
+              <Animatable.View key={idx} animation="fadeInUp" delay={idx * 100} style={styles.historyCard}>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.modCode}>{item.moduleCode}</Text>
                   <Text style={styles.details}>Tutor: {item.tutorId}</Text>
@@ -235,14 +236,14 @@ const PeerSupportScreen = ({ route, navigation }: any) => {
                     </TouchableOpacity>
                   )}
                 </View>
-              </View>
+              </Animatable.View>
             ))}
           </>
         ) : (
           <>
             {tutorRequests.length === 0 ? <Text style={styles.empty}>No requests found.</Text> : null}
             {tutorRequests.map((item, idx) => (
-              <View key={idx} style={styles.historyCard}>
+              <Animatable.View key={idx} animation="fadeInUp" delay={idx * 100} style={styles.historyCard}>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.modCode}>{item.moduleCode}</Text>
                   <Text style={styles.details}>Student: {item.studentId}</Text>
@@ -269,7 +270,7 @@ const PeerSupportScreen = ({ route, navigation }: any) => {
                     </TouchableOpacity>
                   )}
                 </View>
-              </View>
+              </Animatable.View>
             ))}
           </>
         )}
@@ -311,20 +312,20 @@ const PeerSupportScreen = ({ route, navigation }: any) => {
             
             <Text style={styles.label}>Date</Text>
             <TouchableOpacity style={styles.pickerBox} onPress={() => setShowDatePicker(true)}>
-              <Text style={styles.pickerText}>{sessionDate ? sessionDate : '📅 Select Date'}</Text>
+              <Text style={styles.pickerText}>{sessionDate ? sessionDate : 'Select Date'}</Text>
             </TouchableOpacity>
             
             <View style={{flexDirection: 'row', gap: 10}}>
                 <View style={{flex: 1}}>
                     <Text style={styles.label}>Start Time</Text>
                     <TouchableOpacity style={styles.pickerBox} onPress={() => setShowStartTimePicker(true)}>
-                      <Text style={styles.pickerText}>{startTime ? startTime : '⏰ Start Time'}</Text>
+                      <Text style={styles.pickerText}>{startTime ? startTime : 'Start Time'}</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={{flex: 1}}>
                     <Text style={styles.label}>End Time</Text>
                     <TouchableOpacity style={styles.pickerBox} onPress={() => setShowEndTimePicker(true)}>
-                      <Text style={styles.pickerText}>{endTime ? endTime : '⏰ End Time'}</Text>
+                      <Text style={styles.pickerText}>{endTime ? endTime : 'End Time'}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -399,7 +400,7 @@ const styles = StyleSheet.create({
   actionBtnOutline: { borderWidth: 1, borderColor: appTheme.colors.primary, padding: 12, borderRadius: 8, flex: 1, alignItems: 'center' },
   btnText: { color: '#fff', fontWeight: 'bold' },
   btnTextPrimary: { color: appTheme.colors.primary, fontWeight: 'bold' },
-  historyCard: { backgroundColor: '#fff', padding: 15, borderRadius: 8, flexDirection: 'row', alignItems:'center', marginBottom: 10, elevation: 1 },
+  historyCard: { backgroundColor: appTheme.colors.glassStrong, padding: 15, borderRadius: 8, flexDirection: 'row', alignItems:'center', marginBottom: 10, elevation: 1 },
   modCode: { fontSize: 18, fontWeight: 'bold', color: appTheme.colors.textDark },
   details: { fontSize: 14, color: '#555', marginTop: 2 },
   status: { fontSize: 13, fontWeight: 'bold', color: appTheme.colors.primary, marginTop: 5 },
@@ -407,7 +408,7 @@ const styles = StyleSheet.create({
   delBtn: { backgroundColor: '#ffe5e5', padding: 8, borderRadius: 6 },
   delBtnText: { color: 'red', fontWeight: 'bold', fontSize: 12 },
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center', padding: 20 },
-  modalContent: { backgroundColor: '#fff', padding: 25, borderRadius: 12, elevation: 5 },
+  modalContent: { backgroundColor: appTheme.colors.glassStrong, padding: 25, borderRadius: 12, elevation: 5 },
   modalTitle: { fontSize: 22, fontWeight: 'bold', marginBottom: 15, color: appTheme.colors.textDark },
   input: { borderBottomWidth: 1, borderColor: '#ddd', marginBottom: 15, paddingVertical: 8, fontSize: 16 },
   pickerBox: { borderBottomWidth: 1, borderColor: '#ddd', marginBottom: 15, paddingVertical: 12 },
@@ -418,7 +419,7 @@ const styles = StyleSheet.create({
   pillText: { color: '#333', fontWeight: 'bold' },
   pillTextSelected: { color: '#fff' },
   label: { fontSize: 14, fontWeight: 'bold', color: '#444' },
-  suggestionBox: { position: 'absolute', top: 50, left: 0, right: 0, backgroundColor: '#fff', borderWidth: 1, borderColor: '#ccc', borderRadius: 8, elevation: 10, zIndex: 1000, maxHeight: 150 },
+  suggestionBox: { position: 'absolute', top: 50, left: 0, right: 0, backgroundColor: appTheme.colors.glassStrong, borderWidth: 1, borderColor: '#ccc', borderRadius: 8, elevation: 10, zIndex: 1000, maxHeight: 150 },
   suggestionItem: { padding: 12, borderBottomWidth: 1, borderBottomColor: '#eee' },
   suggestionText: { fontSize: 14, color: '#333' },
   modalActions: { flexDirection: 'row', justifyContent: 'flex-end', gap: 15, marginTop: 10 },

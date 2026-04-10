@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import * as Animatable from 'react-native-animatable';
 import { useFocusEffect } from '@react-navigation/native';
 import { Calendar } from 'react-native-calendars';
 import { campusEventApi } from '../../services/api';
@@ -65,12 +66,12 @@ const CampusEventHubScreen = ({ route, navigation }: any) => {
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Campus Event Hub</Text>
-        <TouchableOpacity style={styles.downloadBtn} onPress={handleDownloadPDF}>
-          <Text style={styles.downloadText}>📄 PDF</Text>
+        <TouchableOpacity style={styles.downloadBtn} onPress={handleDownloadPDF} activeOpacity={0.7}>
+          <Text style={styles.downloadText}>PDF</Text>
         </TouchableOpacity>
       </View>
 
-      <View style={styles.calendarContainer}>
+      <Animatable.View animation="fadeInDown" duration={600} style={styles.calendarContainer}>
         <Calendar
           onDayPress={(day: any) => setSelectedDate(day.dateString)}
           markedDates={markedDates}
@@ -81,11 +82,11 @@ const CampusEventHubScreen = ({ route, navigation }: any) => {
           }}
         />
         {selectedDate ? (
-          <TouchableOpacity style={styles.clearBtn} onPress={() => setSelectedDate('')}>
+          <TouchableOpacity style={styles.clearBtn} onPress={() => setSelectedDate('')} activeOpacity={0.7}>
             <Text style={styles.clearBtnText}>Show All Events</Text>
           </TouchableOpacity>
         ) : null}
-      </View>
+      </Animatable.View>
 
       <Text style={styles.sectionTitle}>
         {selectedDate ? `Events on ${selectedDate}` : 'Upcoming Events'}
@@ -95,30 +96,35 @@ const CampusEventHubScreen = ({ route, navigation }: any) => {
         <Text style={styles.emptyText}>No events to display.</Text>
       ) : (
         displayEvents.map((ev, idx) => (
-          <TouchableOpacity 
-            key={idx} 
-            style={styles.eventCard}
-            onPress={() => navigation.navigate('EventDetailScreen', { event: ev, currentUserId, isAdmin })}
-          >
-            <View style={styles.eventHeader}>
-              <Text style={styles.eventTitle}>{ev.title}</Text>
-              <View style={[styles.badge, { backgroundColor: ev.type === 'CAREER_FAIR' ? appTheme.colors.accent : appTheme.colors.primary }]}>
-                <Text style={styles.badgeText}>{ev.type === 'CAREER_FAIR' ? 'Career' : 'University'}</Text>
+          <Animatable.View key={idx} animation="slideInRight" delay={idx * 100} duration={500}>
+            <TouchableOpacity 
+              activeOpacity={0.8}
+              style={styles.eventCard}
+              onPress={() => navigation.navigate('EventDetailScreen', { event: ev, currentUserId, isAdmin })}
+            >
+              <View style={styles.eventHeader}>
+                <Text style={styles.eventTitle}>{ev.title}</Text>
+                <View style={[styles.badge, { backgroundColor: ev.type === 'CAREER_FAIR' ? appTheme.colors.accent : appTheme.colors.primary }]}>
+                  <Text style={styles.badgeText}>{ev.type === 'CAREER_FAIR' ? 'Career' : 'University'}</Text>
+                </View>
               </View>
-            </View>
-            <Text style={styles.eventInfo}>📅 {ev.eventDate}  |  🕒 {ev.startTime} - {ev.endTime}</Text>
-            <Text style={styles.eventInfo}>📍 {ev.location}</Text>
-          </TouchableOpacity>
+              <Text style={styles.eventInfo}>{ev.eventDate}  |  {ev.startTime} - {ev.endTime}</Text>
+              <Text style={styles.eventInfo}>{ev.location}</Text>
+            </TouchableOpacity>
+          </Animatable.View>
         ))
       )}
 
       {isAdmin && (
-        <TouchableOpacity 
-          style={styles.fab} 
-          onPress={() => navigation.navigate('CreateEventScreen', { currentUserId })}
-        >
-          <Text style={styles.fabText}>+</Text>
-        </TouchableOpacity>
+        <Animatable.View animation="zoomIn" delay={600} style={styles.fabContainer}>
+          <TouchableOpacity 
+            style={styles.fab} 
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate('CreateEventScreen', { currentUserId })}
+          >
+            <Text style={styles.fabText}>+</Text>
+          </TouchableOpacity>
+        </Animatable.View>
       )}
     </ScrollView>
   );
@@ -131,18 +137,19 @@ const styles = StyleSheet.create({
   title: { fontSize: 24, fontWeight: 'bold', color: appTheme.colors.textDark },
   downloadBtn: { backgroundColor: '#eee', padding: 8, borderRadius: 8 },
   downloadText: { fontSize: 16, color: appTheme.colors.textDark, fontWeight: 'bold' },
-  calendarContainer: { backgroundColor: '#fff', borderRadius: 12, padding: 5, marginBottom: 20, elevation: 2 },
+  calendarContainer: { backgroundColor: appTheme.colors.glassStrong, borderRadius: 12, padding: 5, marginBottom: 20, elevation: 2 },
   clearBtn: { padding: 10, alignItems: 'center' },
   clearBtnText: { color: appTheme.colors.primary, fontWeight: 'bold' },
   sectionTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 15, color: appTheme.colors.textDark },
   emptyText: { textAlign: 'center', color: '#888', fontStyle: 'italic', marginTop: 20 },
-  eventCard: { backgroundColor: '#fff', padding: 15, borderRadius: 12, marginBottom: 15, elevation: 2 },
+  eventCard: { backgroundColor: appTheme.colors.glassStrong, padding: 15, borderRadius: 12, marginBottom: 15, elevation: 2 },
   eventHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 },
   eventTitle: { fontSize: 18, fontWeight: 'bold',flex: 1, color: appTheme.colors.textDark },
   badge: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 12, marginLeft: 10 },
   badgeText: { color: '#fff', fontSize: 12, fontWeight: 'bold' },
   eventInfo: { fontSize: 14, color: '#666', marginBottom: 5 },
-  fab: { position: 'absolute', bottom: 30, right: 20, backgroundColor: appTheme.colors.primary, width: 60, height: 60, borderRadius: 30, justifyContent: 'center', alignItems: 'center', elevation: 5 },
+  fabContainer: { position: 'absolute', bottom: 30, right: 20 },
+  fab: { backgroundColor: appTheme.colors.primary, width: 60, height: 60, borderRadius: 30, justifyContent: 'center', alignItems: 'center', elevation: 5 },
   fabText: { color: '#fff', fontSize: 30, fontWeight: 'bold' }
 });
 

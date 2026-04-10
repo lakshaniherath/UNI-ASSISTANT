@@ -138,13 +138,13 @@ const TaskTrackerScreen = ({ route }: any) => {
       <View style={styles.glowTop} />
       <Text style={styles.title}>Task Tracker</Text>
       <View style={styles.formPanel}>
-      <TextInput style={styles.input} placeholder="Task title" placeholderTextColor={appTheme.colors.textMuted} value={title} onChangeText={setTitle} />
-      <TextInput style={styles.input} placeholder="Module code (optional)" placeholderTextColor={appTheme.colors.textMuted} value={moduleCode} onChangeText={setModuleCode} />
+      <TextInput style={styles.input} placeholder="Task title" placeholderTextColor={appTheme.colors.textDarkSoft} value={title} onChangeText={setTitle} />
+      <TextInput style={styles.input} placeholder="Module code (optional)" placeholderTextColor={appTheme.colors.textDarkSoft} value={moduleCode} onChangeText={setModuleCode} />
       <View style={styles.datePickerRow}>
         <TextInput
           style={[styles.input, styles.dateInput]}
           placeholder="Due datetime (yyyy-MM-ddTHH:mm)"
-          placeholderTextColor={appTheme.colors.textMuted}
+          placeholderTextColor={appTheme.colors.textDarkSoft}
           value={dueDateTime}
           onChangeText={setDueDateTime}
         />
@@ -174,7 +174,7 @@ const TaskTrackerScreen = ({ route }: any) => {
           onChange={onChangeTime}
         />
       )}
-      <TextInput style={[styles.input, styles.notes]} placeholder="Notes" placeholderTextColor={appTheme.colors.textMuted} value={notes} onChangeText={setNotes} multiline />
+      <TextInput style={[styles.input, styles.notes]} placeholder="Notes" placeholderTextColor={appTheme.colors.textDarkSoft} value={notes} onChangeText={setNotes} multiline />
       <TouchableOpacity style={styles.addBtn} onPress={addTask}>
         <Text style={styles.addBtnText}>Add Task</Text>
       </TouchableOpacity>
@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   input: {
-    backgroundColor: '#fff',
+    backgroundColor: appTheme.colors.glassStrong,
     borderColor: appTheme.colors.inputBorder,
     borderWidth: 1,
     borderRadius: 14,
@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   tabActive: { backgroundColor: appTheme.colors.primary, borderColor: appTheme.colors.primary },
-  tabText: { color: appTheme.colors.textSecondary, fontWeight: '700' },
+  tabText: { color: appTheme.colors.textPrimary, fontWeight: '700' },
   tabTextActive: { color: '#fff' },
   card: {
     backgroundColor: appTheme.colors.card,
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
   calendarBtn: { marginLeft: 10, padding: 10, backgroundColor: appTheme.colors.chipBg, borderRadius: 12, borderWidth: 1, borderColor: appTheme.colors.chipBorder },
   calendarIconContainer: { width: 22, height: 22, borderWidth: 2, borderColor: appTheme.colors.primary, borderRadius: 4, overflow: 'hidden' },
   calendarIconHeader: { backgroundColor: appTheme.colors.primary, height: 5, width: '100%' },
-  calendarIconBody: { flex: 1, backgroundColor: '#fff', flexDirection: 'row', flexWrap: 'wrap', padding: 2, gap: 2, justifyContent: 'center' },
+  calendarIconBody: { flex: 1, backgroundColor: appTheme.colors.glassStrong, flexDirection: 'row', flexWrap: 'wrap', padding: 2, gap: 2, justifyContent: 'center' },
   calendarIconDot: { width: 3, height: 3, backgroundColor: appTheme.colors.primary, borderRadius: 1.5 },
 });
 

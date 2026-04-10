@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http:/192.168.1.3:8080/api';
+const BASE_URL = 'http://10.93.125.239:8080/api';
 
 export const api = axios.create({
   baseURL: BASE_URL,
@@ -12,7 +12,7 @@ export const api = axios.create({
 
 // Request Interceptor: Request එකක් යන්න කලින් Log කරමු
 api.interceptors.request.use(request => {
-  console.log('🚀 Starting Request:', request.url);
+  console.log('Starting Request:', request.url);
   return request;
 });
 
@@ -27,7 +27,7 @@ api.interceptors.response.use(
       config._retry = true;
       config.retryCount = retryCount + 1;
 
-      console.log(`🔄 Retrying... Attempt ${config.retryCount}`);
+      console.log(`Retrying... Attempt ${config.retryCount}`);
 
       // පොඩි වෙලාවක් ඉඳලා ආයෙත් Try කරමු (Exponential Backoff)
       const delay = Math.pow(2, config.retryCount) * 1000;
@@ -38,11 +38,11 @@ api.interceptors.response.use(
 
     // Error එක විස්තරාත්මකව Log කරමු (Option A)
     if (error.code === 'ECONNABORTED') {
-      console.warn('❌ Network Timeout: Backend එක ගොඩක් වෙලා ගන්නවා');
+      console.warn('Network Timeout: Backend එක ගොඩක් වෙලා ගන්නවා');
     } else if (!response) {
-      console.warn('❌ Network Error: 172.28.39.239:8080 ට කතා කරන්න බැහැ. Firewall එක check කරන්න.');
+      console.warn('Network Error: 172.28.39.239:8080 ට කතා කරන්න බැහැ. Firewall එක check කරන්න.');
     } else {
-      console.warn('❌ Server Error:', {
+      console.warn('Server Error:', {
         status: response.status,
         method: config?.method,
         url: config?.url,
@@ -57,12 +57,12 @@ api.interceptors.response.use(
 // Backend එක reachable ද නැත්තේ ඒක test කරන function එක
 export const testBackendConnection = async () => {
   try {
-    console.log('🧪 Testing backend connection to:', BASE_URL);
+    console.log('Testing backend connection to:', BASE_URL);
     const response = await api.get('/users/all');
-    console.log('✅ Backend එක responsive ය!', response.status);
+    console.log('Backend එක responsive ය!', response.status);
     return { connected: true, status: response.status };
   } catch (error: any) {
-    console.warn('❌ Backend έκ unreachable:', {
+    console.warn('Backend unreachable:', {
       code: error?.code,
       message: error?.message,
       status: error?.response?.status,
@@ -96,7 +96,7 @@ export const forumApi = {
 export const resourceApi = {
   createResource: (data: any) => api.post('/resources', data),
   getResourcesByModule: (moduleCode: string) => api.get(`/resources/module/${moduleCode}`),
-  updateResource: (id: number, uploaderId: string, title?: string, description?: string) => 
+  updateResource: (id: number, uploaderId: string, title?: string, description?: string) =>
     api.put(`/resources/${id}?uploaderId=${uploaderId}${title ? `&title=${title}` : ''}${description ? `&description=${description}` : ''}`),
   deleteResource: (id: number, uploaderId: string) => api.delete(`/resources/${id}?uploaderId=${uploaderId}`),
   upvoteResource: (id: number) => api.put(`/resources/${id}/upvote`),
@@ -112,7 +112,7 @@ export const academicApi = {
   deleteResult: (id: number) => api.delete(`/academic/${id}`),
   getCGPA: (studentId: string) => api.get(`/academic/cgpa/${studentId}`),
   getSemesterGPA: (studentId: string, semester: number) => api.get(`/academic/gpa/${studentId}/semester/${semester}`),
-  predictGPA: (studentId: string, targetCGPA: number, remainingCredits: number) => 
+  predictGPA: (studentId: string, targetCGPA: number, remainingCredits: number) =>
     api.get(`/academic/predict/${studentId}`, { params: { targetCGPA, remainingCredits } }),
   downloadReport: (studentId: string) => api.get(`/academic/report/${studentId}`, { responseType: 'blob' }),
 };

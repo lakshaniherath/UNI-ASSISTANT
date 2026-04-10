@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     ...appTheme.shadow.card,
   },
   cardCode: { fontSize: 18, fontWeight: 'bold', color: appTheme.colors.textDark },
-  cardName: { fontSize: 14, color: appTheme.colors.textSecondary, marginTop: 4 },
+  cardName: { fontSize: 14, color: appTheme.colors.textDarkSoft, marginTop: 4, fontWeight: '600' },
 });
 
 export default ResourceModuleSelectionScreen;

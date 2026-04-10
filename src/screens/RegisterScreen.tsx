@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView, ActivityIndicator, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView, ActivityIndicator, Image, ImageBackground } from 'react-native';
 import { Picker } from '@react-native-picker/picker'; // 🚀 Picker එක Import කළා
 import { api } from '../services/api';
 import { appTheme } from '../theme/appTheme';
 
 const logoSource = require('../../assets/app-logo-source.png');
+const bgImageSource = require('../../assets/com.png');
 
 const RegisterScreen = ({ navigation }: any) => {
   // විශ්වවිද්‍යාලය ලබා දී ඇති නිවැරදි Subgroups ලැයිස්තුව
@@ -52,79 +53,97 @@ const RegisterScreen = ({ navigation }: any) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.heroCard}>
-        <Image source={logoSource} style={styles.logo} resizeMode="contain" />
-        <Text style={styles.title}>Join UniBuddy</Text>
-        <Text style={styles.subtitle}>Create an account to manage your studies</Text>
-      </View>
-      
-      <View style={styles.formCard}>
-      
-      <TextInput 
-        style={styles.input} 
-        placeholder="University ID (e.g. IT23658790)" 
-        placeholderTextColor={appTheme.colors.textMuted}
-        onChangeText={(txt) => setFormData({...formData, universityId: txt})} 
-      />
-      
-      <TextInput 
-        style={styles.input} 
-        placeholder="Full Name" 
-        placeholderTextColor={appTheme.colors.textMuted}
-        onChangeText={(txt) => setFormData({...formData, name: txt})} 
-      />
+    <ImageBackground
+      source={bgImageSource}
+      style={styles.background}
+      imageStyle={styles.backgroundImage}
+      resizeMode="cover"
+      blurRadius={5}
+    >
+      <View style={styles.backgroundOverlay} />
 
-      {/* 🚀 Subgroup තෝරා ගැනීමට Dropdown (Picker) එක */}
-      <View style={styles.pickerContainer}>
-        <Text style={styles.label}>Select Your Subgroup:</Text>
-        <Picker
-          selectedValue={formData.subgroup}
-          onValueChange={(itemValue) => setFormData({...formData, subgroup: itemValue})}
-          style={styles.picker}
-        >
-          <Picker.Item label="-- Choose Subgroup --" value="" color="#999" />
-          {subgroups.map((sg) => (
-            <Picker.Item key={sg} label={sg} value={sg} />
-          ))}
-        </Picker>
-      </View>
-      
-      <TextInput 
-        style={styles.input} 
-        placeholder="SLIIT Email" 
-        placeholderTextColor={appTheme.colors.textMuted}
-        keyboardType="email-address"
-        autoCapitalize="none"
-        onChangeText={(txt) => setFormData({...formData, email: txt})} 
-      />
-      
-      <TextInput 
-        style={styles.input} 
-        placeholder="Password" 
-        placeholderTextColor={appTheme.colors.textMuted}
-        secureTextEntry 
-        onChangeText={(txt) => setFormData({...formData, password: txt})} 
-      />
+      <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.heroCard}>
+          <Image source={logoSource} style={styles.logo} resizeMode="contain" />
+          <Text style={styles.title}>Join UniBuddy</Text>
+          <Text style={styles.subtitle}>Create an account to manage your studies</Text>
+        </View>
+        
+        <View style={styles.formCard}>
+        
+        <TextInput 
+          style={styles.input} 
+          placeholder="University ID (e.g. IT23658790)" 
+          placeholderTextColor={appTheme.colors.textMuted}
+          onChangeText={(txt) => setFormData({...formData, universityId: txt})} 
+        />
+        
+        <TextInput 
+          style={styles.input} 
+          placeholder="Full Name" 
+          placeholderTextColor={appTheme.colors.textMuted}
+          onChangeText={(txt) => setFormData({...formData, name: txt})} 
+        />
 
-      <TouchableOpacity style={styles.button} onPress={handleRegister} disabled={loading}>
-        {loading ? (
-          <ActivityIndicator color="#fff" />
-        ) : (
-          <Text style={styles.buttonText}>Register</Text>
-        )}
-      </TouchableOpacity>
+        {/* 🚀 Subgroup තෝරා ගැනීමට Dropdown (Picker) එක */}
+        <View style={styles.pickerContainer}>
+          <Text style={styles.label}>Select Your Subgroup:</Text>
+          <Picker
+            selectedValue={formData.subgroup}
+            onValueChange={(itemValue) => setFormData({...formData, subgroup: itemValue})}
+            style={styles.picker}
+          >
+            <Picker.Item label="-- Choose Subgroup --" value="" color="#999" />
+            {subgroups.map((sg) => (
+              <Picker.Item key={sg} label={sg} value={sg} />
+            ))}
+          </Picker>
+        </View>
 
-      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-        <Text style={styles.linkText}>Already have an account? Login</Text>
-      </TouchableOpacity>
-      </View>
-    </ScrollView>
+        <TextInput 
+          style={styles.input} 
+          placeholder="SLIIT Email" 
+          placeholderTextColor={appTheme.colors.textMuted}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          onChangeText={(txt) => setFormData({...formData, email: txt})} 
+        />
+
+        <TextInput 
+          style={styles.input} 
+          placeholder="Password" 
+          placeholderTextColor={appTheme.colors.textMuted}
+          secureTextEntry 
+          onChangeText={(txt) => setFormData({...formData, password: txt})} 
+        />
+
+        <TouchableOpacity style={styles.button} onPress={handleRegister} disabled={loading}>
+          {loading ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text style={styles.buttonText}>Register</Text>
+          )}
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <Text style={styles.linkText}>Already have an account? Login</Text>
+        </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { padding: 24, justifyContent: 'center', flexGrow: 1, backgroundColor: appTheme.colors.bg },
+  background: { flex: 1 },
+  backgroundImage: {
+    opacity: 0.92,
+  },
+  backgroundOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(6, 17, 31, 0.54)',
+  },
+  container: { padding: 24, justifyContent: 'center', flexGrow: 1, backgroundColor: 'transparent' },
   heroCard: {
     backgroundColor: appTheme.colors.card,
     borderRadius: 28,
@@ -146,10 +165,10 @@ const styles = StyleSheet.create({
   },
   title: { fontSize: 28, fontWeight: 'bold', textAlign: 'center', color: appTheme.colors.textDark, marginBottom: 5 },
   subtitle: { fontSize: 16, textAlign: 'center', color: appTheme.colors.textDarkSoft, marginBottom: 8 },
-  input: { backgroundColor: '#fff', padding: 15, borderRadius: 14, marginBottom: 15, borderWidth: 1, borderColor: appTheme.colors.inputBorder, fontSize: 16, color: appTheme.colors.textDark },
+  input: { backgroundColor: appTheme.colors.glassStrong, padding: 15, borderRadius: 14, marginBottom: 15, borderWidth: 1, borderColor: appTheme.colors.inputBorder, fontSize: 16, color: appTheme.colors.textDark },
   // 🚀 Picker එක සඳහා අලුත් Styles
   pickerContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: appTheme.colors.glassStrong,
     borderWidth: 1,
     borderColor: appTheme.colors.inputBorder,
     borderRadius: 14,

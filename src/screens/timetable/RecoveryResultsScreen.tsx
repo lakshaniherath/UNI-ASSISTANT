@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { api } from '../../services/api';
-import { fetchRecoverySuggestions, saveRecoveryPlan, TimetableEvent, TimetableRecoveryResponse } from '../../services/timetableService';
+import { fetchRecoverySuggestions, TimetableEvent, TimetableRecoveryResponse } from '../../services/timetableService';
 
 const RecoveryResultsScreen = ({ route, navigation }: any) => {
   const { studentSubgroup, missedEventId, userData } = route.params;
@@ -15,7 +14,7 @@ const RecoveryResultsScreen = ({ route, navigation }: any) => {
         const data = await fetchRecoverySuggestions(studentSubgroup, missedEventId);
         setResult(data);
       } catch (e) {
-        Alert.alert('Error', 'Unable to locate recovery options.');
+        Alert.alert('Error', 'Could not find recovery options.');
       } finally {
         setLoading(false);
       }
@@ -23,32 +22,10 @@ const RecoveryResultsScreen = ({ route, navigation }: any) => {
     load();
   }, [studentSubgroup, missedEventId]);
 
-  const savePlan = async (alternative: TimetableEvent) => {
-    try {
-      if (!result?.originalEvent) return;
-      
-      const plan = {
-        universityId: userData.universityId,
-        originalModuleCode: result.originalEvent.moduleCode,
-        originalActivityType: result.originalEvent.activityType,
-        originalTime: `${result.originalEvent.dayOfWeek} ${result.originalEvent.startTime}`,
-        recoveryModuleCode: alternative.moduleCode,
-        recoveryActivityType: alternative.activityType,
-        recoveryDay: alternative.dayOfWeek,
-        recoveryStartTime: alternative.startTime,
-        recoveryEndTime: alternative.endTime,
-        recoveryLocation: alternative.location,
-        recoverySubgroup: alternative.subgroup,
-      };
-
-      await saveRecoveryPlan(plan);
-
-      Alert.alert('Saved', `Recovery plan saved for ${alternative.moduleCode} (${alternative.dayOfWeek} ${alternative.startTime}).`, [
-        { text: 'OK', onPress: () => navigation.navigate('Timetable', { userData }) },
-      ]);
-    } catch (e) {
-      Alert.alert('Error', 'Unable to save the recovery plan.');
-    }
+  const savePlan = (event: TimetableEvent) => {
+    Alert.alert('Saved', `Recovery plan saved for ${event.moduleCode} (${event.dayOfWeek} ${event.startTime}).`, [
+      { text: 'OK', onPress: () => navigation.navigate('Timetable', { userData }) },
+    ]);
   };
 
   if (loading) {

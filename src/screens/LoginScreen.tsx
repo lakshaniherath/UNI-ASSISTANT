@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator, Image, ImageBackground } from 'react-native';
 import { api, testBackendConnection } from '../services/api';
 import { registerFcmTokenForUser } from '../services/notifications';
 import { appTheme } from '../theme/appTheme';
 
 const logoSource = require('../../assets/app-logo-source.png');
+const bgImageSource = require('../../assets/com.png');
 
 const LoginScreen = ({ navigation }: any) => {
   const [email, setEmail] = useState('');
@@ -13,7 +14,7 @@ const LoginScreen = ({ navigation }: any) => {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert('Validation Required', 'Please provide both your email and password.');
+      Alert.alert('Error', 'Please enter both email and password.');
       return;
     }
 
@@ -32,7 +33,7 @@ const LoginScreen = ({ navigation }: any) => {
         registerFcmTokenForUser(loggedInUser.universityId).catch(err =>
           console.warn('FCM token registration failed:', err)
         );
-        Alert.alert('Success', `Welcome back, ${loggedInUser.name}.`, [
+        Alert.alert('Success', `Welcome back, ${loggedInUser.name}`, [
           { 
             text: 'OK', 
             // Home screen එකට යද්දී Login එක stack එකෙන් ඉවත් කරනවා (back press කළාම logout නොවන්න)
@@ -44,17 +45,17 @@ const LoginScreen = ({ navigation }: any) => {
         ]);
       }
     } catch (error: any) {
-      console.warn('Login failure (Likely invalid credentials)');
+      console.error('Login Error:', error?.message || error);
       
       // 401 Error එකක් ආවොත් ඒ කියන්නේ email/password වැරදියි
       if (error?.response?.status === 401) {
-        Alert.alert('Authentication Failed', 'The email or password you entered is incorrect.');
+        Alert.alert('Login Failed', 'Invalid email or password.');
       } else if (error?.code === 'ECONNABORTED' || error?.message === 'Network Error') {
         // Network Timeout
-        Alert.alert('Connection Timeout', 'The server is taking too long to respond. Please try again.');
+        Alert.alert('Connection Timeout', 'Backend එක ඈතිගිය. නැවතත් උත්සාහ කරන්න.');
       } else if (!error?.response) {
         // Network error - Backend එක ගිහින් නැත
-        Alert.alert('Connection Error', 'Unable to reach the server. Please check your network connection.');
+        Alert.alert('Connection Error', 'Backend එක ගිහින් නැත. Firewall එක check කරන්න. localhost:8080 ය running?');
       } else {
         // වෙනත් Server error එකක් ආවොත්
         Alert.alert('Server Error', `Error: ${error?.response?.status || 'Unknown error'}`);
@@ -65,68 +66,86 @@ const LoginScreen = ({ navigation }: any) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.glowTop} />
-      <View style={styles.glowBottom} />
+    <ImageBackground
+      source={bgImageSource}
+      style={styles.background}
+      imageStyle={styles.backgroundImage}
+      resizeMode="cover"
+      blurRadius={5}
+    >
+      <View style={styles.backgroundOverlay} />
 
-      <View style={styles.heroCard}>
-        <Image source={logoSource} style={styles.logo} resizeMode="contain" />
-        <Text style={styles.title}>Welcome back</Text>
-        <Text style={styles.subtitle}>Sign in to continue your UniBuddy flow</Text>
+      <View style={styles.container}>
+        <View style={styles.glowTop} />
+        <View style={styles.glowBottom} />
+
+        <View style={styles.heroCard}>
+          <Image source={logoSource} style={styles.logo} resizeMode="contain" />
+          <Text style={styles.title}>Welcome back</Text>
+          <Text style={styles.subtitle}>Sign in to continue your UniBuddy flow</Text>
+        </View>
+
+        <View style={styles.formCard}>
+          <TextInput
+            style={styles.input}
+            placeholder="SLIIT Email (e.g. IT23658790@my.sliit.lk)"
+            placeholderTextColor={appTheme.colors.textMuted}
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            placeholderTextColor={appTheme.colors.textMuted}
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
+
+          <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
+            {loading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={styles.buttonText}>Login</Text>
+            )}
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            style={styles.testButton} 
+            onPress={async () => {
+              const result = await testBackendConnection();
+              if (result.connected) {
+                Alert.alert('Success', 'Backend එක reachable ය!');
+              } else {
+                Alert.alert('Connection Failed', result.hint);
+              }
+            }}
+          >
+            <Text style={styles.testButtonText}>Test Backend Connection</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+            <Text style={styles.linkText}>Don't have an account? Register</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-
-      <View style={styles.formCard}>
-        <TextInput
-          style={styles.input}
-          placeholder="SLIIT Email (e.g. IT23658790@my.sliit.lk)"
-          placeholderTextColor={appTheme.colors.textMuted}
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
-
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          placeholderTextColor={appTheme.colors.textMuted}
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
-
-        <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
-          {loading ? (
-            <ActivityIndicator color="#fff" />
-          ) : (
-            <Text style={styles.buttonText}>Login</Text>
-          )}
-        </TouchableOpacity>
-
-        <TouchableOpacity 
-          style={styles.testButton} 
-          onPress={async () => {
-            const result = await testBackendConnection();
-            if (result.connected) {
-              Alert.alert('Connection Successful', 'The backend server is reachable.');
-            } else {
-              Alert.alert('Connection Failed', result.hint);
-            }
-          }}
-        >
-          <Text style={styles.testButtonText}>Test Backend Connection</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-          <Text style={styles.linkText}>Don't have an account? Register</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: 20, backgroundColor: appTheme.colors.bg },
+  background: { flex: 1 },
+  backgroundImage: {
+    opacity: 0.92,
+  },
+  backgroundOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(6, 17, 31, 0.54)',
+  },
+  container: { flex: 1, justifyContent: 'center', padding: 20, backgroundColor: 'transparent' },
   glowTop: {
     position: 'absolute',
     top: -80,

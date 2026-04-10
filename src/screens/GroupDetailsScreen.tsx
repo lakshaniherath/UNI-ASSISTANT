@@ -154,16 +154,16 @@ const GroupDetailsScreen = ({ route, navigation }: any) => {
             <View style={styles.memberCard}>
               <View style={styles.memberHeader}>
                 <Text style={styles.memberName}>
-                  {item.name} {item.leader ? '👑' : ''}
+                  {item.name} {item.leader ? '(Leader)' : ''}
                 </Text>
                 {item.leader && <Text style={styles.leaderTag}>Leader</Text>}
               </View>
 
-              <Text style={styles.memberId}>🆔 {item.universityId}</Text>
-              <Text style={styles.memberDetail}>📧 {item.email}</Text>
+              <Text style={styles.memberId}>ID: {item.universityId}</Text>
+              <Text style={styles.memberDetail}>Email: {item.email}</Text>
               <Text style={styles.memberDetail}>CGPA: {item.cgpa}</Text>
               <Text style={styles.memberDetail}>Skills: {item.skills}</Text>
-              <Text style={styles.memberDetail}>📋 Subgroup: {item.subgroup}</Text>
+              <Text style={styles.memberDetail}>Subgroup: {item.subgroup}</Text>
 
               {/* Leader can remove non-leader members */}
               {isLeader && !item.leader && (
@@ -183,7 +183,7 @@ const GroupDetailsScreen = ({ route, navigation }: any) => {
       <View style={styles.actionArea}>
         {isLeader ? (
           <TouchableOpacity style={styles.deleteBtn} onPress={handleDeleteGroup}>
-            <Text style={styles.actionBtnText}>🗑 Delete Group</Text>
+            <Text style={styles.actionBtnText}>Delete Group</Text>
           </TouchableOpacity>
         ) : isMember ? (
           <TouchableOpacity style={styles.leaveBtn} onPress={handleLeaveGroup}>

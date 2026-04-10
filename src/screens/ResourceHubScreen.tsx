@@ -235,7 +235,7 @@ const ResourceHubScreen = ({ navigation, route }: any) => {
       <View style={styles.specialActionsRow}>
         <View style={styles.specialActionContainer}>
           <TouchableOpacity style={styles.specialBtn} onPress={handleBulkDownload}>
-            <Text style={styles.specialBtnText}>📦 Download All (ZIP)</Text>
+            <Text style={styles.specialBtnText}>Download All (ZIP)</Text>
           </TouchableOpacity>
           {downloadProgress['bulk'] !== undefined && (
             <View style={styles.miniProgressContainer}>
@@ -245,7 +245,7 @@ const ResourceHubScreen = ({ navigation, route }: any) => {
         </View>
         <View style={styles.specialActionContainer}>
           <TouchableOpacity style={styles.specialBtn} onPress={handleGetReport}>
-            <Text style={styles.specialBtnText}>📄 Usage Report (PDF)</Text>
+            <Text style={styles.specialBtnText}>Usage Report (PDF)</Text>
           </TouchableOpacity>
           {downloadProgress['report'] !== undefined && (
             <View style={styles.miniProgressContainer}>
@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 12,
-    backgroundColor: '#fff',
+    backgroundColor: appTheme.colors.glassStrong,
     ...appTheme.shadow.card,
     zIndex: 1
   },
@@ -368,7 +368,7 @@ const styles = StyleSheet.create({
     paddingBottom: 80, // for FAB
   },
   resourceCard: {
-    backgroundColor: '#fff',
+    backgroundColor: appTheme.colors.glassStrong,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,

@@ -69,7 +69,7 @@ const CreateEventScreen = ({ route, navigation }: any) => {
       <Text style={styles.label}>Date *</Text>
       <TouchableOpacity style={styles.input} onPress={() => setShowDatePicker(true)}>
         <Text style={{ color: eventDate ? '#000' : '#888', fontSize: 16 }}>
-          📅 {eventDate || 'Select Date'}
+          {eventDate || 'Select Date'}
         </Text>
       </TouchableOpacity>
 
@@ -78,7 +78,7 @@ const CreateEventScreen = ({ route, navigation }: any) => {
           <Text style={styles.label}>Start Time *</Text>
           <TouchableOpacity style={styles.input} onPress={() => setShowStartTimePicker(true)}>
             <Text style={{ color: startTime ? '#000' : '#888', fontSize: 16 }}>
-              🕒 {startTime ? startTime.substring(0, 5) : 'Start Time'}
+              {startTime ? startTime.substring(0, 5) : 'Start Time'}
             </Text>
           </TouchableOpacity>
         </View>
@@ -86,7 +86,7 @@ const CreateEventScreen = ({ route, navigation }: any) => {
           <Text style={styles.label}>End Time *</Text>
           <TouchableOpacity style={styles.input} onPress={() => setShowEndTimePicker(true)}>
             <Text style={{ color: endTime ? '#000' : '#888', fontSize: 16 }}>
-              🕒 {endTime ? endTime.substring(0, 5) : 'End Time'}
+              {endTime ? endTime.substring(0, 5) : 'End Time'}
             </Text>
           </TouchableOpacity>
         </View>
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: appTheme.colors.bg, padding: 20 },
   header: { fontSize: 24, fontWeight: 'bold', color: appTheme.colors.textDark, marginBottom: 20 },
   label: { fontSize: 14, fontWeight: 'bold', color: '#555', marginBottom: 8 },
-  input: { backgroundColor: '#fff', borderRadius: 8, padding: 12, borderWidth: 1, borderColor: '#ddd', marginBottom: 15, fontSize: 16 },
+  input: { backgroundColor: appTheme.colors.glassStrong, borderRadius: 8, padding: 12, borderWidth: 1, borderColor: '#ddd', marginBottom: 15, fontSize: 16 },
   row: { flexDirection: 'row', justifyContent: 'space-between' },
   typeContainer: { flexDirection: 'row', gap: 10, marginBottom: 30 },
   typeBtn: { flex: 1, padding: 12, backgroundColor: '#eee', borderRadius: 8, alignItems: 'center' },

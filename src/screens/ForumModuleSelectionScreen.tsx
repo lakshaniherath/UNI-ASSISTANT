@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import * as Animatable from 'react-native-animatable';
 import { appTheme } from '../theme/appTheme';
 
 const MODULES = [
@@ -15,23 +16,25 @@ const ForumModuleSelectionScreen = ({ navigation, route }: any) => {
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.header}>
+      <Animatable.View animation="fadeInDown" duration={500} style={styles.header}>
         <Text style={styles.title}>Select a Module</Text>
         <Text style={styles.subtitle}>Choose a subject to enter its Q&A forum</Text>
-      </View>
+      </Animatable.View>
       <View style={styles.list}>
-        {MODULES.map((mod) => (
-          <TouchableOpacity 
-            key={mod.code} 
-            style={styles.card}
-            onPress={() => navigation.navigate('AcademicForum', { 
-              moduleCode: mod.code,
-              currentUserId: currentUserId || userData?.universityId 
-            })}
-          >
-            <Text style={styles.cardCode}>{mod.code}: {mod.name}</Text>
-            <Text style={styles.cardName}>Enter Q&A Forum</Text>
-          </TouchableOpacity>
+        {MODULES.map((mod, index) => (
+          <Animatable.View key={mod.code} animation="slideInRight" delay={index * 100} duration={500}>
+            <TouchableOpacity 
+              activeOpacity={0.8}
+              style={styles.card}
+              onPress={() => navigation.navigate('AcademicForum', { 
+                moduleCode: mod.code,
+                currentUserId: currentUserId || userData?.universityId 
+              })}
+            >
+              <Text style={styles.cardCode}>{mod.code}: {mod.name}</Text>
+              <Text style={styles.cardName}>Enter Q&A Forum</Text>
+            </TouchableOpacity>
+          </Animatable.View>
         ))}
       </View>
     </ScrollView>

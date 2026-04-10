@@ -36,7 +36,7 @@ const TimetableScreen = ({ route, navigation }: any) => {
 
   const load = useCallback(async () => {
     if (!subgroup) {
-      Alert.alert('Action Required', 'Please select your subgroup in your profile first.');
+      Alert.alert('Profile Required', 'Please set your subgroup first.');
       return;
     }
 
@@ -50,7 +50,7 @@ const TimetableScreen = ({ route, navigation }: any) => {
       await clearScheduledReminders();
       await scheduleClassRemindersForNextWeek(table, prefs as ReminderPreference);
     } catch {
-      Alert.alert('Error', 'Unable to load the timetable.');
+      Alert.alert('Error', 'Could not load timetable.');
     } finally {
       setLoading(false);
     }
@@ -98,12 +98,6 @@ const TimetableScreen = ({ route, navigation }: any) => {
         >
           <Text style={styles.quickText}>Task Tracker</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.quickBtn, { backgroundColor: '#4C6F8C' }]}
-          onPress={() => navigation.navigate('RecoveryPlans', { userData })}
-        >
-          <Text style={styles.quickText}>Recovery Plans</Text>
-        </TouchableOpacity>
       </View>
       <TouchableOpacity
         style={styles.personalBtn}
@@ -112,10 +106,14 @@ const TimetableScreen = ({ route, navigation }: any) => {
         <Text style={styles.personalBtnText}>Personal Events</Text>
       </TouchableOpacity>
 
-      <View style={styles.chipContainer}>
-        {DAY_TABS.map(item => (
+      <FlatList
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        data={DAY_TABS}
+        keyExtractor={d => d}
+        style={styles.tabList}
+        renderItem={({ item }) => (
           <TouchableOpacity
-            key={item}
             style={[styles.tab, selectedDay === item && styles.tabActive]}
             onPress={() => setSelectedDay(item)}
           >
@@ -123,20 +121,24 @@ const TimetableScreen = ({ route, navigation }: any) => {
               {item.slice(0, 3)}
             </Text>
           </TouchableOpacity>
-        ))}
-      </View>
+        )}
+      />
 
-      <View style={styles.chipContainer}>
-        {TYPE_TABS.map(item => (
+      <FlatList
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        data={TYPE_TABS}
+        keyExtractor={d => d}
+        style={styles.tabList}
+        renderItem={({ item }) => (
           <TouchableOpacity
-            key={item}
             style={[styles.tab, selectedType === item && styles.tabActive]}
             onPress={() => setSelectedType(item)}
           >
             <Text style={[styles.tabText, selectedType === item && styles.tabTextActive]}>{item}</Text>
           </TouchableOpacity>
-        ))}
-      </View>
+        )}
+      />
 
       <View style={styles.switchRow}>
         <Text style={styles.switchText}>Show hall classes only</Text>
@@ -184,30 +186,18 @@ const TimetableScreen = ({ route, navigation }: any) => {
             missedEventId: selectedEvent.id,
           });
         }}
-
+        onMarkMissed={() => {
+          if (!selectedEvent) return;
+          setShowModal(false);
+          navigation.navigate('RecoveryResults', {
+            userData,
+            studentSubgroup: subgroup,
+            missedEventId: selectedEvent.id,
+          });
+        }}
         onAddPersonal={() => {
           if (!selectedEvent) return;
           setShowModal(false);
-
-          // Get the date for the current week's corresponding day
-          const getThisWeekDate = (dayName: string) => {
-            const days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
-            const targetIndex = days.indexOf(dayName.toUpperCase());
-            if (targetIndex === -1) return '';
-
-            const now = new Date();
-            const currentDayIndex = now.getDay(); // 0 is Sunday
-            const diff = targetIndex - currentDayIndex;
-            
-            const targetDate = new Date(now);
-            targetDate.setDate(now.getDate() + diff);
-            
-            const yyyy = targetDate.getFullYear();
-            const MM = String(targetDate.getMonth() + 1).padStart(2, '0');
-            const dd = String(targetDate.getDate()).padStart(2, '0');
-            return `${yyyy}-${MM}-${dd}`;
-          };
-
           navigation.navigate('AddPersonalEvent', {
             userData,
             prefill: {
@@ -215,7 +205,6 @@ const TimetableScreen = ({ route, navigation }: any) => {
               notes: selectedEvent.moduleName,
               startTime: selectedEvent.startTime,
               endTime: selectedEvent.endTime,
-              date: getThisWeekDate(selectedEvent.dayOfWeek),
             },
           });
         }}
@@ -242,8 +231,8 @@ const styles = StyleSheet.create({
   quickText: { color: '#fff', textAlign: 'center', fontWeight: '700', fontSize: 12 },
   personalBtn: { backgroundColor: appTheme.colors.success, borderRadius: 14, padding: 12, marginBottom: 8 },
   personalBtnText: { color: '#fff', textAlign: 'center', fontWeight: '700' },
-  chipContainer: { flexDirection: 'row', flexWrap: 'wrap', marginVertical: 6, gap: 8 },
-  tab: { paddingHorizontal: 10, paddingVertical: 7, borderRadius: 16, backgroundColor: appTheme.colors.chipBg, borderWidth: 1, borderColor: appTheme.colors.chipBorder },
+  tabList: { marginVertical: 6, maxHeight: 45 },
+  tab: { paddingHorizontal: 10, paddingVertical: 7, borderRadius: 16, backgroundColor: appTheme.colors.chipBg, borderWidth: 1, borderColor: appTheme.colors.chipBorder, marginRight: 8 },
   tabActive: { backgroundColor: appTheme.colors.primary, borderColor: appTheme.colors.primary },
   tabText: { color: appTheme.colors.textSecondary, fontWeight: '700' },
   tabTextActive: { color: '#fff' },

@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { appTheme } from '../theme/appTheme';
 
 const ForumCard = ({ item, currentUserId, onEdit, onDelete, onVote, isAnswer = false }: any) => {
   const isOwner = item.universityId === currentUserId;
@@ -16,11 +17,11 @@ const ForumCard = ({ item, currentUserId, onEdit, onDelete, onVote, isAnswer = f
       <View style={styles.footer}>
         <View style={styles.voteContainer}>
           <TouchableOpacity onPress={() => onVote(item.id, true)}>
-            <Text style={styles.voteBtn}>👍</Text>
+            <Text style={styles.voteBtn}>Up</Text>
           </TouchableOpacity>
           <Text style={styles.votes}>{Math.max(0, item.upvotes - (item.downvotes || 0))}</Text>
           <TouchableOpacity onPress={() => onVote(item.id, false)}>
-            <Text style={styles.voteBtn}>👎</Text>
+            <Text style={styles.voteBtn}>Down</Text>
           </TouchableOpacity>
         </View>
 
@@ -43,15 +44,13 @@ const ForumCard = ({ item, currentUserId, onEdit, onDelete, onVote, isAnswer = f
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: appTheme.colors.glassStrong,
     padding: 16,
     borderRadius: 8,
     marginVertical: 8,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
+    borderWidth: 1,
+    borderColor: appTheme.colors.cardBorder,
+    ...appTheme.shadow.card,
   },
   recommendedCard: {
     borderColor: '#4CAF50',

@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { api } from '../services/api';
+import { appTheme } from '../theme/appTheme';
 
 // 🚀 Interface to match the new JoinRequestResponseDTO structure
 interface JoinRequestDTO {
@@ -30,7 +31,7 @@ const RequestManagementScreen = ({ route }: any) => {
       const response = await api.get(`/groups/${groupId}/requests`);
       setRequests(response.data);
     } catch (error) {
-      Alert.alert('Error', 'Unable to load requests.');
+      Alert.alert('Error', 'Could not load requests.');
     } finally {
       setLoading(false);
     }
@@ -39,20 +40,20 @@ const RequestManagementScreen = ({ route }: any) => {
   const handleAccept = async (requestId: number) => {
     try {
       await api.post(`/groups/accept-request/${requestId}`);
-      Alert.alert('Success', 'The member has been added successfully.');
+      Alert.alert('Success', 'New member added.');
       fetchRequests(); // Refresh list
     } catch (error) {
-      Alert.alert('Error', 'Unable to add the member.');
+      Alert.alert('Error', 'Failed to add member.');
     }
   };
 
   const handleReject = async (requestId: number) => {
     try {
       await api.post(`/groups/reject-request/${requestId}`);
-      Alert.alert('Declined', 'The request has been successfully declined.');
+      Alert.alert('Rejected', 'The request has been declined.');
       fetchRequests(); // Refresh the live list
     } catch (error) {
-      Alert.alert('Error', 'Unable to decline the request.');
+      Alert.alert('Error', 'Could not reject the request.');
     }
   };
 
@@ -113,17 +114,15 @@ const RequestManagementScreen = ({ route }: any) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: '#F5F7FA' },
+  container: { flex: 1, padding: 20, backgroundColor: appTheme.colors.bg },
   requestCard: {
-    backgroundColor: '#fff',
+    backgroundColor: appTheme.colors.glassStrong,
     padding: 15,
     borderRadius: 12,
     marginBottom: 15,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
+    borderWidth: 1,
+    borderColor: appTheme.colors.cardBorder,
+    ...appTheme.shadow.card,
   },
   studentName: { fontSize: 18, fontWeight: 'bold', color: '#1864AB' },
   studentId: { fontSize: 13, color: '#627D98', marginTop: 2 },

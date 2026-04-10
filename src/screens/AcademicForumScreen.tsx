@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, ActivityIndicator, Alert, TextInput, Modal } from 'react-native';
+import * as Animatable from 'react-native-animatable';
 import { useFocusEffect } from '@react-navigation/native';
 import { forumApi } from '../services/api';
 import ForumCard from '../components/ForumCard';
@@ -76,29 +77,32 @@ const AcademicForumScreen = ({ navigation, route }: any) => {
     }
   };
 
-  const renderItem = ({ item }: any) => (
-    <TouchableOpacity onPress={() => navigation.navigate('QuestionDetail', { question: item, currentUserId })}>
-      <ForumCard 
-        item={item} 
-        currentUserId={currentUserId} 
-        onVote={handleVote}
-        onDelete={handleDelete}
-        onEdit={handleEdit}
-      />
-    </TouchableOpacity>
+  const renderItem = ({ item, index }: any) => (
+    <Animatable.View animation="fadeInUp" delay={index * 50} duration={500}>
+      <TouchableOpacity onPress={() => navigation.navigate('QuestionDetail', { question: item, currentUserId })} activeOpacity={0.8}>
+        <ForumCard 
+          item={item} 
+          currentUserId={currentUserId} 
+          onVote={handleVote}
+          onDelete={handleDelete}
+          onEdit={handleEdit}
+        />
+      </TouchableOpacity>
+    </Animatable.View>
   );
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      <Animatable.View animation="fadeInDown" style={styles.header}>
         <Text style={styles.headerTitle}>Forum: {moduleCode}</Text>
         <TouchableOpacity 
           style={styles.askBtn} 
+          activeOpacity={0.8}
           onPress={() => navigation.navigate('CreateQuestion', { moduleCode, currentUserId })}
         >
           <Text style={styles.askBtnText}>+ Ask</Text>
         </TouchableOpacity>
-      </View>
+      </Animatable.View>
 
       {loading ? (
         <ActivityIndicator size="large" color="#0000ff" style={{ marginTop: 20 }} />

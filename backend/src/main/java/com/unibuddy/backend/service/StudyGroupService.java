@@ -215,10 +215,10 @@ public class StudyGroupService {
     }
 
     private void validateGroupData(StudyGroup group) {
-        if (group.getGroupName() == null || group.getGroupName().trim().isEmpty()) throw new IllegalArgumentException("The study group name is a required field.");
-        if (group.getSubgroup() == null || group.getSubgroup().trim().isEmpty()) throw new IllegalArgumentException("The subgroup is a required field.");
-        if (group.getRequiredSkills() == null || group.getRequiredSkills().isEmpty()) throw new IllegalArgumentException("At least one required skill must be specified.");
-        if (group.getTargetCGPA() == null || group.getTargetCGPA().trim().isEmpty()) throw new IllegalArgumentException("A target CGPA must be specified.");
+        if (group.getGroupName() == null || group.getGroupName().trim().isEmpty()) throw new IllegalArgumentException("Group name required");
+        if (group.getSubgroup() == null || group.getSubgroup().trim().isEmpty()) throw new IllegalArgumentException("Subgroup required");
+        if (group.getRequiredSkills() == null || group.getRequiredSkills().isEmpty()) throw new IllegalArgumentException("Skills required");
+        if (group.getTargetCGPA() == null || group.getTargetCGPA().trim().isEmpty()) throw new IllegalArgumentException("Target CGPA required");
     }
 
     private boolean isStudentInAnyGroup(String studentId) {

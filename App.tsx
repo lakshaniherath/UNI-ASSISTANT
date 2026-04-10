@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { ActivityIndicator, StatusBar, View } from 'react-native';
+import { ActivityIndicator, ImageBackground, StatusBar, StyleSheet, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setupForegroundMessageListener } from './src/services/notifications';
 
@@ -24,24 +24,18 @@ import RecoveryResultsScreen from './src/screens/timetable/RecoveryResultsScreen
 import ReminderSettingsScreen from './src/screens/timetable/ReminderSettingsScreen';
 import TaskTrackerScreen from './src/screens/timetable/TaskTrackerScreen';
 import AddPersonalEventScreen from './src/screens/timetable/AddPersonalEventScreen';
-import RecoveryPlansScreen from './src/screens/timetable/RecoveryPlansScreen';
-
-import AcademicForumScreen from './src/screens/AcademicForumScreen';
+import AcademicDashboardScreen from './src/screens/AcademicDashboardScreen';
+import PeerSupportScreen from './src/screens/PeerSupportScreen';
 import ForumModuleSelectionScreen from './src/screens/ForumModuleSelectionScreen';
+import AcademicForumScreen from './src/screens/AcademicForumScreen';
 import CreateQuestionScreen from './src/screens/CreateQuestionScreen';
 import QuestionDetailScreen from './src/screens/QuestionDetailScreen';
-
 import ResourceModuleSelectionScreen from './src/screens/ResourceModuleSelectionScreen';
 import ResourceHubScreen from './src/screens/ResourceHubScreen';
 import UploadResourceScreen from './src/screens/UploadResourceScreen';
-import AcademicDashboardScreen from './src/screens/AcademicDashboardScreen';
-import PeerSupportScreen from './src/screens/PeerSupportScreen';
-
-// 🚀 Campus Event Hub Screens
 import CampusEventHubScreen from './src/screens/events/CampusEventHubScreen';
 import CreateEventScreen from './src/screens/events/CreateEventScreen';
 import EventDetailScreen from './src/screens/events/EventDetailScreen';
-
 import { appTheme } from './src/theme/appTheme';
 
 const Stack = createStackNavigator();
@@ -51,6 +45,8 @@ const loadingContainerStyle = {
   justifyContent: 'center' as const,
   alignItems: 'center' as const,
 };
+
+const appBackgroundImage = require('./assets/com.png');
 
 const App = () => {
   const [initialRouteName, setInitialRouteName] = useState<string | null>(null);
@@ -73,34 +69,51 @@ const App = () => {
   if (!initialRouteName) {
     return (
       <SafeAreaProvider>
-        <StatusBar barStyle="light-content" backgroundColor={appTheme.colors.bg} />
-        <View style={[loadingContainerStyle, { backgroundColor: appTheme.colors.bg }]}>
-          <ActivityIndicator size="large" color={appTheme.colors.accent} />
-        </View>
+        <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
+        <ImageBackground
+          source={appBackgroundImage}
+          style={styles.background}
+          imageStyle={styles.backgroundImage}
+          resizeMode="cover"
+          blurRadius={6}
+        >
+          <View style={styles.overlay} />
+          <View style={[loadingContainerStyle, styles.content]}>
+            <ActivityIndicator size="large" color={appTheme.colors.accent} />
+          </View>
+        </ImageBackground>
       </SafeAreaProvider>
     );
   }
 
   return (
     <SafeAreaProvider>
-      <StatusBar barStyle="light-content" backgroundColor={appTheme.colors.bg} />
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName={initialRouteName}
-          screenOptions={{
-            headerStyle: {
-              backgroundColor: appTheme.colors.bg,
-            },
-            headerTintColor: appTheme.colors.textPrimary,
-            headerTitleStyle: {
-              fontWeight: '700',
-            },
-            headerShadowVisible: false,
-            cardStyle: {
-              backgroundColor: appTheme.colors.bg,
-            },
-          }}
-        >
+      <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
+      <ImageBackground
+        source={appBackgroundImage}
+        style={styles.background}
+        imageStyle={styles.backgroundImage}
+        resizeMode="cover"
+        blurRadius={6}
+      >
+        <View style={styles.overlay} />
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName={initialRouteName}
+            screenOptions={{
+              headerStyle: {
+                backgroundColor: appTheme.colors.bg,
+              },
+              headerTintColor: appTheme.colors.textPrimary,
+              headerTitleStyle: {
+                fontWeight: '700',
+              },
+              headerShadowVisible: false,
+              cardStyle: {
+                backgroundColor: 'transparent',
+              },
+            }}
+          >
 
           <Stack.Screen
             name="Onboarding"
@@ -187,84 +200,89 @@ const App = () => {
             component={AddPersonalEventScreen}
             options={{ title: 'Personal Events' }}
           />
+
           <Stack.Screen
-            name="RecoveryPlans"
-            component={RecoveryPlansScreen}
-            options={{ title: 'Recovery Plans' }}
+            name="AcademicDashboard"
+            component={AcademicDashboardScreen}
+            options={{ title: 'Academic Dashboard' }}
           />
-
-          {/* 🚀 Academic Forum Screens */}
-          <Stack.Screen 
-            name="ForumModuleSelection" 
-            component={ForumModuleSelectionScreen} 
-            options={{ title: 'Select Module' }} 
-          />
-          <Stack.Screen 
-            name="AcademicForum" 
-            component={AcademicForumScreen} 
-            options={{ title: 'Academic Forum (Q&A)' }} 
-          />
-          <Stack.Screen 
-            name="CreateQuestion" 
-            component={CreateQuestionScreen} 
-            options={{ title: 'Ask a Question' }} 
-          />
-          <Stack.Screen 
-            name="QuestionDetail" 
-            component={QuestionDetailScreen} 
-            options={{ title: 'Question Details' }} 
-          />
-
-          {/* 🚀 Resource Hub Screens */}
-          <Stack.Screen 
-            name="ResourceModuleSelection" 
-            component={ResourceModuleSelectionScreen} 
-            options={{ title: 'Select Resource Module' }} 
-          />
-          <Stack.Screen 
-            name="ResourceHub" 
-            component={ResourceHubScreen} 
-            options={{ title: 'Resource Hub' }} 
-          />
-          <Stack.Screen 
-            name="UploadResource" 
-            component={UploadResourceScreen} 
-            options={{ title: 'Upload File' }} 
-          />
-
-          <Stack.Screen 
-            name="AcademicAnalytics" 
-            component={AcademicDashboardScreen} 
-            options={{ title: 'Academic Analytics' }} 
-          />
-
           <Stack.Screen
             name="PeerSupport"
             component={PeerSupportScreen}
-            options={{ title: 'Peer Support Hub' }}
+            options={{ title: 'Peer Support' }}
+          />
+          <Stack.Screen
+            name="ForumModuleSelection"
+            component={ForumModuleSelectionScreen}
+            options={{ title: 'Forum Modules' }}
+          />
+          <Stack.Screen
+            name="AcademicForum"
+            component={AcademicForumScreen}
+            options={{ title: 'Academic Forum' }}
+          />
+          <Stack.Screen
+            name="CreateQuestion"
+            component={CreateQuestionScreen}
+            options={{ title: 'Create Question' }}
+          />
+          <Stack.Screen
+            name="QuestionDetail"
+            component={QuestionDetailScreen}
+            options={{ title: 'Question Details' }}
+          />
+          <Stack.Screen
+            name="ResourceModuleSelection"
+            component={ResourceModuleSelectionScreen}
+            options={{ title: 'Resource Modules' }}
+          />
+          <Stack.Screen
+            name="ResourceHub"
+            component={ResourceHubScreen}
+            options={{ title: 'Resource Hub' }}
+          />
+          <Stack.Screen
+            name="UploadResource"
+            component={UploadResourceScreen}
+            options={{ title: 'Upload Resource' }}
+          />
+          <Stack.Screen
+            name="CampusEventHub"
+            component={CampusEventHubScreen}
+            options={{ title: 'Campus Events' }}
+          />
+          <Stack.Screen
+            name="CreateEventScreen"
+            component={CreateEventScreen}
+            options={{ title: 'Create Event' }}
+          />
+          <Stack.Screen
+            name="EventDetailScreen"
+            component={EventDetailScreen}
+            options={{ title: 'Event Details' }}
           />
 
-          {/* 🚀 Campus Event Hub Screens */}
-          <Stack.Screen 
-            name="CampusEventHub" 
-            component={CampusEventHubScreen} 
-            options={{ title: 'Campus Events' }} 
-          />
-          <Stack.Screen 
-            name="CreateEventScreen" 
-            component={CreateEventScreen} 
-            options={{ title: 'Create Event' }} 
-          />
-          <Stack.Screen 
-            name="EventDetailScreen" 
-            component={EventDetailScreen} 
-            options={{ title: 'Event Details' }} 
-          />
-
-        </Stack.Navigator>
-      </NavigationContainer>
+          </Stack.Navigator>
+        </NavigationContainer>
+      </ImageBackground>
     </SafeAreaProvider>
   );
 };
 
 export default App;
+
+const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+  },
+  backgroundImage: {
+    opacity: 0.96,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(6, 17, 31, 0.58)',
+  },
+  content: {
+    flex: 1,
+  },
+});

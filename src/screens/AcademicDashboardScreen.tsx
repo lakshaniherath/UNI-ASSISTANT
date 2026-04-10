@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Alert, ActivityIndicator, Modal } from 'react-native';
+import * as Animatable from 'react-native-animatable';
 import { LineChart, PieChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
 import { academicApi } from '../services/api';
@@ -160,12 +161,12 @@ const AcademicDashboardScreen = ({ route, navigation }: any) => {
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.header}>
+      <Animatable.View animation="fadeInDown" duration={500} style={styles.header}>
         <Text style={styles.title}>Analytics Hub</Text>
         <Text style={styles.cgpa}>CGPA: {cgpa.toFixed(2)}</Text>
-      </View>
+      </Animatable.View>
 
-      <View style={styles.chartCard}>
+      <Animatable.View animation="zoomIn" delay={100} duration={600} style={styles.chartCard}>
         <Text style={styles.sectionTitle}>Progress Trends</Text>
         {semesters.length > 0 ? (
           <LineChart
@@ -173,7 +174,7 @@ const AcademicDashboardScreen = ({ route, navigation }: any) => {
             width={screenWidth - 60}
             height={220}
             chartConfig={{
-              backgroundColor: '#fff',
+              backgroundColor: appTheme.colors.glassStrong,
               backgroundGradientFrom: '#fff',
               backgroundGradientTo: '#fff',
               color: (opacity = 1) => `rgba(0, 122, 255, ${opacity})`,
@@ -184,9 +185,9 @@ const AcademicDashboardScreen = ({ route, navigation }: any) => {
             style={styles.chart}
           />
         ) : <Text style={styles.emptyText}>Add results to see your trend</Text>}
-      </View>
+      </Animatable.View>
 
-      <View style={styles.chartCard}>
+      <Animatable.View animation="zoomIn" delay={200} duration={600} style={styles.chartCard}>
         <Text style={styles.sectionTitle}>Credit Distribution</Text>
         <PieChart
           data={pieData}
@@ -198,9 +199,9 @@ const AcademicDashboardScreen = ({ route, navigation }: any) => {
           paddingLeft={"0"}
           absolute
         />
-      </View>
+      </Animatable.View>
 
-      <View style={styles.actionRow}>
+      <Animatable.View animation="fadeInUp" delay={300} duration={500} style={styles.actionRow}>
         <TouchableOpacity style={styles.actionBtn} onPress={() => setAddModalVisible(true)}>
           <Text style={styles.btnText}>+ Log Grade</Text>
         </TouchableOpacity>
@@ -208,14 +209,14 @@ const AcademicDashboardScreen = ({ route, navigation }: any) => {
           <Text style={styles.btnTextDark}>Predictor</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.actionBtnOutline} onPress={handleDownloadPDF}>
-          <Text style={styles.btnTextPrimary}>📄 Generate Report</Text>
+          <Text style={styles.btnTextPrimary}>Generate Report</Text>
         </TouchableOpacity>
-      </View>
+      </Animatable.View>
 
       <View style={styles.historySection}>
-        <Text style={styles.sectionTitle}>History</Text>
+        <Animatable.Text animation="fadeIn" delay={400} style={styles.historyTitle}>History</Animatable.Text>
         {results.map((item, idx) => (
-          <View key={idx} style={styles.historyCard}>
+          <Animatable.View key={idx} animation="slideInRight" delay={400 + (idx * 50)} duration={400} style={styles.historyCard}>
             <View>
               <Text style={styles.modCode}>{item.moduleCode}</Text>
               <Text style={styles.modName}>Sem {item.semester} • {item.credits} Cr</Text>
@@ -223,10 +224,10 @@ const AcademicDashboardScreen = ({ route, navigation }: any) => {
             <View style={styles.gradeBox}>
               <Text style={styles.gradeTxt}>{item.grade}</Text>
               <TouchableOpacity onPress={() => handleDelete(item.id)}>
-                <Text style={styles.delBtn}>❌</Text>
+                <Text style={styles.delBtn}>Delete</Text>
               </TouchableOpacity>
             </View>
-          </View>
+          </Animatable.View>
         ))}
       </View>
 
@@ -291,8 +292,8 @@ const AcademicDashboardScreen = ({ route, navigation }: any) => {
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Smart Predictor</Text>
             <Text style={styles.promptText}>Find out the minimum GPA you need to maintain to reach a target CGPA.</Text>
-            <TextInput style={styles.input} placeholder="Target CGPA (out of 4.0)" value={targetCGPA} onChangeText={setTargetCGPA} keyboardType="numeric"/>
-            <TextInput style={styles.input} placeholder="Est. Remaining Credits in Degree" value={remainingCredits} onChangeText={setRemainingCredits} keyboardType="numeric" />
+            <TextInput style={styles.input} placeholder="Target CGPA (out of 4.0)" placeholderTextColor={appTheme.colors.textDarkSoft} value={targetCGPA} onChangeText={setTargetCGPA} keyboardType="numeric"/>
+            <TextInput style={styles.input} placeholder="Est. Remaining Credits in Degree" placeholderTextColor={appTheme.colors.textDarkSoft} value={remainingCredits} onChangeText={setRemainingCredits} keyboardType="numeric" />
             
             <TouchableOpacity style={styles.predictBtnCore} onPress={handlePredict}>
               <Text style={styles.btnText}>Calculate</Text>
@@ -303,7 +304,7 @@ const AcademicDashboardScreen = ({ route, navigation }: any) => {
                 <Text>Current standing: {prediction.currentCGPA} CGPA</Text>
                 <Text style={styles.highlight}>Required Minimum GPA: {prediction.requiredGPA}</Text>
                 <Text style={prediction.isPossible ? styles.successTxt : styles.errorTxt}>
-                  {prediction.isPossible ? "✅ This is mathematically achievable!" : "❌ Impossible with remaining credits."}
+                  {prediction.isPossible ? "This is mathematically achievable." : "Impossible with remaining credits."}
                 </Text>
               </View>
             )}
@@ -326,10 +327,11 @@ const Button = ({title, onPress}: any) => (
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: appTheme.colors.bg, padding: 15 },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
-  title: { fontSize: 24, fontWeight: 'bold', color: appTheme.colors.textDark },
-  cgpa: { fontSize: 22, fontWeight: 'bold', color: appTheme.colors.primary },
-  chartCard: { backgroundColor: '#fff', borderRadius: 12, padding: 15, marginBottom: 15, elevation: 2 },
+  title: { fontSize: 24, fontWeight: 'bold', color: appTheme.colors.textPrimary },
+  cgpa: { fontSize: 22, fontWeight: 'bold', color: appTheme.colors.accentSoft },
+  chartCard: { backgroundColor: appTheme.colors.glassStrong, borderRadius: 12, padding: 15, marginBottom: 15, elevation: 2 },
   sectionTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 10 },
+  historyTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 10, color: appTheme.colors.textPrimary },
   emptyText: { color: '#888', fontStyle: 'italic', textAlign: 'center', marginTop: 30, marginBottom: 30 },
   chart: { borderRadius: 12, alignSelf:'center' },
   actionRow: { flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap', gap: 5, marginBottom: 20 },
@@ -340,17 +342,17 @@ const styles = StyleSheet.create({
   btnTextDark: { color: '#333', fontWeight: 'bold' },
   btnTextPrimary: { color: appTheme.colors.primary, fontWeight: 'bold' },
   historySection: { marginBottom: 40 },
-  historyCard: { backgroundColor: '#fff', padding: 15, borderRadius: 8, flexDirection: 'row', justifyContent: 'space-between', alignItems:'center', marginBottom: 10, elevation: 1 },
+  historyCard: { backgroundColor: appTheme.colors.glassStrong, padding: 15, borderRadius: 8, flexDirection: 'row', justifyContent: 'space-between', alignItems:'center', marginBottom: 10, elevation: 1 },
   modCode: { fontSize: 16, fontWeight: 'bold' },
   modName: { fontSize: 13, color: '#666', marginTop: 2 },
   gradeBox: { flexDirection: 'row', alignItems: 'center', gap: 15 },
   gradeTxt: { fontSize: 20, fontWeight: 'bold', color: appTheme.colors.primary },
   delBtn: { fontSize: 16 },
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center', padding: 20 },
-  modalContent: { backgroundColor: '#fff', padding: 25, borderRadius: 12, elevation: 5 },
+  modalContent: { backgroundColor: appTheme.colors.glassStrong, padding: 25, borderRadius: 12, elevation: 5 },
   modalTitle: { fontSize: 22, fontWeight: 'bold', marginBottom: 15, color: appTheme.colors.textDark },
   promptText: { fontSize: 14, color: '#555', marginBottom: 20 },
-  input: { borderBottomWidth: 1, borderColor: '#ddd', marginBottom: 20, paddingVertical: 10, fontSize: 16 },
+  input: { borderBottomWidth: 1, borderColor: '#ddd', marginBottom: 20, paddingVertical: 10, fontSize: 16, color: appTheme.colors.textDark },
   label: { fontSize: 16, fontWeight: 'bold', marginBottom: 8, color: '#444' },
   helperText: { fontSize: 14, color: '#666', marginBottom: 15, fontStyle: 'italic' },
   pillContainer: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 15 },
