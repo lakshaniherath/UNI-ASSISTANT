@@ -39,7 +39,7 @@ public class CampusEventService {
     }
 
     public List<CampusEventDTO> getAllUpcomingEvents() {
-        return campusEventRepository.findByEventDateGreaterThanEqualOrderByEventDateAscStartTimeAsc(LocalDate.now())
+        return campusEventRepository.findAllByOrderByEventDateAscStartTimeAsc()
                 .stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());

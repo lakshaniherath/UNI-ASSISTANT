@@ -181,7 +181,8 @@ const PeerSupportScreen = ({ route, navigation }: any) => {
   const handleDownloadPDF = async () => {
     try {
       Alert.alert('Download Initiated', 'Please wait while the PDF summary is being generated.');
-      await tutoringApi.downloadReport(currentUserId);
+      const path = await tutoringApi.downloadReport(currentUserId);
+      Alert.alert('Success', `PDF saved to ${path}`);
     } catch (e) {
       Alert.alert('Error', 'An error occurred while downloading the PDF.');
     }

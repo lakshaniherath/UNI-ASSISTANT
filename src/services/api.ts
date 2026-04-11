@@ -1,6 +1,28 @@
 import axios from 'axios';
+import { Platform } from 'react-native';
+import RNFS from 'react-native-fs';
 
-const BASE_URL = 'http://10.93.125.239:8080/api';
+const BASE_URL = 'http://10.145.116.239:8080/api';
+
+const resolveDownloadPath = (fileName: string) => {
+  return Platform.OS === 'android'
+    ? `${RNFS.DownloadDirectoryPath}/${fileName}`
+    : `${RNFS.DocumentDirectoryPath}/${fileName}`;
+};
+
+export const downloadFileFromApi = async (endpoint: string, fileName: string) => {
+  const destPath = resolveDownloadPath(fileName);
+  const result = await RNFS.downloadFile({
+    fromUrl: `${BASE_URL}${endpoint}`,
+    toFile: destPath,
+  }).promise;
+
+  if (result.statusCode && result.statusCode >= 400) {
+    throw new Error(`Download failed with status ${result.statusCode}`);
+  }
+
+  return destPath;
+};
 
 export const api = axios.create({
   baseURL: BASE_URL,
@@ -83,7 +105,7 @@ export const forumApi = {
   deleteQuestion: (id: number, userId: string) => api.delete(`/forum/questions/${id}?userId=${userId}`),
   voteQuestion: (id: number, upvote: boolean, userId: string) => api.post(`/forum/questions/${id}/vote?upvote=${upvote}&userId=${userId}`),
   getPotentialDuplicates: (title: string, moduleCode: string) => api.get(`/forum/questions/duplicates`, { params: { title, moduleCode } }),
-  downloadReport: (id: number) => api.get(`/forum/questions/${id}/report`, { responseType: 'blob' }),
+  downloadReport: (id: number) => downloadFileFromApi(`/forum/questions/${id}/report`, `academic-forum-report-${id}.pdf`),
 
   createAnswer: (data: any) => api.post('/forum/answers', data),
   getAnswersForQuestion: (id: number) => api.get(`/forum/questions/${id}/answers`),
@@ -114,7 +136,7 @@ export const academicApi = {
   getSemesterGPA: (studentId: string, semester: number) => api.get(`/academic/gpa/${studentId}/semester/${semester}`),
   predictGPA: (studentId: string, targetCGPA: number, remainingCredits: number) =>
     api.get(`/academic/predict/${studentId}`, { params: { targetCGPA, remainingCredits } }),
-  downloadReport: (studentId: string) => api.get(`/academic/report/${studentId}`, { responseType: 'blob' }),
+  downloadReport: (studentId: string) => downloadFileFromApi(`/academic/report/${studentId}`, `academic_report_${studentId}.pdf`),
 };
 
 // --- Tutoring API ---
@@ -127,7 +149,7 @@ export const tutoringApi = {
   acceptSession: (id: number, tutorId: string) => api.put(`/tutoring/${id}/accept`, {}, { params: { tutorId } }),
   declineSession: (id: number, tutorId: string, declineReason: string) => api.put(`/tutoring/${id}/decline`, { declineReason }, { params: { tutorId } }),
   completeSession: (id: number, tutorId: string) => api.put(`/tutoring/${id}/complete`, {}, { params: { tutorId } }),
-  downloadReport: (studentId: string) => api.get(`/tutoring/report/${studentId}`, { responseType: 'blob' }),
+  downloadReport: (studentId: string) => downloadFileFromApi(`/tutoring/report/${studentId}`, `peer_summary_${studentId}.pdf`),
 };
 
 // --- User Search API ---
@@ -142,7 +164,7 @@ export const campusEventApi = {
   createEvent: (data: any, organizerId: string) => api.post(`/events?organizerId=${organizerId}`, data),
   updateEvent: (id: number, data: any) => api.put(`/events/${id}`, data),
   deleteEvent: (id: number) => api.delete(`/events/${id}`),
-  downloadReport: () => api.get('/events/report/pdf', { responseType: 'blob' }),
+  downloadReport: () => downloadFileFromApi('/events/report/pdf', 'monthly-event-calendar.pdf'),
   markAsGoing: (eventId: number, userId: string) => api.post(`/events/${eventId}/registrations?userId=${userId}`),
   unmarkAsGoing: (eventId: number, userId: string) => api.delete(`/events/${eventId}/registrations?userId=${userId}`),
   getRegistrationStatus: (eventId: number, userId: string) => api.get(`/events/${eventId}/registrations/status?userId=${userId}`)

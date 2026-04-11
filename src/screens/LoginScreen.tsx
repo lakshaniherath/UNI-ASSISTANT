@@ -20,23 +20,19 @@ const LoginScreen = ({ navigation }: any) => {
 
     setLoading(true);
     try {
-      // Backend එකට request එක යවනවා
       const response = await api.post('/users/login', {
         email: email,
         password: password
       });
 
-      // Backend එකෙන් සාර්ථකව (Status 200) User object එක ලැබුණා නම්
       if (response.status === 200 && response.data) {
         const loggedInUser = response.data;
-        // Register FCM token in the background (don't block navigation)
         registerFcmTokenForUser(loggedInUser.universityId).catch(err =>
           console.warn('FCM token registration failed:', err)
         );
         Alert.alert('Success', `Welcome back, ${loggedInUser.name}`, [
           { 
             text: 'OK', 
-            // Home screen එකට යද්දී Login එක stack එකෙන් ඉවත් කරනවා (back press කළාම logout නොවන්න)
             onPress: () => navigation.reset({
               index: 0,
               routes: [{ name: 'Home', params: { userData: loggedInUser } }],
@@ -47,17 +43,13 @@ const LoginScreen = ({ navigation }: any) => {
     } catch (error: any) {
       console.error('Login Error:', error?.message || error);
       
-      // 401 Error එකක් ආවොත් ඒ කියන්නේ email/password වැරදියි
       if (error?.response?.status === 401) {
         Alert.alert('Login Failed', 'Invalid email or password.');
       } else if (error?.code === 'ECONNABORTED' || error?.message === 'Network Error') {
-        // Network Timeout
-        Alert.alert('Connection Timeout', 'Backend එක ඈතිගිය. නැවතත් උත්සාහ කරන්න.');
+        Alert.alert('Connection Timeout', 'The backend took too long to respond. Please try again.');
       } else if (!error?.response) {
-        // Network error - Backend එක ගිහින් නැත
-        Alert.alert('Connection Error', 'Backend එක ගිහින් නැත. Firewall එක check කරන්න. localhost:8080 ය running?');
+        Alert.alert('Connection Error', 'The backend is unreachable. Check your firewall and ensure localhost:8080 is running.');
       } else {
-        // වෙනත් Server error එකක් ආවොත්
         Alert.alert('Server Error', `Error: ${error?.response?.status || 'Unknown error'}`);
       }
     } finally {
@@ -118,7 +110,7 @@ const LoginScreen = ({ navigation }: any) => {
             onPress={async () => {
               const result = await testBackendConnection();
               if (result.connected) {
-                Alert.alert('Success', 'Backend එක reachable ය!');
+                Alert.alert('Success', 'The backend is reachable.');
               } else {
                 Alert.alert('Connection Failed', result.hint);
               }

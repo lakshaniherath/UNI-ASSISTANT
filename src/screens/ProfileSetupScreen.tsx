@@ -3,7 +3,6 @@ import { View, Text, TouchableOpacity, StyleSheet, Alert, ScrollView } from 'rea
 import { api } from '../services/api';
 import { appTheme } from '../theme/appTheme';
 
-// 🚀 ඔයා ලබාදුන් සම්පූර්ණ Skills සහ CGPA ලැයිස්තුව
 const AVAILABLE_SKILLS = [
   "Java", "React", "React Native", "Spring Boot", 
   "Node.js", "Python", "C++", "SQL", "MongoDB", "Firebase",
@@ -33,17 +32,15 @@ const ProfileSetupScreen = ({ route, navigation }: any) => {
 
   const saveProfile = async () => {
     try {
-      // Backend එකේ අපි හදපු @PutMapping("/{universityId}/profile") endpoint එකට දත්ත යැවීම
       await api.put(`/users/${userData.universityId}/profile`, {
         cgpa: selectedCGPA,
         mySkills: selectedSkills
       });
-      // Updated userData එක Home එකට ආපසු යවමු
       const updatedUserData = { ...userData, cgpa: selectedCGPA, mySkills: selectedSkills };
-      Alert.alert("Success", "ඔබේ Profile එක යාවත්කාලීන කරන ලදී. දැන් ඔබට ගැලපෙන කණ්ඩායම් පරීක්ෂා කළ හැක.");
+      Alert.alert('Success', 'Your profile has been updated. You can now check matching groups.');
       navigation.navigate('Home', { userData: updatedUserData });
     } catch {
-      Alert.alert("Error", "Profile එක යාවත්කාලීන කිරීමට නොහැකි විය.");
+      Alert.alert('Error', 'Unable to update your profile.');
     }
   };
 

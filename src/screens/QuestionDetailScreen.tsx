@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity, ActivityIndicator, Alert, Linking, Modal } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity, ActivityIndicator, Alert, Modal } from 'react-native';
 import { forumApi } from '../services/api';
 import ForumCard from '../components/ForumCard';
 
@@ -132,13 +132,8 @@ const QuestionDetailScreen = ({ route, navigation }: any) => {
   const handleDownloadReport = async () => {
     try {
       setDownloading(true);
-      // Add cache-busting timestamp to prevent stale cached PDF
-      const url = `http://192.168.1.5:8080/api/forum/questions/${question.id}/report?t=${Date.now()}`;
-      
-      await Linking.openURL(url).catch(err => {
-        Alert.alert('Error', 'Could not open URL automatically.');
-        console.error(err);
-      });
+      const path = await forumApi.downloadReport(question.id);
+      Alert.alert('Success', `PDF saved to ${path}`);
     } catch (e) {
       Alert.alert('Error', 'Failed to download report');
       console.error(e);

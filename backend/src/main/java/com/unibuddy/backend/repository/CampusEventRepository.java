@@ -11,4 +11,5 @@ import java.util.List;
 public interface CampusEventRepository extends JpaRepository<CampusEvent, Long> {
     List<CampusEvent> findByEventDateBetweenOrderByEventDateAscStartTimeAsc(LocalDate startDate, LocalDate endDate);
     List<CampusEvent> findByEventDateGreaterThanEqualOrderByEventDateAscStartTimeAsc(LocalDate date);
+    List<CampusEvent> findAllByOrderByEventDateAscStartTimeAsc();
 }

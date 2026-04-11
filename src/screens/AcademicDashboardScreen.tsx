@@ -129,8 +129,8 @@ const AcademicDashboardScreen = ({ route, navigation }: any) => {
   const handleDownloadPDF = async () => {
     try {
       Alert.alert('Download Initiated', 'Your PDF is being generated. Please wait.');
-      // Normally here you'd use RNFS or similar to stream the blob to local disk
-      await academicApi.downloadReport(currentUserId);
+      const path = await academicApi.downloadReport(currentUserId);
+      Alert.alert('Success', `PDF saved to ${path}`);
     } catch (e) {
       console.log(e);
       Alert.alert('Error', 'An error occurred while downloading the PDF.');
@@ -153,8 +153,8 @@ const AcademicDashboardScreen = ({ route, navigation }: any) => {
   const completedCredits = results.reduce((acc, r) => acc + r.credits, 0);
   const totalDegreeCredits = 120; // Example average target
   const pieData = [
-    { name: 'Completed', credits: completedCredits, color: appTheme.colors.primary, legendFontColor: '#333', legendFontSize: 13 },
-    { name: 'Remaining', credits: Math.max(0, totalDegreeCredits - completedCredits), color: '#ddd', legendFontColor: '#333', legendFontSize: 13 }
+    { name: 'Completed', credits: completedCredits, color: appTheme.colors.primary, legendFontColor: appTheme.colors.textPrimary, legendFontSize: 13 },
+    { name: 'Remaining', credits: Math.max(0, totalDegreeCredits - completedCredits), color: '#ddd', legendFontColor: appTheme.colors.textPrimary, legendFontSize: 13 }
   ];
 
   if (loading) return <ActivityIndicator style={{ flex: 1, justifyContent:'center' }} size="large" />;
@@ -175,10 +175,10 @@ const AcademicDashboardScreen = ({ route, navigation }: any) => {
             height={220}
             chartConfig={{
               backgroundColor: appTheme.colors.glassStrong,
-              backgroundGradientFrom: '#fff',
-              backgroundGradientTo: '#fff',
+              backgroundGradientFrom: appTheme.colors.glassStrong,
+              backgroundGradientTo: appTheme.colors.glassStrong,
               color: (opacity = 1) => `rgba(0, 122, 255, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+              labelColor: (opacity = 1) => `rgba(16, 42, 67, ${opacity})`,
               propsForDots: { r: "5", strokeWidth: "2", stroke: appTheme.colors.primary }
             }}
             bezier
@@ -193,7 +193,7 @@ const AcademicDashboardScreen = ({ route, navigation }: any) => {
           data={pieData}
           width={screenWidth - 60}
           height={150}
-          chartConfig={{ color: () => '#000' }}
+          chartConfig={{ color: () => appTheme.colors.textPrimary }}
           accessor={"credits"}
           backgroundColor={"transparent"}
           paddingLeft={"0"}
@@ -326,13 +326,13 @@ const Button = ({title, onPress}: any) => (
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: appTheme.colors.bg, padding: 15 },
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
+  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, backgroundColor: appTheme.colors.glassSoft, borderRadius: 16, padding: 12, borderWidth: 1, borderColor: appTheme.colors.cardBorder },
   title: { fontSize: 24, fontWeight: 'bold', color: appTheme.colors.textPrimary },
   cgpa: { fontSize: 22, fontWeight: 'bold', color: appTheme.colors.accentSoft },
   chartCard: { backgroundColor: appTheme.colors.glassStrong, borderRadius: 12, padding: 15, marginBottom: 15, elevation: 2 },
-  sectionTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 10 },
+  sectionTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 10, color: appTheme.colors.textPrimary },
   historyTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 10, color: appTheme.colors.textPrimary },
-  emptyText: { color: '#888', fontStyle: 'italic', textAlign: 'center', marginTop: 30, marginBottom: 30 },
+  emptyText: { color: appTheme.colors.textSecondary, fontStyle: 'italic', textAlign: 'center', marginTop: 30, marginBottom: 30 },
   chart: { borderRadius: 12, alignSelf:'center' },
   actionRow: { flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap', gap: 5, marginBottom: 20 },
   actionBtn: { backgroundColor: appTheme.colors.primary, padding: 12, borderRadius: 8, flex: 1, alignItems: 'center', minWidth: '30%' },
@@ -344,17 +344,17 @@ const styles = StyleSheet.create({
   historySection: { marginBottom: 40 },
   historyCard: { backgroundColor: appTheme.colors.glassStrong, padding: 15, borderRadius: 8, flexDirection: 'row', justifyContent: 'space-between', alignItems:'center', marginBottom: 10, elevation: 1 },
   modCode: { fontSize: 16, fontWeight: 'bold' },
-  modName: { fontSize: 13, color: '#666', marginTop: 2 },
+  modName: { fontSize: 13, color: appTheme.colors.textDarkSoft, marginTop: 2 },
   gradeBox: { flexDirection: 'row', alignItems: 'center', gap: 15 },
   gradeTxt: { fontSize: 20, fontWeight: 'bold', color: appTheme.colors.primary },
   delBtn: { fontSize: 16 },
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center', padding: 20 },
   modalContent: { backgroundColor: appTheme.colors.glassStrong, padding: 25, borderRadius: 12, elevation: 5 },
   modalTitle: { fontSize: 22, fontWeight: 'bold', marginBottom: 15, color: appTheme.colors.textDark },
-  promptText: { fontSize: 14, color: '#555', marginBottom: 20 },
+  promptText: { fontSize: 14, color: appTheme.colors.textDarkSoft, marginBottom: 20 },
   input: { borderBottomWidth: 1, borderColor: '#ddd', marginBottom: 20, paddingVertical: 10, fontSize: 16, color: appTheme.colors.textDark },
-  label: { fontSize: 16, fontWeight: 'bold', marginBottom: 8, color: '#444' },
-  helperText: { fontSize: 14, color: '#666', marginBottom: 15, fontStyle: 'italic' },
+  label: { fontSize: 16, fontWeight: 'bold', marginBottom: 8, color: appTheme.colors.textDark },
+  helperText: { fontSize: 14, color: appTheme.colors.textDarkSoft, marginBottom: 15, fontStyle: 'italic' },
   pillContainer: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 15 },
   pill: { paddingHorizontal: 15, paddingVertical: 10, backgroundColor: '#eee', borderRadius: 20 },
   pillSelected: { backgroundColor: appTheme.colors.primary },
@@ -362,7 +362,7 @@ const styles = StyleSheet.create({
   pillTextSelected: { color: '#fff' },
   modalActions: { flexDirection: 'row', justifyContent: 'flex-end', gap: 15, marginTop: 10 },
   predictBtnCore: { backgroundColor: appTheme.colors.accent, padding: 12, borderRadius: 8, alignItems: 'center', marginTop: 10 },
-  predResult: { marginTop: 20, padding: 15, backgroundColor: '#f0f4ff', borderRadius: 8 },
+  predResult: { marginTop: 20, padding: 15, backgroundColor: 'rgba(255,255,255,0.72)', borderRadius: 8 },
   highlight: { fontSize: 18, fontWeight: 'bold', color: appTheme.colors.primary, marginVertical: 8 },
   successTxt: { color: 'green', fontWeight: 'bold' },
   errorTxt: { color: 'red', fontWeight: 'bold' }

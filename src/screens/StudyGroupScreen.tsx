@@ -10,7 +10,6 @@ const StudyGroupScreen = ({ route, navigation }: any) => {
   const [showOnlyMySubgroup, setShowOnlyMySubgroup] = useState(true);
   const [requestedGroups, setRequestedGroups] = useState<Set<number>>(new Set());
 
-  // 🚀 Backend එකෙන් Match Score එකත් එක්කම Groups ලබා ගැනීම
   const fetchGroups = useCallback(async () => {
     try {
       setLoading(true);
@@ -24,7 +23,7 @@ const StudyGroupScreen = ({ route, navigation }: any) => {
       setAllGroups(groupsWithScores);
     } catch (error) {
       console.error(error);
-      Alert.alert('Error', 'Groups ලබා ගැනීමට නොහැකි විය.');
+      Alert.alert('Error', 'Unable to load study groups.');
     } finally {
       setLoading(false);
     }
@@ -37,7 +36,6 @@ const StudyGroupScreen = ({ route, navigation }: any) => {
     return unsubscribe;
   }, [fetchGroups, navigation]);
 
-  // 🔄 Switch එක වෙනස් කරන විට instantly filter වේ (re-fetch අවශ්‍ය නැත)
   const filteredGroups = useMemo(() => {
     if (showOnlyMySubgroup) {
       return allGroups.filter((g: any) => g.subgroup === userData.subgroup);
@@ -53,7 +51,7 @@ const StudyGroupScreen = ({ route, navigation }: any) => {
           studentId: userData.universityId
         }
       });
-      const message = typeof response.data === 'string' ? response.data : JSON.stringify(response.data);
+      const message = 'Your request to join the group has been sent successfully.';
       setRequestedGroups(prev => new Set(prev).add(groupId));
       Alert.alert('Success', message);
     } catch (error: any) {
@@ -61,9 +59,9 @@ const StudyGroupScreen = ({ route, navigation }: any) => {
       let errMsg = 'Could not send the request.';
       if (error.response?.data) {
         if (typeof error.response.data === 'string') {
-          errMsg = error.response.data;
+          errMsg = 'Could not send the request. Please try again.';
         } else if (error.response.data.message) {
-          errMsg = error.response.data.message;
+          errMsg = error.response.data.message || errMsg;
         }
       }
       Alert.alert('Error', errMsg);
@@ -98,7 +96,7 @@ const StudyGroupScreen = ({ route, navigation }: any) => {
         <FlatList
           data={filteredGroups}
           keyExtractor={(item: any) => item.id.toString()}
-          ListEmptyComponent={<Text style={styles.empty}>දැනට කිසිදු කණ්ඩායමක් නොමැත.</Text>}
+          ListEmptyComponent={<Text style={styles.empty}>No study groups are available right now.</Text>}
           renderItem={({ item }) => {
             const isLeader = item.creatorId === userData.universityId;
             const isMember = item.memberIds?.includes(userData.universityId);
@@ -118,7 +116,6 @@ const StudyGroupScreen = ({ route, navigation }: any) => {
               <View style={styles.groupCard}>
                 <View style={styles.cardHeader}>
                   <Text style={styles.groupName}>{item.groupName}</Text>
-                  {/* Backend එකෙන් ලැබෙන Match Score එක පෙන්වීම */}
                   <View style={[styles.matchBadge, {backgroundColor: item.matchScore >= 70 ? appTheme.colors.success : (item.matchScore >= 40 ? appTheme.colors.accent : appTheme.colors.danger)}]}>
                     <Text style={styles.matchText}>{item.matchScore}% Match</Text>
                   </View>
@@ -127,7 +124,6 @@ const StudyGroupScreen = ({ route, navigation }: any) => {
                 <Text style={styles.subgroupTag}>{item.subgroup}</Text>
                 <Text style={styles.desc}>{item.description}</Text>
 
-                {/* Displaying target CGPA */}
                 <View style={styles.targetRow}>
                   <Text style={styles.targetLabel}>Target CGPA: </Text>
                   <Text style={styles.targetValue}>{item.targetCGPA}</Text>
@@ -139,7 +135,6 @@ const StudyGroupScreen = ({ route, navigation }: any) => {
                   <Text style={styles.members}>{item.currentMembers}/{item.maxMembers} Members</Text>
 
                   {isLeader ? (
-                    // 🚀 1. Button shown only to the Leader
                     <TouchableOpacity
                       style={[styles.actionButton, styles.manageBtn]}
                       onPress={() => navigation.navigate('RequestManagement', { groupId: item.id })}
@@ -147,7 +142,6 @@ const StudyGroupScreen = ({ route, navigation }: any) => {
                       <Text style={styles.btnText}>Manage Requests</Text>
                     </TouchableOpacity>
                   ) : requestedGroups.has(item.id) ? (
-                    // 🚀 2a. Already requested — disabled grey button
                     <TouchableOpacity
                       style={[styles.actionButton, styles.requestedBtn]}
                       disabled={true}
@@ -155,7 +149,6 @@ const StudyGroupScreen = ({ route, navigation }: any) => {
                       <Text style={styles.btnText}>Requested ✓</Text>
                     </TouchableOpacity>
                   ) : (
-                    // 🚀 2b. Button shown to other students
                     <TouchableOpacity
                       style={[styles.actionButton, styles.requestBtn]}
                       onPress={() => handleRequestToJoin(item.id)}
@@ -177,7 +170,6 @@ const StudyGroupScreen = ({ route, navigation }: any) => {
   );
 };
 
-// Styles (දැනට ඇති ඒවා එලෙසම පවතී)
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, backgroundColor: appTheme.colors.bg },
   headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 15 },

@@ -36,9 +36,8 @@ const CampusEventHubScreen = ({ route, navigation }: any) => {
   const handleDownloadPDF = async () => {
     try {
       Alert.alert('Downloading', 'Generating Monthly Calendar PDF...');
-      await campusEventApi.downloadReport();
-      // Normally here you'd use RNFS or similar to stream the blob to local disk
-      Alert.alert('Success', 'Report Downloaded! (Stubbed for demo)');
+      const path = await campusEventApi.downloadReport();
+      Alert.alert('Success', `Report downloaded to ${path}`);
     } catch (e) {
       Alert.alert('Error', 'Unable to download report.');
     }
@@ -134,20 +133,20 @@ const styles = StyleSheet.create({
   loader: { flex: 1, justifyContent: 'center' },
   container: { flex: 1, backgroundColor: appTheme.colors.bg, padding: 15 },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
-  title: { fontSize: 24, fontWeight: 'bold', color: appTheme.colors.textDark },
+  title: { fontSize: 24, fontWeight: 'bold', color: appTheme.colors.textPrimary },
   downloadBtn: { backgroundColor: '#eee', padding: 8, borderRadius: 8 },
   downloadText: { fontSize: 16, color: appTheme.colors.textDark, fontWeight: 'bold' },
   calendarContainer: { backgroundColor: appTheme.colors.glassStrong, borderRadius: 12, padding: 5, marginBottom: 20, elevation: 2 },
   clearBtn: { padding: 10, alignItems: 'center' },
   clearBtnText: { color: appTheme.colors.primary, fontWeight: 'bold' },
-  sectionTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 15, color: appTheme.colors.textDark },
-  emptyText: { textAlign: 'center', color: '#888', fontStyle: 'italic', marginTop: 20 },
+  sectionTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 15, color: appTheme.colors.textPrimary },
+  emptyText: { textAlign: 'center', color: appTheme.colors.textSecondary, fontStyle: 'italic', marginTop: 20 },
   eventCard: { backgroundColor: appTheme.colors.glassStrong, padding: 15, borderRadius: 12, marginBottom: 15, elevation: 2 },
   eventHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 },
   eventTitle: { fontSize: 18, fontWeight: 'bold',flex: 1, color: appTheme.colors.textDark },
   badge: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 12, marginLeft: 10 },
   badgeText: { color: '#fff', fontSize: 12, fontWeight: 'bold' },
-  eventInfo: { fontSize: 14, color: '#666', marginBottom: 5 },
+  eventInfo: { fontSize: 14, color: appTheme.colors.textDarkSoft, marginBottom: 5 },
   fabContainer: { position: 'absolute', bottom: 30, right: 20 },
   fab: { backgroundColor: appTheme.colors.primary, width: 60, height: 60, borderRadius: 30, justifyContent: 'center', alignItems: 'center', elevation: 5 },
   fabText: { color: '#fff', fontSize: 30, fontWeight: 'bold' }
