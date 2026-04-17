@@ -28,7 +28,7 @@ public class PersonalCalendarService {
     public PersonalCalendarEvent update(String universityId, Long id, PersonalCalendarEvent incoming) {
         PersonalCalendarEvent existing = personalCalendarEventRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Personal event not found: " + id));
-        if (!existing.getUniversityId().equals(universityId)) {
+        if (!existing.getUniversityId().trim().equalsIgnoreCase(universityId.trim())) {
             throw new RuntimeException("Unauthorized Access: You are only permitted to update your own events.");
         }
 
@@ -44,7 +44,7 @@ public class PersonalCalendarService {
     public void delete(String universityId, Long id) {
         PersonalCalendarEvent existing = personalCalendarEventRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Personal event not found: " + id));
-        if (!existing.getUniversityId().equals(universityId)) {
+        if (!existing.getUniversityId().trim().equalsIgnoreCase(universityId.trim())) {
             throw new RuntimeException("Unauthorized Access: You are only permitted to delete your own events.");
         }
         personalCalendarEventRepository.deleteById(id);

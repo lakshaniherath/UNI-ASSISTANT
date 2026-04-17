@@ -28,7 +28,7 @@ public class TaskAssignmentService {
     public TaskAssignment update(String universityId, Long id, TaskAssignment incoming) {
         TaskAssignment existing = taskAssignmentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found: " + id));
-        if (!existing.getUniversityId().equals(universityId)) {
+        if (!existing.getUniversityId().trim().equalsIgnoreCase(universityId.trim())) {
             throw new RuntimeException("Unauthorized Access: You are only permitted to update your own tasks.");
         }
 
@@ -43,7 +43,7 @@ public class TaskAssignmentService {
     public void delete(String universityId, Long id) {
         TaskAssignment existing = taskAssignmentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found: " + id));
-        if (!existing.getUniversityId().equals(universityId)) {
+        if (!existing.getUniversityId().trim().equalsIgnoreCase(universityId.trim())) {
             throw new RuntimeException("Unauthorized Access: You are only permitted to delete your own tasks.");
         }
         taskAssignmentRepository.deleteById(id);

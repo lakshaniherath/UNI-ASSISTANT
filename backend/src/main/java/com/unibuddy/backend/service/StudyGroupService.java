@@ -278,7 +278,7 @@ public class StudyGroupService {
         StudyGroup group = studyGroupRepository.findById(groupId)
                 .orElseThrow(() -> new RuntimeException("Group not found"));
 
-        if (!group.getCreatorId().equals(requesterId)) {
+        if (!group.getCreatorId().trim().equalsIgnoreCase(requesterId.trim())) {
             return "Error: Only the group leader can delete this group.";
         }
 

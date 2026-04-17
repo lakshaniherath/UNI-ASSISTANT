@@ -36,7 +36,7 @@ public class ForumService {
     @Transactional
     public ForumQuestion updateQuestion(Long id, ForumQuestion updated, String userId) {
         ForumQuestion existing = questionRepository.findById(id).orElseThrow(() -> new RuntimeException("Question not found"));
-        if (!existing.getUniversityId().equals(userId)) {
+        if (!existing.getUniversityId().trim().equalsIgnoreCase(userId.trim())) {
             throw new RuntimeException("Unauthorized Access: You are only permitted to edit your own questions.");
         }
         existing.setTitle(updated.getTitle());
@@ -47,7 +47,7 @@ public class ForumService {
     @Transactional
     public void deleteQuestion(Long id, String userId) {
         ForumQuestion existing = questionRepository.findById(id).orElseThrow(() -> new RuntimeException("Question not found"));
-        if (!existing.getUniversityId().equals(userId)) {
+        if (!existing.getUniversityId().trim().equalsIgnoreCase(userId.trim())) {
             throw new RuntimeException("Unauthorized Access: You are only permitted to delete your own questions.");
         }
         questionRepository.delete(existing);
@@ -154,7 +154,7 @@ public class ForumService {
     @Transactional
     public ForumAnswer updateAnswer(Long id, ForumAnswer updated, String userId) {
         ForumAnswer existing = answerRepository.findById(id).orElseThrow();
-        if (!existing.getUniversityId().equals(userId)) {
+        if (!existing.getUniversityId().trim().equalsIgnoreCase(userId.trim())) {
             throw new RuntimeException("Unauthorized Access: You are only permitted to edit your own answers.");
         }
         existing.setContent(updated.getContent());
@@ -164,7 +164,7 @@ public class ForumService {
     @Transactional
     public void deleteAnswer(Long id, String userId) {
         ForumAnswer existing = answerRepository.findById(id).orElseThrow();
-        if (!existing.getUniversityId().equals(userId)) {
+        if (!existing.getUniversityId().trim().equalsIgnoreCase(userId.trim())) {
             throw new RuntimeException("Unauthorized Access: You are only permitted to delete your own answers.");
         }
         answerRepository.delete(existing);

@@ -18,11 +18,14 @@ public class ReminderPreference {
     @Column(nullable = false, unique = true)
     private String universityId;
 
-    private boolean classRemindersEnabled = true;
-    private Integer beforeMinutesPrimary = 10;
-    private Integer beforeMinutesSecondary = 5;
+    // Timetable
+    private boolean timetable24HoursEnabled = true;
+    private boolean timetable2HoursEnabled = true;
+    private boolean timetableStartEnabled = true;
 
-    private boolean deadline7DaysEnabled = true;
-    private boolean deadline1DayEnabled = true;
-    private boolean deadline1HourEnabled = true;
+    // Tasks
+    private boolean task7DaysEnabled = true;
+    private boolean task1DayEnabled = true;
+    private boolean task2HoursEnabled = true;
+    private boolean taskDeadlineEnabled = true;
 }

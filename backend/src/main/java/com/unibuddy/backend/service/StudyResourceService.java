@@ -111,7 +111,7 @@ public class StudyResourceService {
         StudyResource resource = studyResourceRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Resource not found"));
         
-        if (!resource.getUploaderId().equals(uploaderId)) {
+        if (!resource.getUploaderId().trim().equalsIgnoreCase(uploaderId.trim())) {
             throw new RuntimeException("Unauthorized Access: You lack the necessary permissions to delete this resource.");
         }
         studyResourceRepository.delete(resource);
@@ -121,7 +121,7 @@ public class StudyResourceService {
         StudyResource resource = studyResourceRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Resource not found"));
 
-        if (!resource.getUploaderId().equals(uploaderId)) {
+        if (!resource.getUploaderId().trim().equalsIgnoreCase(uploaderId.trim())) {
             throw new RuntimeException("Unauthorized Access: You lack the necessary permissions to edit this resource.");
         }
         

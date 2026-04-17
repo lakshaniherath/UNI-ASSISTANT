@@ -23,12 +23,13 @@ export interface TimetableRecoveryResponse {
 export interface ReminderPreference {
   id?: number;
   universityId?: string;
-  classRemindersEnabled: boolean;
-  beforeMinutesPrimary: number;
-  beforeMinutesSecondary: number;
-  deadline7DaysEnabled: boolean;
-  deadline1DayEnabled: boolean;
-  deadline1HourEnabled: boolean;
+  timetable24HoursEnabled: boolean;
+  timetable2HoursEnabled: boolean;
+  timetableStartEnabled: boolean;
+  task7DaysEnabled: boolean;
+  task1DayEnabled: boolean;
+  task2HoursEnabled: boolean;
+  taskDeadlineEnabled: boolean;
 }
 
 export interface PersonalCalendarEvent {

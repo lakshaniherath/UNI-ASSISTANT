@@ -74,7 +74,6 @@ export const scheduleClassRemindersForNextWeek = async (
   prefs: ReminderPreference
 ) => {
   await ensureChannel();
-  if (!prefs.classRemindersEnabled) return;
 
   for (const event of events) {
     const classTime = nextOccurrence(event);
@@ -82,21 +81,22 @@ export const scheduleClassRemindersForNextWeek = async (
 
     if (classTime.getTime() - Date.now() > 7 * 24 * 60 * 60 * 1000) continue;
 
-    const p1 = new Date(classTime.getTime() - prefs.beforeMinutesPrimary * 60 * 1000);
-    const p2 = new Date(classTime.getTime() - prefs.beforeMinutesSecondary * 60 * 1000);
+    const reminders = [
+      { enabled: prefs.timetable24HoursEnabled, ms: 24 * 60 * 60 * 1000, suffix: '24h', label: 'Tomorrow' },
+      { enabled: prefs.timetable2HoursEnabled, ms: 2 * 60 * 60 * 1000, suffix: '2h', label: 'In 2 hours' },
+      { enabled: prefs.timetableStartEnabled, ms: 0, suffix: '0h', label: 'Starting now' },
+    ];
 
-    await scheduleAt(
-      `class-${event.id}-p1`,
-      `${event.moduleCode || event.moduleName} starts soon`,
-      `${event.activityType} at ${event.location} in ${prefs.beforeMinutesPrimary} min`,
-      p1
-    );
-    await scheduleAt(
-      `class-${event.id}-p2`,
-      `${event.moduleCode || event.moduleName} reminder`,
-      `${event.activityType} at ${event.location} in ${prefs.beforeMinutesSecondary} min`,
-      p2
-    );
+    for (const r of reminders) {
+      if (!r.enabled) continue;
+      const at = new Date(classTime.getTime() - r.ms);
+      await scheduleAt(
+        `class-${event.id}-${r.suffix}`,
+        `${event.moduleCode || event.moduleName}: ${r.label}`,
+        `${event.activityType} at ${event.location}`,
+        at
+      );
+    }
   }
 };
 
@@ -111,10 +111,11 @@ export const scheduleTaskReminders = async (
     const due = new Date(task.dueDateTime);
     if (Number.isNaN(due.getTime())) continue;
 
-    const reminders: Array<{ enabled: boolean; ms: number; suffix: string }> = [
-      { enabled: prefs.deadline7DaysEnabled, ms: 7 * 24 * 60 * 60 * 1000, suffix: '7d' },
-      { enabled: prefs.deadline1DayEnabled, ms: 24 * 60 * 60 * 1000, suffix: '1d' },
-      { enabled: prefs.deadline1HourEnabled, ms: 60 * 60 * 1000, suffix: '1h' },
+    const reminders = [
+      { enabled: prefs.task7DaysEnabled, ms: 7 * 24 * 60 * 60 * 1000, suffix: '7d', label: 'in 7 days' },
+      { enabled: prefs.task1DayEnabled, ms: 24 * 60 * 60 * 1000, suffix: '1d', label: 'Tomorrow' },
+      { enabled: prefs.task2HoursEnabled, ms: 2 * 60 * 60 * 1000, suffix: '2h', label: 'in 2 hours' },
+      { enabled: prefs.taskDeadlineEnabled, ms: 0, suffix: '0h', label: 'Deadline now!' },
     ];
 
     for (const r of reminders) {
@@ -123,7 +124,7 @@ export const scheduleTaskReminders = async (
       await scheduleAt(
         `task-${task.id}-${r.suffix}`,
         `Task due: ${task.title}`,
-        `${task.moduleCode || 'General'} deadline at ${due.toLocaleString()}`,
+        `${task.moduleCode || 'General'} deadline ${r.label} (${due.toLocaleString()})`,
         at
       );
     }
@@ -135,7 +136,6 @@ export const schedulePersonalEventReminders = async (
   prefs: ReminderPreference
 ) => {
   await ensureChannel();
-  if (!prefs.classRemindersEnabled) return;
 
   for (const event of events) {
     if (!event.date || !event.startTime) continue;
@@ -144,21 +144,21 @@ export const schedulePersonalEventReminders = async (
     if (Number.isNaN(eventTime.getTime())) continue;
     if (eventTime.getTime() <= Date.now()) continue;
 
-    const p1 = new Date(eventTime.getTime() - prefs.beforeMinutesPrimary * 60 * 1000);
-    const p2 = new Date(eventTime.getTime() - prefs.beforeMinutesSecondary * 60 * 1000);
+    const reminders = [
+      { enabled: prefs.timetable24HoursEnabled, ms: 24 * 60 * 60 * 1000, suffix: '24h', label: 'Tomorrow' },
+      { enabled: prefs.timetable2HoursEnabled, ms: 2 * 60 * 60 * 1000, suffix: '2h', label: 'In 2 hours' },
+    ];
 
-    await scheduleAt(
-      `personal-${event.id}-p1`,
-      `Upcoming: ${event.title}`,
-      `${event.notes || 'Personal Event'} in ${prefs.beforeMinutesPrimary} min`,
-      p1
-    );
-    await scheduleAt(
-      `personal-${event.id}-p2`,
-      `Reminder: ${event.title}`,
-      `${event.notes || 'Personal Event'} in ${prefs.beforeMinutesSecondary} min`,
-      p2
-    );
+    for (const r of reminders) {
+      if (!r.enabled) continue;
+      const at = new Date(eventTime.getTime() - r.ms);
+      await scheduleAt(
+        `personal-${event.id}-${r.suffix}`,
+        `Upcoming: ${event.title}`,
+        `${event.notes || 'Personal Event'}: ${r.label}`,
+        at
+      );
+    }
   }
 };
 

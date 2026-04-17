@@ -10,12 +10,13 @@ const ReminderSettingsScreen = ({ route }: any) => {
   const { userData } = route.params;
   const userId = userData.universityId;
   const [prefs, setPrefs] = useState<ReminderPreference>({
-    classRemindersEnabled: true,
-    beforeMinutesPrimary: 10,
-    beforeMinutesSecondary: 5,
-    deadline7DaysEnabled: true,
-    deadline1DayEnabled: true,
-    deadline1HourEnabled: true,
+    timetable24HoursEnabled: true,
+    timetable2HoursEnabled: true,
+    timetableStartEnabled: true,
+    task7DaysEnabled: true,
+    task1DayEnabled: true,
+    task2HoursEnabled: true,
+    taskDeadlineEnabled: true,
   });
 
   useEffect(() => {
@@ -34,8 +35,6 @@ const ReminderSettingsScreen = ({ route }: any) => {
     try {
       const payload = {
         ...prefs,
-        beforeMinutesPrimary: Number(prefs.beforeMinutesPrimary) || 10,
-        beforeMinutesSecondary: Number(prefs.beforeMinutesSecondary) || 5,
       };
       const updated = await updateReminderPreferences(userId, payload);
       setPrefs(updated);
@@ -49,49 +48,58 @@ const ReminderSettingsScreen = ({ route }: any) => {
     <View style={styles.container}>
       <Text style={styles.title}>Reminder Settings</Text>
 
-      <View style={styles.row}>
-        <Text style={styles.label}>Class reminders</Text>
-        <Switch
-          value={prefs.classRemindersEnabled}
-          onValueChange={v => setPrefs(prev => ({ ...prev, classRemindersEnabled: v }))}
-        />
-      </View>
-
-      <Text style={styles.label}>Primary offset (minutes)</Text>
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        value={String(prefs.beforeMinutesPrimary)}
-        onChangeText={v => setPrefs(prev => ({ ...prev, beforeMinutesPrimary: Number(v) }))}
-      />
-
-      <Text style={styles.label}>Secondary offset (minutes)</Text>
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        value={String(prefs.beforeMinutesSecondary)}
-        onChangeText={v => setPrefs(prev => ({ ...prev, beforeMinutesSecondary: Number(v) }))}
-      />
+      <Text style={[styles.label, styles.sectionHeader]}>Timetable Reminders</Text>
 
       <View style={styles.row}>
-        <Text style={styles.label}>7-day deadline reminder</Text>
+        <Text style={styles.label}>24 hours before</Text>
         <Switch
-          value={prefs.deadline7DaysEnabled}
-          onValueChange={v => setPrefs(prev => ({ ...prev, deadline7DaysEnabled: v }))}
+          value={prefs.timetable24HoursEnabled}
+          onValueChange={v => setPrefs(prev => ({ ...prev, timetable24HoursEnabled: v }))}
         />
       </View>
       <View style={styles.row}>
-        <Text style={styles.label}>1-day deadline reminder</Text>
+        <Text style={styles.label}>2 hours before</Text>
         <Switch
-          value={prefs.deadline1DayEnabled}
-          onValueChange={v => setPrefs(prev => ({ ...prev, deadline1DayEnabled: v }))}
+          value={prefs.timetable2HoursEnabled}
+          onValueChange={v => setPrefs(prev => ({ ...prev, timetable2HoursEnabled: v }))}
         />
       </View>
       <View style={styles.row}>
-        <Text style={styles.label}>1-hour deadline reminder</Text>
+        <Text style={styles.label}>At starting time</Text>
         <Switch
-          value={prefs.deadline1HourEnabled}
-          onValueChange={v => setPrefs(prev => ({ ...prev, deadline1HourEnabled: v }))}
+          value={prefs.timetableStartEnabled}
+          onValueChange={v => setPrefs(prev => ({ ...prev, timetableStartEnabled: v }))}
+        />
+      </View>
+
+      <Text style={[styles.label, styles.sectionHeader, { marginTop: 16 }]}>Task Reminders</Text>
+
+      <View style={styles.row}>
+        <Text style={styles.label}>7 days before deadline</Text>
+        <Switch
+          value={prefs.task7DaysEnabled}
+          onValueChange={v => setPrefs(prev => ({ ...prev, task7DaysEnabled: v }))}
+        />
+      </View>
+      <View style={styles.row}>
+        <Text style={styles.label}>1 day before deadline</Text>
+        <Switch
+          value={prefs.task1DayEnabled}
+          onValueChange={v => setPrefs(prev => ({ ...prev, task1DayEnabled: v }))}
+        />
+      </View>
+      <View style={styles.row}>
+        <Text style={styles.label}>2 hours before deadline</Text>
+        <Switch
+          value={prefs.task2HoursEnabled}
+          onValueChange={v => setPrefs(prev => ({ ...prev, task2HoursEnabled: v }))}
+        />
+      </View>
+      <View style={styles.row}>
+        <Text style={styles.label}>At deadline</Text>
+        <Switch
+          value={prefs.taskDeadlineEnabled}
+          onValueChange={v => setPrefs(prev => ({ ...prev, taskDeadlineEnabled: v }))}
         />
       </View>
 
@@ -116,6 +124,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   label: { color: '#334E68', fontWeight: '600', marginBottom: 6 },
+  sectionHeader: { fontSize: 16, color: '#102A43', marginBottom: 8, marginTop: 8 },
   input: {
     backgroundColor: '#fff',
     borderRadius: 10,
