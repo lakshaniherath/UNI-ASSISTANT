@@ -5,13 +5,14 @@
 
 ## 📋 TABLE OF CONTENTS
 1. [What is Detox?](#what-is-detox)
-2. [Setup (ONE PERSON ONLY)](#setup-one-person-only)
-3. [Each Member's Responsibilities](#each-members-responsibilities)
-4. [Step-by-Step: Writing Tests](#step-by-step-writing-tests)
-5. [Adding testID to Components](#adding-testid-to-components)
-6. [Running Tests](#running-tests)
-7. [Git Workflow](#git-workflow)
-8. [Presentation Tips](#presentation-tips)
+2. [Current Setup Status (Already Completed)](#current-setup-status-already-completed)
+3. [How Team Members Start and Continue](#how-team-members-start-and-continue)
+4. [Each Member's Responsibilities](#each-members-responsibilities)
+5. [Step-by-Step: Writing Tests](#step-by-step-writing-tests)
+6. [Adding testID to Components](#adding-testid-to-components)
+7. [Running Tests](#running-tests)
+8. [Git Workflow](#git-workflow)
+9. [Presentation Tips](#presentation-tips)
 
 ---
 
@@ -35,57 +36,115 @@
 
 ---
 
-## 🔧 Setup (ONE PERSON ONLY)
+## ✅ Current Setup Status (Already Completed)
 
-### **⚠️ IMPORTANT: Only ONE group member does this**
+The base Detox setup has already been done and pushed to branch `feature/initial-setup`.
 
-**Assigned to:** `[DECIDE WHO - Person 1]`
+### What was completed
+- Installed Detox as a dev dependency in `package.json`
+- Updated `package-lock.json`
+- Added Detox scripts in `package.json`:
+  - `build:e2e:ios`
+  - `test:e2e:ios`
+- Added Detox configuration block in `package.json`
+- Created `e2e/jest.config.js`
+- Created `e2e/smoke.e2e.js` (basic launch smoke test)
+- Added and pushed this guide file
 
-### Step 1: Install Detox Globally
+### Setup commit already on remote
+- Branch: `feature/initial-setup`
+- Commit: `46b1ba8`
+
+### What this means
+- No one needs to recreate the folder or repeat initial Detox setup.
+- Each member can start directly from writing tests for their component.
+
+---
+
+## 🚀 How Team Members Start and Continue
+
+Follow these steps exactly.
+
+### Step A: Get setup code locally
 ```bash
-npm install detox-cli --global
+git checkout feature/initial-setup
+git pull origin feature/initial-setup
 ```
 
-### Step 2: Install Detox in Project
+### Step B: Install dependencies once
 ```bash
-cd /Users/dasun/Development/UniBuddy
-npm install detox detox-cli --save-dev
+npm install
 ```
 
-### Step 3: Create e2e Folder
+### Step C: Verify Detox is available
 ```bash
-mkdir -p e2e
+npx detox --version
 ```
 
-### Step 4: Create Detox Configuration
-Create file: `e2e/config.json`
+### Step D: Create your own test file
+- Member 1: `e2e/member1-forum.e2e.js`
+- Member 2: `e2e/member2-analytics.e2e.js`
+- Member 3: `e2e/member3-groups.e2e.js`
+- Member 4: `e2e/member4-timetable.e2e.js`
 
-```json
-{
-  "testRunner": "jest",
-  "runners": [
-    "ios"
-  ],
-  "apps": {
-    "ios.debug": {
-      "type": "ios.app",
-      "binaryPath": "ios/build/UniBuddy/Build/Products/Release-iphonesimulator/UniBuddy.app",
-      "build": "xcodebuild -workspace ios/UniBuddy.xcworkspace -scheme UniBuddy -configuration Release -sdk iphonesimulator -derivedDataPath ios/build"
-    }
-  },
-  "testRunner": "jest"
-}
+### Step E: Add `testID` values in your screens
+Add `testID` props to the exact buttons, inputs, cards, and tabs your test uses.
+
+### Step F: Build and run your tests
+```bash
+npm run build:e2e:ios
+npx detox test e2e/memberX-yourfile.e2e.js -c ios.sim.debug
 ```
 
-### Step 5: Commit Setup to Git
+Replace `memberX-yourfile.e2e.js` with your file name.
+
+### Step G: Continue until stable
+- Fix failed selectors (`by.id(...)`) by matching real `testID` values.
+- Add `waitFor(...).toExist().withTimeout(...)` before tapping dynamic UI.
+- Keep tests independent (each test should run even if others fail).
+
+### Step H: Commit only your component work
 ```bash
-git add e2e/
-git add package.json
-git commit -m "Setup: Initialize Detox testing framework"
+git add e2e/memberX-yourfile.e2e.js src/screens/YourScreenFile.tsx
+git commit -m "Member X: Add Detox tests for <component name>"
 git push
 ```
 
-✅ **Setup is COMPLETE. Everyone else now runs `git pull`**
+### Step I: Before final demo day
+- Run all tests together:
+```bash
+npx detox test e2e -c ios.sim.debug
+```
+- Take screenshots/videos of passing test output for viva evidence.
+
+---
+
+## 🔧 Setup (ONE PERSON ONLY)
+
+### ⚠️ NOTE
+This section is kept for reference only. Initial setup is already done in the repository.
+
+### If you ever need to re-do setup from zero
+```bash
+cd /Users/dasun/Development/UniBuddy
+npm install --save-dev detox
+mkdir -p e2e
+```
+
+Then ensure these files exist:
+- `package.json` includes:
+  - `build:e2e:ios`
+  - `test:e2e:ios`
+  - `detox` config with `ios.sim.debug`
+- `e2e/jest.config.js`
+- `e2e/smoke.e2e.js`
+
+Then commit and push:
+```bash
+git add package.json package-lock.json e2e
+git commit -m "Setup: Initialize Detox E2E"
+git push
+```
 
 ---
 
