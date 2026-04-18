@@ -8,6 +8,8 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
+    "build:e2e:ios": "detox build -c ios.sim.debug",
+    "test:e2e:ios": "detox test -c ios.sim.debug",
     "postinstall": "node -e \"const fs=require('fs'),p='node_modules/@react-navigation/elements/lib/module/assets/'; ['1x','2x','3x','4x'].forEach(d=>{const src=p+'back-icon@'+d+'x.ios.png',dst=p+'back-icon@'+d+'x.png';if(fs.existsSync(src)&&!fs.existsSync(dst))fs.copyFileSync(src,dst);})\""
   },
   "dependencies": {
@@ -47,6 +49,7 @@
     "@types/jest": "^29.5.13",
     "@types/react": "^19.2.0",
     "@types/react-test-renderer": "^19.1.0",
+    "detox": "^20.50.1",
     "eslint": "^8.19.0",
     "jest": "^29.6.3",
     "prettier": "2.8.8",
@@ -55,5 +58,30 @@
   },
   "engines": {
     "node": ">= 22.11.0"
+  },
+  "detox": {
+    "testRunner": "jest",
+    "runnerConfig": "e2e/jest.config.js",
+    "apps": {
+      "ios.debug": {
+        "type": "ios.app",
+        "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/UniBuddy.app",
+        "build": "xcodebuild -workspace ios/UniBuddy.xcworkspace -scheme UniBuddy -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build"
+      }
+    },
+    "devices": {
+      "simulator": {
+        "type": "ios.simulator",
+        "device": {
+          "type": "iPhone 15"
+        }
+      }
+    },
+    "configurations": {
+      "ios.sim.debug": {
+        "device": "simulator",
+        "app": "ios.debug"
+      }
+    }
   }
 }
