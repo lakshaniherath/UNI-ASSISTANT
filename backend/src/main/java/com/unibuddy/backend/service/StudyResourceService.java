@@ -24,9 +24,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+import java.util.Map;
 
-import com.google.cloud.storage.Bucket;
-import com.google.firebase.cloud.StorageClient;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -38,6 +39,9 @@ public class StudyResourceService {
     @Autowired
     private StudyResourceRepository studyResourceRepository;
 
+    @Autowired
+    private Cloudinary cloudinary;
+
     public StudyResource saveResource(StudyResource resource) {
         resource.setUploadedAt(LocalDateTime.now());
         if (resource.getCategory() == null) {
@@ -46,27 +50,21 @@ public class StudyResourceService {
         return studyResourceRepository.save(resource);
     }
 
-    public StudyResource uploadFileToFirebase(MultipartFile file, StudyResource metadata) throws IOException {
-        System.out.println("DEBUG: Starting upload for: " + file.getOriginalFilename());
+    public StudyResource uploadFileToCloud(MultipartFile file, StudyResource metadata) throws IOException {
+        System.out.println("DEBUG: Starting Cloudinary upload for: " + file.getOriginalFilename());
         
-        Bucket bucket = StorageClient.getInstance().bucket(); 
-        if (bucket == null) {
-            System.out.println("DEBUG: BUCKET IS NULL! Check FirebaseConfig.");
-            throw new RuntimeException("Storage Bucket not initialized");
-        }
+        String publicId = metadata.getModuleCode() + "/" + UUID.randomUUID() + "_" + file.getOriginalFilename();
         
-        String fileName = metadata.getModuleCode() + "/" + UUID.randomUUID() + "_" + file.getOriginalFilename();
-        System.out.println("DEBUG: Uploading to path: " + fileName);
+        Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap(
+                "resource_type", "auto",
+                "public_id", publicId
+        ));
         
-        bucket.create(fileName, file.getBytes(), file.getContentType());
-        System.out.println("DEBUG: Firebase create successful!");
+        System.out.println("DEBUG: Cloudinary upload successful!");
         
-        // Construct the URL using the bucket name automatically
-        String url = String.format("https://firebasestorage.googleapis.com/v0/b/%s/o/%s?alt=media",
-                bucket.getName(),
-                URLEncoder.encode(fileName, StandardCharsets.UTF_8).replace("+", "%20"));
+        String url = uploadResult.get("secure_url").toString();
         
-        metadata.setFirebaseStorageUrl(url);
+        metadata.setStorageUrl(url);
         metadata.setFileName(file.getOriginalFilename());
         metadata.setFileType(file.getContentType());
         metadata.setUploadedAt(LocalDateTime.now());
@@ -135,11 +133,11 @@ public class StudyResourceService {
         List<StudyResource> resources = studyResourceRepository.findByModuleCode(moduleCode);
         try (ZipOutputStream zipOut = new ZipOutputStream(outputStream)) {
             for (StudyResource resource : resources) {
-                if (resource.getFirebaseStorageUrl() == null || resource.getFirebaseStorageUrl().isEmpty()) {
+                if (resource.getStorageUrl() == null || resource.getStorageUrl().isEmpty()) {
                     continue;
                 }
                 try {
-                    URL targetUrl = new URL(resource.getFirebaseStorageUrl());
+                    URL targetUrl = new URL(resource.getStorageUrl());
                     try (InputStream in = targetUrl.openStream()) {
                         String zipEntryName = resource.getCategory() + "/" + resource.getFileName();
                         ZipEntry zipEntry = new ZipEntry(zipEntryName);

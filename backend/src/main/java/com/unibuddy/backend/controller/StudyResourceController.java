@@ -38,8 +38,9 @@ public class StudyResourceController {
             resource.setTitle(title);
             resource.setDescription(description);
 
-            return ResponseEntity.ok(studyResourceService.uploadFileToFirebase(file, resource));
+            return ResponseEntity.ok(studyResourceService.uploadFileToCloud(file, resource));
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

@@ -41,7 +41,7 @@ const ResourceHubScreen = ({ navigation, route }: any) => {
 
   const handleDownloadFile = async (item: any) => {
     try {
-      if (!item.firebaseStorageUrl) {
+      if (!item.storageUrl) {
         Alert.alert('Error', 'The file URL could not be found.');
         return;
       }
@@ -54,7 +54,7 @@ const ResourceHubScreen = ({ navigation, route }: any) => {
       setDownloadProgress(prev => ({ ...prev, [item.id.toString()]: 0 }));
 
       const ret = RNFS.downloadFile({
-        fromUrl: item.firebaseStorageUrl,
+        fromUrl: item.storageUrl,
         toFile: destPath,
         progressDivider: 1,
         progress: (res) => {
@@ -96,7 +96,7 @@ const ResourceHubScreen = ({ navigation, route }: any) => {
          ? `${RNFS.DownloadDirectoryPath}/${fileName}` 
          : `${RNFS.DocumentDirectoryPath}/${fileName}`;
 
-      setDownloadProgress(prev => ({ ...prev, ['bulk']: 0 }));
+      setDownloadProgress(prev => ({ ...prev, bulk: 0 }));
 
       const ret = RNFS.downloadFile({
         fromUrl: url,
@@ -107,7 +107,7 @@ const ResourceHubScreen = ({ navigation, route }: any) => {
           if (res.contentLength > 0) {
             progressPercent = Math.round((res.bytesWritten / res.contentLength) * 100);
           }
-          setDownloadProgress(prev => ({ ...prev, ['bulk']: progressPercent }));
+          setDownloadProgress(prev => ({ ...prev, bulk: progressPercent }));
         }
       });
 
@@ -120,7 +120,7 @@ const ResourceHubScreen = ({ navigation, route }: any) => {
     } finally {
       setDownloadProgress(prev => {
         const newProgress = { ...prev };
-        delete newProgress['bulk'];
+        delete newProgress.bulk;
         return newProgress;
       });
     }
@@ -134,7 +134,7 @@ const ResourceHubScreen = ({ navigation, route }: any) => {
          ? `${RNFS.DownloadDirectoryPath}/${fileName}` 
          : `${RNFS.DocumentDirectoryPath}/${fileName}`;
 
-      setDownloadProgress(prev => ({ ...prev, ['report']: 0 }));
+      setDownloadProgress(prev => ({ ...prev, report: 0 }));
 
       const ret = RNFS.downloadFile({
         fromUrl: url,
@@ -145,7 +145,7 @@ const ResourceHubScreen = ({ navigation, route }: any) => {
           if (res.contentLength > 0) {
             progressPercent = Math.round((res.bytesWritten / res.contentLength) * 100);
           }
-          setDownloadProgress(prev => ({ ...prev, ['report']: progressPercent }));
+          setDownloadProgress(prev => ({ ...prev, report: progressPercent }));
         }
       });
 
@@ -158,7 +158,7 @@ const ResourceHubScreen = ({ navigation, route }: any) => {
     } finally {
       setDownloadProgress(prev => {
         const newProgress = { ...prev };
-        delete newProgress['report'];
+        delete newProgress.report;
         return newProgress;
       });
     }
@@ -237,9 +237,9 @@ const ResourceHubScreen = ({ navigation, route }: any) => {
           <TouchableOpacity style={styles.specialBtn} onPress={handleBulkDownload}>
             <Text style={styles.specialBtnText}>Download All (ZIP)</Text>
           </TouchableOpacity>
-          {downloadProgress['bulk'] !== undefined && (
+          {downloadProgress.bulk !== undefined && (
             <View style={styles.miniProgressContainer}>
-              <View style={[styles.miniProgressBar, { width: `${downloadProgress['bulk']}%` }]} />
+              <View style={[styles.miniProgressBar, { width: `${downloadProgress.bulk}%` }]} />
             </View>
           )}
         </View>
@@ -247,9 +247,9 @@ const ResourceHubScreen = ({ navigation, route }: any) => {
           <TouchableOpacity style={styles.specialBtn} onPress={handleGetReport}>
             <Text style={styles.specialBtnText}>Usage Report (PDF)</Text>
           </TouchableOpacity>
-          {downloadProgress['report'] !== undefined && (
+          {downloadProgress.report !== undefined && (
             <View style={styles.miniProgressContainer}>
-              <View style={[styles.miniProgressBar, { width: `${downloadProgress['report']}%` }]} />
+              <View style={[styles.miniProgressBar, { width: `${downloadProgress.report}%` }]} />
             </View>
           )}
         </View>

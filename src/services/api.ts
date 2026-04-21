@@ -2,8 +2,7 @@ import axios from 'axios';
 import { Platform } from 'react-native';
 import RNFS from 'react-native-fs';
 
-<<<<<<< Updated upstream
-const BASE_URL = 'http://10.145.116.239:8080/api';
+const BASE_URL = 'http://192.168.56.1:8080/api';
 
 const resolveDownloadPath = (fileName: string) => {
   return Platform.OS === 'android'
@@ -24,9 +23,6 @@ export const downloadFileFromApi = async (endpoint: string, fileName: string) =>
 
   return destPath;
 };
-=======
-const BASE_URL = 'http://192.168.198.1:8080/api';
->>>>>>> Stashed changes
 
 export const api = axios.create({
   baseURL: BASE_URL,

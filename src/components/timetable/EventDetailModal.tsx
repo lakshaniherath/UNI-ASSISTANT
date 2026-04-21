@@ -7,6 +7,7 @@ interface Props {
   event: TimetableEvent | null;
   onClose: () => void;
   onFindAlternative: () => void;
+  onMarkMissed: () => void;
   onAddPersonal: () => void;
 }
 
@@ -15,6 +16,7 @@ const EventDetailModal = ({
   event,
   onClose,
   onFindAlternative,
+  onMarkMissed,
   onAddPersonal,
 }: Props) => {
   if (!event) return null;
@@ -36,6 +38,10 @@ const EventDetailModal = ({
 
           <TouchableOpacity style={styles.actionBtn} onPress={onFindAlternative}>
             <Text style={styles.actionText}>Find Alternative Slot</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={[styles.actionBtn, styles.secondary]} onPress={onMarkMissed}>
+            <Text style={styles.actionText}>Mark as Missed</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={[styles.actionBtn, styles.secondary]} onPress={onAddPersonal}>

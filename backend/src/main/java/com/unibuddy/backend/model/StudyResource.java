@@ -23,7 +23,7 @@ public class StudyResource {
     private String description;
     private String fileName;
     private String fileType;
-    private String firebaseStorageUrl;
+    private String storageUrl;
     private int upvotes = 0;
     private int downvotes = 0;
     private int downloads = 0;

@@ -18,8 +18,6 @@ public class FirebaseConfig {
     @Value("${firebase.service-account.path:}")
     private String serviceAccountPath;
 
-    @Value("${firebase.storage.bucket:}")
-    private String storageBucket;
 
     @PostConstruct
     public void initialize() {
@@ -40,19 +38,13 @@ public class FirebaseConfig {
             FirebaseOptions.Builder optionsBuilder = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount));
 
-            if (storageBucket != null && !storageBucket.isBlank()) {
-                optionsBuilder.setStorageBucket(storageBucket);
-            }
+
 
             FirebaseOptions options = optionsBuilder.build();
 
             if (FirebaseApp.getApps().isEmpty()) {
                 FirebaseApp.initializeApp(options);
-                if (storageBucket != null && !storageBucket.isBlank()) {
-                    System.out.println("Firebase Admin initialized with bucket: " + storageBucket);
-                } else {
-                    System.out.println("Firebase Admin initialized without storage bucket.");
-                }
+                System.out.println("Firebase Admin initialized.");
             }
         } catch (IOException e) {
             System.out.println("FCM initialization failed: " + e.getMessage());
